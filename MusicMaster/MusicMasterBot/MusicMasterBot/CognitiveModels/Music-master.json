@@ -1,0 +1,476 @@
+{
+  "luis_schema_version": "7.0.0",
+  "intents": [
+    {
+      "name": "NextSong",
+      "features": [
+        {
+          "featureName": "Music synonyms",
+          "isRequired": false
+        }
+      ]
+    },
+    {
+      "name": "None",
+      "features": [
+        {
+          "featureName": "Music synonyms",
+          "isRequired": false
+        },
+        {
+          "featureName": "Artist synonyms",
+          "isRequired": false
+        }
+      ]
+    },
+    {
+      "name": "PlayByTitleArtist",
+      "features": [
+        {
+          "featureName": "Music synonyms",
+          "isRequired": false
+        },
+        {
+          "featureName": "Artist synonyms",
+          "isRequired": false
+        }
+      ]
+    },
+    {
+      "name": "PlayRandom",
+      "features": []
+    },
+    {
+      "name": "PreviousSong",
+      "features": [
+        {
+          "featureName": "Music synonyms",
+          "isRequired": false
+        }
+      ]
+    },
+    {
+      "name": "StartPlaying",
+      "features": [
+        {
+          "featureName": "Music synonyms",
+          "isRequired": false
+        }
+      ]
+    },
+    {
+      "name": "StopPlaying",
+      "features": [
+        {
+          "featureName": "Music synonyms",
+          "isRequired": false
+        }
+      ]
+    },
+    {
+      "name": "VolumeDown",
+      "features": [
+        {
+          "featureName": "Music synonyms",
+          "isRequired": false
+        }
+      ]
+    },
+    {
+      "name": "VolumeUp",
+      "features": [
+        {
+          "featureName": "Music synonyms",
+          "isRequired": false
+        }
+      ]
+    }
+  ],
+  "entities": [
+    {
+      "name": "MusicArtist",
+      "children": [],
+      "roles": [],
+      "features": [
+        {
+          "featureName": "Music synonyms",
+          "isRequired": false
+        },
+        {
+          "featureName": "Artist synonyms",
+          "isRequired": false
+        }
+      ]
+    },
+    {
+      "name": "MusicSongTitle",
+      "children": [],
+      "roles": [],
+      "features": [
+        {
+          "featureName": "Music synonyms",
+          "isRequired": false
+        },
+        {
+          "featureName": "Artist synonyms",
+          "isRequired": false
+        }
+      ]
+    }
+  ],
+  "hierarchicals": [],
+  "composites": [],
+  "closedLists": [],
+  "prebuiltEntities": [],
+  "utterances": [
+    {
+      "text": "do you have some music from george ezra?",
+      "intent": "PlayByTitleArtist",
+      "entities": [
+        {
+          "entity": "MusicArtist",
+          "startPos": 28,
+          "endPos": 38,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "give me some music",
+      "intent": "PlayRandom",
+      "entities": []
+    },
+    {
+      "text": "give me some music by the rolling stones",
+      "intent": "PlayByTitleArtist",
+      "entities": [
+        {
+          "entity": "MusicArtist",
+          "startPos": 22,
+          "endPos": 39,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "go back",
+      "intent": "PreviousSong",
+      "entities": []
+    },
+    {
+      "text": "i can't hear it",
+      "intent": "VolumeUp",
+      "entities": []
+    },
+    {
+      "text": "i don't want to hear it anymore",
+      "intent": "StopPlaying",
+      "entities": []
+    },
+    {
+      "text": "i want to hear riverside, agnes obel",
+      "intent": "PlayByTitleArtist",
+      "entities": [
+        {
+          "entity": "MusicSongTitle",
+          "startPos": 15,
+          "endPos": 23,
+          "children": []
+        },
+        {
+          "entity": "MusicArtist",
+          "startPos": 26,
+          "endPos": 35,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "it's too loud",
+      "intent": "VolumeDown",
+      "entities": []
+    },
+    {
+      "text": "last one",
+      "intent": "PreviousSong",
+      "entities": []
+    },
+    {
+      "text": "let me hear some birdy",
+      "intent": "PlayByTitleArtist",
+      "entities": [
+        {
+          "entity": "MusicArtist",
+          "startPos": 17,
+          "endPos": 21,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "let me hear someone like me",
+      "intent": "PlayByTitleArtist",
+      "entities": [
+        {
+          "entity": "MusicSongTitle",
+          "startPos": 12,
+          "endPos": 26,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "let me hear someone like me of adele",
+      "intent": "PlayByTitleArtist",
+      "entities": [
+        {
+          "entity": "MusicSongTitle",
+          "startPos": 12,
+          "endPos": 26,
+          "children": []
+        },
+        {
+          "entity": "MusicArtist",
+          "startPos": 31,
+          "endPos": 35,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "let me hear something",
+      "intent": "PlayRandom",
+      "entities": []
+    },
+    {
+      "text": "lower",
+      "intent": "VolumeDown",
+      "entities": []
+    },
+    {
+      "text": "next song",
+      "intent": "NextSong",
+      "entities": []
+    },
+    {
+      "text": "nope",
+      "intent": "NextSong",
+      "entities": []
+    },
+    {
+      "text": "play",
+      "intent": "StartPlaying",
+      "entities": []
+    },
+    {
+      "text": "play a song of coldplay",
+      "intent": "PlayByTitleArtist",
+      "entities": [
+        {
+          "entity": "MusicArtist",
+          "startPos": 15,
+          "endPos": 22,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "play me some music",
+      "intent": "PlayRandom",
+      "entities": []
+    },
+    {
+      "text": "play some adele",
+      "intent": "PlayByTitleArtist",
+      "entities": [
+        {
+          "entity": "MusicArtist",
+          "startPos": 10,
+          "endPos": 14,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "play something",
+      "intent": "PlayRandom",
+      "entities": []
+    },
+    {
+      "text": "play viva la vida",
+      "intent": "PlayByTitleArtist",
+      "entities": [
+        {
+          "entity": "MusicSongTitle",
+          "startPos": 5,
+          "endPos": 16,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "play viva la vida by coldplay",
+      "intent": "PlayByTitleArtist",
+      "entities": [
+        {
+          "entity": "MusicSongTitle",
+          "startPos": 5,
+          "endPos": 16,
+          "children": []
+        },
+        {
+          "entity": "MusicArtist",
+          "startPos": 21,
+          "endPos": 28,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "previous song",
+      "intent": "PreviousSong",
+      "entities": []
+    },
+    {
+      "text": "return",
+      "intent": "PreviousSong",
+      "entities": []
+    },
+    {
+      "text": "silence",
+      "intent": "StopPlaying",
+      "entities": []
+    },
+    {
+      "text": "skip",
+      "intent": "NextSong",
+      "entities": []
+    },
+    {
+      "text": "skip this one",
+      "intent": "NextSong",
+      "entities": []
+    },
+    {
+      "text": "softer",
+      "intent": "VolumeDown",
+      "entities": []
+    },
+    {
+      "text": "start playing",
+      "intent": "StartPlaying",
+      "entities": []
+    },
+    {
+      "text": "stop",
+      "intent": "StopPlaying",
+      "entities": []
+    },
+    {
+      "text": "stop playing",
+      "intent": "StopPlaying",
+      "entities": []
+    },
+    {
+      "text": "stop the music",
+      "intent": "StopPlaying",
+      "entities": []
+    },
+    {
+      "text": "volume down",
+      "intent": "VolumeDown",
+      "entities": []
+    },
+    {
+      "text": "volume up",
+      "intent": "VolumeUp",
+      "entities": []
+    },
+    {
+      "text": "what about a song",
+      "intent": "PlayRandom",
+      "entities": []
+    },
+    {
+      "text": "what about every breath you take, the police?",
+      "intent": "PlayByTitleArtist",
+      "entities": [
+        {
+          "entity": "MusicSongTitle",
+          "startPos": 11,
+          "endPos": 31,
+          "children": []
+        },
+        {
+          "entity": "MusicArtist",
+          "startPos": 34,
+          "endPos": 43,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "what about some music?",
+      "intent": "PlayRandom",
+      "entities": []
+    },
+    {
+      "text": "what about some u2?",
+      "intent": "PlayByTitleArtist",
+      "entities": [
+        {
+          "entity": "MusicArtist",
+          "startPos": 16,
+          "endPos": 17,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "what do you have today?",
+      "intent": "PlayRandom",
+      "entities": []
+    },
+    {
+      "text": "what if you'd sing us a song?",
+      "intent": "PlayRandom",
+      "entities": []
+    },
+    {
+      "text": "you can skip this",
+      "intent": "NextSong",
+      "entities": []
+    }
+  ],
+  "versionId": "0.1",
+  "name": "Music-master",
+  "desc": "Music serving bot",
+  "culture": "en-us",
+  "tokenizerVersion": "1.0.0",
+  "patternAnyEntities": [],
+  "regex_entities": [],
+  "phraselists": [
+    {
+      "name": "Music synonyms",
+      "mode": true,
+      "words": "music,song,tune,jingle,theme",
+      "activated": true,
+      "enabledForAllModels": false
+    },
+    {
+      "name": "Artist synonyms",
+      "mode": true,
+      "words": "artist,singer,band,composer,songster,musician,performer",
+      "activated": true,
+      "enabledForAllModels": false
+    }
+  ],
+  "regex_features": [],
+  "patterns": [],
+  "settings": [
+    {
+      "name": "NormalizePunctuation",
+      "value": "true"
+    }
+  ]
+}
