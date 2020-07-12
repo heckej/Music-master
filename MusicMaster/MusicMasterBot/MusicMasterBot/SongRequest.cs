@@ -1,8 +1,9 @@
 using System.Collections.Generic;
+using static MusicMasterBot.CognitiveModels.UserCommand;
 
 namespace MusicMasterBot
 {
-    public class SongDetails
+    public class SongRequest
     {
         public string Title { get; set; }
 
@@ -12,6 +13,8 @@ namespace MusicMasterBot
 
         public int Year { get; set; }
 
-        public ISet<string> Genres { get; set; }
+        public string Genre { get; set; }
+
+        public  Intent Intent { get; set; }
     }
 }
