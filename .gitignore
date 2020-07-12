@@ -352,3 +352,5 @@ MigrationBackup/
 MusicMaster/MusicMasterBot/MusicMasterBot/appsettings.json
 
 MusicMaster/MusicMasterBot/MusicMasterBot/appsettings.Development.json
+
+MusicMaster/MusicMasterBot/MusicMasterBot/DeploymentTemplates/
