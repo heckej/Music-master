@@ -10,5 +10,8 @@ namespace MusicMasterBot.CognitiveModels
 
         public string SongTitle
             => Entities.MusicSongTitle?.FirstOrDefault();
+
+        public string SongGenre
+            => Entities.MusicGenre?.FirstOrDefault();
     }
 }

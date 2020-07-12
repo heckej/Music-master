@@ -21,6 +21,9 @@ namespace MusicMasterBot.CognitiveModels
         public enum Intent {
             NextSong, 
             None, 
+            PlayByArtist, 
+            PlayByGenre, 
+            PlayByTitle, 
             PlayByTitleArtist, 
             PlayRandom, 
             PreviousSong, 
@@ -37,12 +40,15 @@ namespace MusicMasterBot.CognitiveModels
             // Simple entities
             public string[] MusicArtist;
 
+            public string[] MusicGenre;
+
             public string[] MusicSongTitle;
 
             // Instance
             public class _Instance
             {
                 public InstanceData[] MusicArtist;
+                public InstanceData[] MusicGenre;
                 public InstanceData[] MusicSongTitle;
             }
             [JsonProperty("$instance")]
