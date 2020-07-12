@@ -24,6 +24,18 @@
       ]
     },
     {
+      "name": "PlayByArtist",
+      "features": []
+    },
+    {
+      "name": "PlayByGenre",
+      "features": []
+    },
+    {
+      "name": "PlayByTitle",
+      "features": []
+    },
+    {
       "name": "PlayByTitleArtist",
       "features": [
         {
@@ -103,6 +115,12 @@
       ]
     },
     {
+      "name": "MusicGenre",
+      "children": [],
+      "roles": [],
+      "features": []
+    },
+    {
       "name": "MusicSongTitle",
       "children": [],
       "roles": [],
@@ -125,12 +143,96 @@
   "utterances": [
     {
       "text": "do you have some music from george ezra?",
-      "intent": "PlayByTitleArtist",
+      "intent": "PlayByArtist",
       "entities": [
         {
           "entity": "MusicArtist",
           "startPos": 28,
           "endPos": 38,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "do you have some music to make you feel my love by adele",
+      "intent": "PlayByTitleArtist",
+      "entities": [
+        {
+          "entity": "MusicSongTitle",
+          "startPos": 23,
+          "endPos": 46,
+          "children": []
+        },
+        {
+          "entity": "MusicArtist",
+          "startPos": 51,
+          "endPos": 55,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "do you have some music to make you feel my loveby adele",
+      "intent": "PlayByTitleArtist",
+      "entities": [
+        {
+          "entity": "MusicSongTitle",
+          "startPos": 23,
+          "endPos": 48,
+          "children": []
+        },
+        {
+          "entity": "MusicArtist",
+          "startPos": 50,
+          "endPos": 54,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "do you have someone like me by adele",
+      "intent": "PlayByTitleArtist",
+      "entities": [
+        {
+          "entity": "MusicSongTitle",
+          "startPos": 12,
+          "endPos": 26,
+          "children": []
+        },
+        {
+          "entity": "MusicArtist",
+          "startPos": 31,
+          "endPos": 35,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "do you have to make you feel my loveby adele",
+      "intent": "PlayByTitleArtist",
+      "entities": [
+        {
+          "entity": "MusicSongTitle",
+          "startPos": 12,
+          "endPos": 37,
+          "children": []
+        },
+        {
+          "entity": "MusicArtist",
+          "startPos": 39,
+          "endPos": 43,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "do you know the song hallelujah",
+      "intent": "PlayByTitle",
+      "entities": [
+        {
+          "entity": "MusicSongTitle",
+          "startPos": 21,
+          "endPos": 30,
           "children": []
         }
       ]
@@ -142,7 +244,7 @@
     },
     {
       "text": "give me some music by the rolling stones",
-      "intent": "PlayByTitleArtist",
+      "intent": "PlayByArtist",
       "entities": [
         {
           "entity": "MusicArtist",
@@ -153,9 +255,44 @@
       ]
     },
     {
+      "text": "give me some pop music please",
+      "intent": "PlayByGenre",
+      "entities": [
+        {
+          "entity": "MusicGenre",
+          "startPos": 13,
+          "endPos": 15,
+          "children": []
+        }
+      ]
+    },
+    {
       "text": "go back",
       "intent": "PreviousSong",
       "entities": []
+    },
+    {
+      "text": "hey, play some music",
+      "intent": "PlayRandom",
+      "entities": []
+    },
+    {
+      "text": "hey, play viva la vida by coldplay",
+      "intent": "PlayByTitleArtist",
+      "entities": [
+        {
+          "entity": "MusicSongTitle",
+          "startPos": 10,
+          "endPos": 21,
+          "children": []
+        },
+        {
+          "entity": "MusicArtist",
+          "startPos": 26,
+          "endPos": 33,
+          "children": []
+        }
+      ]
     },
     {
       "text": "i can't hear it",
@@ -165,6 +302,23 @@
     {
       "text": "i don't want to hear it anymore",
       "intent": "StopPlaying",
+      "entities": []
+    },
+    {
+      "text": "i wanna hear someone like of adel",
+      "intent": "PlayByTitleArtist",
+      "entities": [
+        {
+          "entity": "MusicSongTitle",
+          "startPos": 13,
+          "endPos": 27,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "i wanna hear something by the beatles",
+      "intent": "PlayByArtist",
       "entities": []
     },
     {
@@ -186,6 +340,18 @@
       ]
     },
     {
+      "text": "i'm in a blues mood today",
+      "intent": "PlayByGenre",
+      "entities": [
+        {
+          "entity": "MusicGenre",
+          "startPos": 9,
+          "endPos": 13,
+          "children": []
+        }
+      ]
+    },
+    {
       "text": "it's too loud",
       "intent": "VolumeDown",
       "entities": []
@@ -196,8 +362,13 @@
       "entities": []
     },
     {
-      "text": "let me hear some birdy",
+      "text": "let me hear all of the little lights by passenger",
       "intent": "PlayByTitleArtist",
+      "entities": []
+    },
+    {
+      "text": "let me hear some birdy",
+      "intent": "PlayByArtist",
       "entities": [
         {
           "entity": "MusicArtist",
@@ -208,7 +379,19 @@
       ]
     },
     {
-      "text": "let me hear someone like me",
+      "text": "let me hear some music by billy",
+      "intent": "PlayByArtist",
+      "entities": [
+        {
+          "entity": "MusicArtist",
+          "startPos": 26,
+          "endPos": 30,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "let me hear someone like by adel",
       "intent": "PlayByTitleArtist",
       "entities": [
         {
@@ -220,19 +403,31 @@
       ]
     },
     {
-      "text": "let me hear someone like me of adele",
+      "text": "let me hear someone like you",
+      "intent": "PlayByTitle",
+      "entities": [
+        {
+          "entity": "MusicSongTitle",
+          "startPos": 12,
+          "endPos": 27,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "let me hear someone like you of adele",
       "intent": "PlayByTitleArtist",
       "entities": [
         {
           "entity": "MusicSongTitle",
           "startPos": 12,
-          "endPos": 26,
+          "endPos": 27,
           "children": []
         },
         {
           "entity": "MusicArtist",
-          "startPos": 31,
-          "endPos": 35,
+          "startPos": 32,
+          "endPos": 36,
           "children": []
         }
       ]
@@ -243,12 +438,51 @@
       "entities": []
     },
     {
+      "text": "let me hear something from alexander hamilton",
+      "intent": "PlayByArtist",
+      "entities": []
+    },
+    {
+      "text": "let me hear something romantic",
+      "intent": "PlayByGenre",
+      "entities": [
+        {
+          "entity": "MusicGenre",
+          "startPos": 22,
+          "endPos": 29,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "let me hear the song walking in your footsteps",
+      "intent": "PlayByTitle",
+      "entities": [
+        {
+          "entity": "MusicSongTitle",
+          "startPos": 21,
+          "endPos": 45,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "louder!",
+      "intent": "VolumeUp",
+      "entities": []
+    },
+    {
       "text": "lower",
       "intent": "VolumeDown",
       "entities": []
     },
     {
       "text": "next song",
+      "intent": "NextSong",
+      "entities": []
+    },
+    {
+      "text": "next song please",
       "intent": "NextSong",
       "entities": []
     },
@@ -263,8 +497,32 @@
       "entities": []
     },
     {
+      "text": "play a song by adele",
+      "intent": "PlayByArtist",
+      "entities": [
+        {
+          "entity": "MusicArtist",
+          "startPos": 15,
+          "endPos": 19,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "play a song by the beatles",
+      "intent": "PlayByArtist",
+      "entities": [
+        {
+          "entity": "MusicArtist",
+          "startPos": 15,
+          "endPos": 25,
+          "children": []
+        }
+      ]
+    },
+    {
       "text": "play a song of coldplay",
-      "intent": "PlayByTitleArtist",
+      "intent": "PlayByArtist",
       "entities": [
         {
           "entity": "MusicArtist",
@@ -275,13 +533,52 @@
       ]
     },
     {
+      "text": "play bloody sunday from u2",
+      "intent": "PlayByTitleArtist",
+      "entities": []
+    },
+    {
+      "text": "play hello by the beatles",
+      "intent": "PlayByTitleArtist",
+      "entities": []
+    },
+    {
       "text": "play me some music",
       "intent": "PlayRandom",
       "entities": []
     },
     {
-      "text": "play some adele",
+      "text": "play me some music by the beatles",
+      "intent": "PlayByArtist",
+      "entities": [
+        {
+          "entity": "MusicArtist",
+          "startPos": 22,
+          "endPos": 32,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "play me some soft music",
+      "intent": "PlayByGenre",
+      "entities": [
+        {
+          "entity": "MusicGenre",
+          "startPos": 13,
+          "endPos": 16,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "play nothing else matters by muse",
       "intent": "PlayByTitleArtist",
+      "entities": []
+    },
+    {
+      "text": "play some adele",
+      "intent": "PlayByArtist",
       "entities": [
         {
           "entity": "MusicArtist",
@@ -292,13 +589,47 @@
       ]
     },
     {
+      "text": "play some song by billy",
+      "intent": "PlayByArtist",
+      "entities": [
+        {
+          "entity": "MusicArtist",
+          "startPos": 18,
+          "endPos": 22,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "play someone likj meeee of adllle",
+      "intent": "PlayByTitleArtist",
+      "entities": []
+    },
+    {
       "text": "play something",
       "intent": "PlayRandom",
       "entities": []
     },
     {
-      "text": "play viva la vida",
+      "text": "play the pian man by bill",
       "intent": "PlayByTitleArtist",
+      "entities": []
+    },
+    {
+      "text": "play the song this is me",
+      "intent": "PlayByTitle",
+      "entities": [
+        {
+          "entity": "MusicSongTitle",
+          "startPos": 14,
+          "endPos": 23,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "play viva la vida",
+      "intent": "PlayByTitle",
       "entities": [
         {
           "entity": "MusicSongTitle",
@@ -325,6 +656,11 @@
           "children": []
         }
       ]
+    },
+    {
+      "text": "previous sng",
+      "intent": "PreviousSong",
+      "entities": []
     },
     {
       "text": "previous song",
@@ -357,12 +693,41 @@
       "entities": []
     },
     {
+      "text": "some music by the beatles",
+      "intent": "PlayByArtist",
+      "entities": [
+        {
+          "entity": "MusicArtist",
+          "startPos": 14,
+          "endPos": 24,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "some music by the police",
+      "intent": "PlayByArtist",
+      "entities": [
+        {
+          "entity": "MusicArtist",
+          "startPos": 14,
+          "endPos": 23,
+          "children": []
+        }
+      ]
+    },
+    {
       "text": "start playing",
       "intent": "StartPlaying",
       "entities": []
     },
     {
       "text": "stop",
+      "intent": "StopPlaying",
+      "entities": []
+    },
+    {
+      "text": "stop it now",
       "intent": "StopPlaying",
       "entities": []
     },
@@ -375,6 +740,24 @@
       "text": "stop the music",
       "intent": "StopPlaying",
       "entities": []
+    },
+    {
+      "text": "viva la vida by coldplay",
+      "intent": "PlayByTitleArtist",
+      "entities": [
+        {
+          "entity": "MusicSongTitle",
+          "startPos": 0,
+          "endPos": 11,
+          "children": []
+        },
+        {
+          "entity": "MusicArtist",
+          "startPos": 16,
+          "endPos": 23,
+          "children": []
+        }
+      ]
     },
     {
       "text": "volume down",
@@ -410,18 +793,162 @@
       ]
     },
     {
+      "text": "what about some adel",
+      "intent": "PlayByArtist",
+      "entities": [
+        {
+          "entity": "MusicArtist",
+          "startPos": 16,
+          "endPos": 19,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "what about some agnes obel",
+      "intent": "PlayByArtist",
+      "entities": [
+        {
+          "entity": "MusicArtist",
+          "startPos": 16,
+          "endPos": 25,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "what about some alexander hamilton",
+      "intent": "PlayByArtist",
+      "entities": [
+        {
+          "entity": "MusicArtist",
+          "startPos": 16,
+          "endPos": 24,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "what about some belle perez",
+      "intent": "PlayByArtist",
+      "entities": [
+        {
+          "entity": "MusicArtist",
+          "startPos": 16,
+          "endPos": 20,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "what about some billy?",
+      "intent": "PlayByArtist",
+      "entities": [
+        {
+          "entity": "MusicArtist",
+          "startPos": 16,
+          "endPos": 20,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "what about some birdy?",
+      "intent": "PlayByArtist",
+      "entities": [
+        {
+          "entity": "MusicArtist",
+          "startPos": 16,
+          "endPos": 20,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "what about some coldplay",
+      "intent": "PlayByArtist",
+      "entities": [
+        {
+          "entity": "MusicArtist",
+          "startPos": 16,
+          "endPos": 23,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "what about some coltplay",
+      "intent": "PlayByArtist",
+      "entities": [
+        {
+          "entity": "MusicArtist",
+          "startPos": 16,
+          "endPos": 23,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "what about some hardrock music?",
+      "intent": "PlayByGenre",
+      "entities": [
+        {
+          "entity": "MusicGenre",
+          "startPos": 16,
+          "endPos": 23,
+          "children": []
+        }
+      ]
+    },
+    {
       "text": "what about some music?",
       "intent": "PlayRandom",
       "entities": []
     },
     {
-      "text": "what about some u2?",
-      "intent": "PlayByTitleArtist",
+      "text": "what about some u2",
+      "intent": "PlayByArtist",
       "entities": [
         {
           "entity": "MusicArtist",
           "startPos": 16,
           "endPos": 17,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "what about some u2?",
+      "intent": "PlayByArtist",
+      "entities": [
+        {
+          "entity": "MusicArtist",
+          "startPos": 16,
+          "endPos": 17,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "what about the beatles",
+      "intent": "PlayByArtist",
+      "entities": [
+        {
+          "entity": "MusicArtist",
+          "startPos": 15,
+          "endPos": 21,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "what about to make you feel my love",
+      "intent": "PlayByTitle",
+      "entities": [
+        {
+          "entity": "MusicSongTitle",
+          "startPos": 11,
+          "endPos": 34,
           "children": []
         }
       ]
@@ -442,7 +969,7 @@
       "entities": []
     }
   ],
-  "versionId": "0.1",
+  "versionId": "0.2",
   "name": "Music-master",
   "desc": "Music serving bot",
   "culture": "en-us",
@@ -466,7 +993,40 @@
     }
   ],
   "regex_features": [],
-  "patterns": [],
+  "patterns": [
+    {
+      "pattern": "what about some {MusicArtist}?",
+      "intent": "PlayByTitleArtist"
+    },
+    {
+      "pattern": "play {MusicSongTitle}",
+      "intent": "PlayByTitleArtist"
+    },
+    {
+      "pattern": "let me hear {MusicSongTitle} of {MusicArtist}",
+      "intent": "PlayByTitleArtist"
+    },
+    {
+      "pattern": "play {MusicSongTitle} by {MusicArtist}",
+      "intent": "PlayByTitleArtist"
+    },
+    {
+      "pattern": "let me hear {MusicSongTitle}",
+      "intent": "PlayByTitleArtist"
+    },
+    {
+      "pattern": "let me hear some {MusicArtist}",
+      "intent": "PlayByTitleArtist"
+    },
+    {
+      "pattern": "do you have some music from {MusicArtist}?",
+      "intent": "PlayByTitleArtist"
+    },
+    {
+      "pattern": "give me some music by {MusicArtist}",
+      "intent": "PlayByTitleArtist"
+    }
+  ],
   "settings": [
     {
       "name": "NormalizePunctuation",
