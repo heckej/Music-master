@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace Metrics
 {
@@ -55,6 +55,16 @@ namespace Metrics
             }
             // Step 7
             return d[n, m];
+        }
+        /// <summary>
+        /// Computes the Levenshtein similarity ratio of two strings.
+        /// </summary>
+        /// <param name="s">The first string to be compared.</param>
+        /// <param name="t">The second string to be compared.</param>
+        /// <returns>(s.Length + t.Length - Compute(s,t))/(s.Length + t.Length)</returns>
+        public static double ComputeSimilarityRatio(string s, string t)
+        {
+            return (double) (s.Length + t.Length - Compute(s,t)) / (s.Length + t.Length);
         }
     }
 }
