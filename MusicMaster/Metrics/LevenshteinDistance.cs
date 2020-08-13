@@ -56,6 +56,43 @@ namespace Metrics
             // Step 7
             return d[n, m];
         }
+
+        /// <summary>
+        /// Computes the Levenshtein distance between the respective words of two given sentences.
+        /// </summary>
+        /// <param name="sentence1">The first sentence to be compared.</param>
+        /// <param name="sentence2">The second sentence to be compared.</param>
+        /// <returns>A list of the Levenshtein distances between the respective words. 
+        /// The list contains as much elements as there are words in the sentence with the most words.
+        /// If one sentence is longer than the other, the words that don't have a respective word to 
+        /// be compared to are compared to the empty string.</returns>
+        public static IList<int> ComputePerWordInSentence(string sentence1, string sentence2)
+        {
+            IList<int> results = new List<int>();
+            IList<string> wordsLongestSentence;
+            IList<string> wordsShortestSentence;
+
+            if (sentence1.Split(' ').Length > sentence2.Length)
+            {
+                wordsLongestSentence = sentence1.Split(' ');
+                wordsShortestSentence = sentence2.Split(' ');
+            }            
+            else
+            {
+                wordsLongestSentence = sentence2.Split(' ');
+                wordsShortestSentence = sentence1.Split(' ');
+            }
+            for (int i = 0; i < wordsLongestSentence.Count; i++)
+            {
+                if (i < wordsShortestSentence.Count)
+                    results.Add(Compute(wordsLongestSentence[i], wordsShortestSentence[i]));
+                else
+                    results.Add(wordsLongestSentence[i].Length);
+            }
+
+            return results; 
+        }
+
         /// <summary>
         /// Computes the Levenshtein similarity ratio of two strings.
         /// </summary>
