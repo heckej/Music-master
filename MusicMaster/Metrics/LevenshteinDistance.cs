@@ -1,17 +1,20 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Metrics
 {
 
     /// <summary>
-    /// Contains approximate string matching
+    /// A class that contains methods based on the Levensthein distance to compare strings.
     /// </summary>
-    /// <see>Code copied from Dot Net Perls: https://www.dotnetperls.com/levenshtein </see>
     public static class LevenshteinDistance
     {
         /// <summary>
-        /// Compute the distance between two strings.
+        /// Computes the Levensthein distance between two strings.
         /// </summary>
+        /// <see>Code copied from Dot Net Perls: https://www.dotnetperls.com/levenshtein </see>
         public static int Compute(string s, string t)
         {
             int n = s.Length;
