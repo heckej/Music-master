@@ -11,6 +11,7 @@ using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Schema;
 using Metrics;
 using System.Security.Policy;
+using MusicMasterBot.CognitiveModels;
 
 namespace MusicMasterBot.Dialogs
 {
@@ -62,54 +63,64 @@ namespace MusicMasterBot.Dialogs
 
         private async Task<DialogTurnResult> ArtistStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
-            var songDetails = (SongDetails)stepContext.Options;
-            var (bestMatchArtist, levDist) = GetBestMatch(songDetails.Artist, KnownArtists);
-            if (bestMatchArtist != null && levDist < _levDistPercentage * bestMatchArtist.Length)
-                songDetails.Artist = bestMatchArtist;
-            else
+            var songRequest = (SongRequest)stepContext.Options;
+            if (songRequest.Intent == UserCommand.Intent.PlayByArtist || songRequest.Intent == UserCommand.Intent.PlayByTitleArtist)
             {
-                var promptMessage = MessageFactory.Text(ArtistStepMsgText, ArtistStepMsgText, InputHints.ExpectingInput);
-                return await stepContext.PromptAsync(nameof(TextPrompt), new PromptOptions { Prompt = promptMessage }, cancellationToken);
+                var (bestMatchArtist, levDist) = GetBestMatch(songRequest.Artist, KnownArtists);
+                if (bestMatchArtist != null && levDist < _levDistPercentage * bestMatchArtist.Length)
+                    songRequest.Artist = bestMatchArtist;
+                else
+                {
+                    var promptMessage = MessageFactory.Text(ArtistStepMsgText, ArtistStepMsgText, InputHints.ExpectingInput);
+                    return await stepContext.PromptAsync(nameof(TextPrompt), new PromptOptions { Prompt = promptMessage }, cancellationToken);
+                }
             }
 
-            return await stepContext.NextAsync(songDetails.Artist, cancellationToken);
+            return await stepContext.NextAsync(songRequest.Artist, cancellationToken);
         }
 
         private async Task<DialogTurnResult> TitleStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
-            var songDetails = (SongDetails)stepContext.Options;
-
-            songDetails.Artist = (string)stepContext.Result;
-            var (bestMatchArtist, levDistArtist) = GetBestMatch(songDetails.Artist, KnownArtists);
-            songDetails.Artist = bestMatchArtist;
-
-            var (bestMatchTitle, levDist) = GetBestMatch(songDetails.Title, KnownSongs);
-            if (bestMatchTitle != null && levDist < _levDistBoundary && IsSongOfArtist(bestMatchTitle, songDetails.Artist))
-                songDetails.Title = bestMatchTitle;
-            if (songDetails.Title == null || levDist > _levDistPercentage * bestMatchArtist.Length)
+            var songRequest = (SongRequest)stepContext.Options;
+            if (songRequest.Intent == UserCommand.Intent.PlayByArtist || songRequest.Intent == UserCommand.Intent.PlayByTitleArtist)
             {
-                var promptMessage = MessageFactory.Text(TitleStepMsgText, TitleStepMsgText, InputHints.ExpectingInput);
-                return await stepContext.PromptAsync(nameof(TextPrompt), new PromptOptions { Prompt = promptMessage }, cancellationToken);
+                songRequest.Artist = (string)stepContext.Result;
+                var (bestMatchArtist, levDistArtist) = GetBestMatch(songRequest.Artist, KnownArtists);
+                songRequest.Artist = bestMatchArtist;
             }
-
-            return await stepContext.NextAsync(songDetails.Title, cancellationToken);
+            if (songRequest.Intent == UserCommand.Intent.PlayByTitle || songRequest.Intent == UserCommand.Intent.PlayByTitleArtist)
+            {
+                var (bestMatchTitle, levDist) = GetBestMatch(songRequest.Title, KnownSongs);
+                if (bestMatchTitle != null && levDist < _levDistBoundary && IsSongOfArtist(bestMatchTitle, songRequest.Artist))
+                    songRequest.Title = bestMatchTitle;
+                if (songRequest.Title == null || levDist > _levDistPercentage * bestMatchTitle.Length)
+                {
+                    var promptMessage = MessageFactory.Text(TitleStepMsgText, TitleStepMsgText, InputHints.ExpectingInput);
+                    return await stepContext.PromptAsync(nameof(TextPrompt), new PromptOptions { Prompt = promptMessage }, cancellationToken);
+                }
+            }
+            
+            return await stepContext.NextAsync(songRequest.Title, cancellationToken);
         }
 
         private async Task<DialogTurnResult> ConfirmStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
-            var songDetails = (SongDetails)stepContext.Options;
+            var songRequest = (SongRequest)stepContext.Options;
 
-            songDetails.Title = (string)stepContext.Result;
-            var (bestMatchTitle, levDist) = GetBestMatch(songDetails.Title, KnownSongs);
-            if (levDist < _levDistPercentage * bestMatchTitle.Length && IsSongOfArtist(bestMatchTitle, songDetails.Artist))
-                songDetails.Title = bestMatchTitle;
+            if (songRequest.Intent == UserCommand.Intent.PlayByTitle || songRequest.Intent == UserCommand.Intent.PlayByTitleArtist)
+            {
+                songRequest.Title = (string)stepContext.Result;
+                var (bestMatchTitle, levDist) = GetBestMatch(songRequest.Title, KnownSongs);
+                if (levDist < _levDistPercentage * bestMatchTitle.Length && IsSongOfArtist(bestMatchTitle, songRequest.Artist))
+                    songRequest.Title = bestMatchTitle;
+            }
 
-            var messageText = $"Please confirm, I have you requesting: {songDetails.Title} by {songDetails.Artist}. Is this correct? ";
+            var messageText = $"Please confirm, I have you requesting: {songRequest.Title} by {songRequest.Artist}. Is this correct? ";
 
-            if (!KnownArtists.Contains(songDetails.Artist))
-                messageText += $"I don't know any artist called '{songDetails.Artist}'. ";
-            if (!IsSongOfArtist(songDetails.Title, songDetails.Artist))
-                messageText += $"I don't know the song '{songDetails.Title}' by '{songDetails.Artist}'.";
+            if (!KnownArtists.Contains(songRequest.Artist))
+                messageText += $"I don't know any artist called '{songRequest.Artist}'. ";
+            if (!IsSongOfArtist(songRequest.Title, songRequest.Artist))
+                messageText += $"I don't know the song '{songRequest.Title}' by '{songRequest.Artist}'.";
 
 
             var promptMessage = MessageFactory.Text(messageText, messageText, InputHints.ExpectingInput);
@@ -121,7 +132,10 @@ namespace MusicMasterBot.Dialogs
         {
             if ((bool)stepContext.Result)
             {
-                var songDetails = (SongDetails)stepContext.Options;
+                var songRequest = (SongRequest)stepContext.Options;
+                
+                // get song of the given genre
+                var songDetails = (Song)
 
                 return await stepContext.EndDialogAsync(songDetails, cancellationToken);
             }
