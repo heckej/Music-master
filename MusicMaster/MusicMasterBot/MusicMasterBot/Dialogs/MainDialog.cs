@@ -65,26 +65,52 @@ namespace MusicMasterBot.Dialogs
             if (!_luisRecognizer.IsConfigured)
             {
                 // LUIS is not configured, we just run the RequestSongDialog path with an empty SongDetailsInstance.
-                return await stepContext.BeginDialogAsync(nameof(RequestSongDialog), new SongDetails(), cancellationToken);
+                return await stepContext.BeginDialogAsync(nameof(RequestSongDialog), new SongRequest(), cancellationToken);
             }
 
             // Call LUIS and gather any potential song details. (Note the TurnContext has the response to the prompt.)
             var luisResult = await _luisRecognizer.RecognizeAsync<UserCommand>(stepContext.Context, cancellationToken);
+            var songRequest = new SongRequest()
+            {
+                Intent = luisResult.TopIntent().intent
+            }
             switch (luisResult.TopIntent().intent)
             {
                 case UserCommand.Intent.PlayByTitleArtist:
                     await ShowWarningForUnknownSong(stepContext.Context, luisResult, cancellationToken);
 
-                    // Initialize SongDetails with any entities we may have found in the response.
-                    var songDetails = new SongDetails()
-                    {
-                        // Get title and artist from the entities.
-                        Title = luisResult.SongTitle,
-                        Artist = luisResult.SongArtist
-                    };
+                    // Initialize SongRequest with any entities we may have found in the response.
+                    songRequest.Title = luisResult.SongTitle;
+                    songRequest.Artist = luisResult.SongArtist;
 
-                    // Run the BookingDialog giving it whatever details we have from the LUIS call, it will fill out the remainder.
-                    return await stepContext.BeginDialogAsync(nameof(RequestSongDialog), songDetails, cancellationToken);
+                    // Run the RequestSongDialog giving it whatever details we have from the LUIS call, it will fill out the remainder.
+                    return await stepContext.BeginDialogAsync(nameof(RequestSongDialog), songRequest, cancellationToken);
+
+                case UserCommand.Intent.PlayByArtist:
+                    await ShowWarningForUnknownSong(stepContext.Context, luisResult, cancellationToken);
+
+                    // Initialize SongRequest with any entities we may have found in the response.
+                    songRequest.Artist = luisResult.SongArtist;
+
+                    // Run the RequestSongDialog giving it whatever details we have from the LUIS call, it will fill out the remainder.
+                    return await stepContext.BeginDialogAsync(nameof(RequestSongDialog), songRequest, cancellationToken);
+
+                case UserCommand.Intent.PlayByTitle:
+                    await ShowWarningForUnknownSong(stepContext.Context, luisResult, cancellationToken);
+
+                    // Initialize SongRequest with any entities we may have found in the response.
+                    songRequest.Title = luisResult.SongTitle;
+
+                    // Run the RequestSongDialog giving it whatever details we have from the LUIS call, it will fill out the remainder.
+                    return await stepContext.BeginDialogAsync(nameof(RequestSongDialog), songRequest, cancellationToken);
+
+                case UserCommand.Intent.PlayByGenre:
+
+                    // Initialize SongRequest with any entities we may have found in the response.
+                    songRequest.Genre = luisResult.SongGenre;
+
+                    // Run the RequestSongDialog giving it whatever details we have from the LUIS call, it will fill out the remainder.
+                    return await stepContext.BeginDialogAsync(nameof(RequestSongDialog), songRequest, cancellationToken);
 
                 case UserCommand.Intent.PlayRandom:
                     // We haven't implemented the PlayRandomSongDialog so we just display a TODO message.
@@ -160,7 +186,7 @@ namespace MusicMasterBot.Dialogs
         {
             // If the child dialog ("RequestSongDialog") was cancelled, the user failed to confirm or if the intent wasn't PlayByTitleArtist
             // the Result here will be null.
-            if (stepContext.Result is SongDetails result)
+            if (stepContext.Result is SongRequest result)
             {
                 // Now we have all the song details call the music player.
 
