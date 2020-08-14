@@ -14,6 +14,8 @@ namespace MusicMasterBot
 
         public ISet<string> Genres { get; set; }
 
+        public string FilePath { get; set; }
+
         public ISet<Song> BestMatches { get; set; }
 
         public bool ArtistInDatabase { get; set; }
