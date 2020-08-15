@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Text;
 
 namespace Tools
@@ -39,6 +39,18 @@ namespace Tools
                 // The wait may not work! :(  
                 if (wait) p.WaitForExit();
             }
+        public static string Listen()
+        {
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+                return ListenOnLinux();
+            else
+                throw new Exception("No implementation exists for the current OS");
         }
+
+        public static string ListenOnLinux()
+        {
+            return new RunCmd().RunPython3("/home/jvh/Music-master/MusicMaster/Tools/record.py", "");
+        }
+
     }
 }
