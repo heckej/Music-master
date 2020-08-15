@@ -66,7 +66,8 @@ namespace MusicMasterBot.TextToSpeech
                         {
                             Console.WriteLine("Speaking: " + text);
                             var speak = Voice.Speak(text);
-                            Console.WriteLine("Speech result: debug: " + speak["debug"] + ", output: " + speak["output"]);
+                            if (speak != null && speak.ContainsKey("debug") && speak.ContainsKey("output"))
+                                Console.WriteLine("Speech result: debug: " + speak["debug"] + ", output: " + speak["output"]);
                         } else if (text != null)
                         {
                             currentActivity.AsMessageActivity().Text = text.Substring(2);

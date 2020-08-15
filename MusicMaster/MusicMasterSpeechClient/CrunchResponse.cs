@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Crunch.NET.Response
 {
-    public class SkillResponse
+    public class CrunchResponse
     {
         [JsonRequired]
         [JsonProperty("version")]

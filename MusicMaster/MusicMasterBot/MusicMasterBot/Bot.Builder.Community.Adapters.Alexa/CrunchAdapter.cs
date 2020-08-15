@@ -138,7 +138,7 @@ namespace Bot.Builder.Community.Adapters.Crunch
             return Task.FromException(new NotImplementedException("Alexa adapter does not support deleteActivity."));
         }
 
-        private async Task<SkillResponse> ProcessAlexaRequestAsync(CrunchRequest alexaRequest, BotCallbackHandler logic)
+        private async Task<CrunchResponse> ProcessAlexaRequestAsync(CrunchRequest alexaRequest, BotCallbackHandler logic)
         {
             var activity = RequestToActivity(alexaRequest);
             var context = new TurnContextEx(this, activity);

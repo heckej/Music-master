@@ -70,9 +70,9 @@ namespace Bot.Builder.Community.Adapters.Crunch.Core
         /// <param name="alexaRequest">Original SkillRequest received from Alexa Skills service. This is used
         /// to check if the original request was a SessionEndedRequest which should not return a response.</param>
         /// <returns>SkillResponse</returns>
-        public SkillResponse ActivityToResponse(MergedActivityResult mergedActivityResult, CrunchRequest alexaRequest)
+        public CrunchResponse ActivityToResponse(MergedActivityResult mergedActivityResult, CrunchRequest alexaRequest)
         {
-            var response = new SkillResponse()
+            var response = new CrunchResponse()
             {
                 Version = "1.0",
                 Response = new ResponseBody()
@@ -351,7 +351,7 @@ namespace Bot.Builder.Community.Adapters.Crunch.Core
         /// </summary>
         /// <param name="response">Boolean indicating if the 'ShouldEndSession' property can be populated on the response.'</param>
         /// <returns>bool</returns>
-        private bool ShouldSetEndSession(SkillResponse response)
+        private bool ShouldSetEndSession(CrunchResponse response)
         {
             if (response.Response.Directives.Any(d => d is IEndSessionDirective))
             {
@@ -373,7 +373,7 @@ namespace Bot.Builder.Community.Adapters.Crunch.Core
         /// </summary>
         /// <param name="activity">The Activity for which to process activities.</param>
         /// <param name="response">The SkillResponse to be modified based on the attachments on the Activity object.</param>
-        private void ProcessActivityAttachments(Activity activity, SkillResponse response)
+        private void ProcessActivityAttachments(Activity activity, CrunchResponse response)
         {
 
             var bfCard = activity.Attachments?.FirstOrDefault(a => a.ContentType == HeroCard.ContentType || a.ContentType == SigninCard.ContentType);

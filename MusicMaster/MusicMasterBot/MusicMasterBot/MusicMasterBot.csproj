@@ -32,4 +32,8 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Alexa.NET\Properties\" />
+  </ItemGroup>
 </Project>

@@ -8,5 +8,6 @@ namespace Crunch.NET.Response
     public interface IOutputSpeech : IResponse
     {
         PlayBehavior? PlayBehavior { get; set; }
+        string Text { get; set; }
     }
 }
