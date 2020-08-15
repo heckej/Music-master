@@ -1,0 +1,40 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove('$(MSBuildThisFileDirectory)../', 'Bot.Builder.Community.sln'))\CommonTargets\library.shared.targets" />
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Description>Core package containing Attachment types and turn context extensions for when using Bot Builder .NET Alexa Adapter to allow for a bot to be used for Alexa skills.</Description>
+    <RepositoryUrl>https://github.com/BotBuilderCommunity/botbuilder-community-dotnet/</RepositoryUrl>
+    <Authors>Bot Builder Community</Authors>
+    <Company>Bot Builder Community</Company>
+    <PackageProjectUrl>https://github.com/BotBuilderCommunity/botbuilder-community-dotnet/tree/master/libraries/Bot.Builder.Community.Adapters.Alexa</PackageProjectUrl>
+    <Version>1.0.0</Version>
+    <FileVersion>1.0.0</FileVersion>
+    <AssemblyVersion>1.0.0</AssemblyVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningsAsErrors />
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Helpers\**" />
+    <EmbeddedResource Remove="Helpers\**" />
+    <None Remove="Helpers\**" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <PackageReference Include="Alexa.NET" Version="1.13.3" />
+    <PackageReference Include="Alexa.NET.CustomerProfile" Version="2.1.1" />
+    <PackageReference Include="Microsoft.MarkedNet" Version="1.0.13" />
+    <PackageReference Include="Microsoft.Bot.Builder" Version="$(Bot_Builder_Version)" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <ProjectReference Include="..\Bot.Builder.Community.Adapters.Shared\Bot.Builder.Community.Adapters.Shared.csproj" />
+  </ItemGroup>
+
+</Project>
