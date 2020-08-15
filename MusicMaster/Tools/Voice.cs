@@ -1,4 +1,6 @@
-using System;
+﻿using System;
+using System.Diagnostics;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace Tools
@@ -6,8 +8,26 @@ namespace Tools
     public class Voice
     {
         /// <see>https://www.c-sharpcorner.com/blogs/using-systemspeech-with-net-core-30</see>
-        public static void Speak(string textToSpeech, bool wait = false)
+        public static string Speak(string textToSpeech, bool wait = false)
         {
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                return SpeakOnWindows(textToSpeech, wait);
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+                return SpeakOnLinux(textToSpeech, wait);
+            else
+                throw new Exception("No implementation exists for the current OS");
+        }
+
+        private static string SpeakOnLinux(string textToSpeech, bool wait = false)
+        {
+            string param = "\"" + textToSpeech + "\"";
+            return new RunCmd().RunPython3("/home/jvh/Music-master/MusicMaster/Tools/tts.py", param);
+        }
+
+        private static string SpeakOnWindows(string textToSpeech, bool wait = false)
+        {
+            /*string param = "\"" + textToSpeech + "\"";
+            return new RunCmd().RunPython3("tts.py", param);*/
             // Command to execute PS  
             Execute($@"Add-Type -AssemblyName System.speech;  
             $speak = New-Object System.Speech.Synthesis.SpeechSynthesizer;                           
@@ -39,6 +59,9 @@ namespace Tools
                 // The wait may not work! :(  
                 if (wait) p.WaitForExit();
             }
+            return null;
+        }
+
         public static string Listen()
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
