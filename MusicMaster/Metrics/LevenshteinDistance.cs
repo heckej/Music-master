@@ -107,6 +107,37 @@ namespace Metrics
             return results; 
         }
 
+        public static IList<double> ComputeBestPerWordInFirstSentence(string sentence1, string sentence2, bool ratio)
+        {
+            IList<double> results = new List<double>();
+            var wordsSentence1 = sentence1.Split(' ');
+            var wordsSentence2 = sentence2.Split(' ');
+            foreach (var word1 in wordsSentence1)
+            {
+                double bestLev = word1.Length;
+                double currentLev = bestLev;
+                if (ratio)
+                    bestLev = 0;
+                foreach (var word2 in wordsSentence2)
+                {
+                    if (ratio)
+                    {
+                        currentLev = ComputeSimilarityRatio(word1, word2);
+                        if (currentLev > bestLev)
+                            bestLev = currentLev;
+                    }
+                    else
+                    {
+                        currentLev = Compute(word1, word2);
+                        if (currentLev < bestLev)
+                            bestLev = currentLev;
+                    }
+                }
+                results.Add(bestLev);
+            }
+            return results;
+        }
+
         /// <summary>
         /// Computes the Levenshtein similarity ratio of two strings.
         /// </summary>
