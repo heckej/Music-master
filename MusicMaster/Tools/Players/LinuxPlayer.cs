@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,18 +16,23 @@ namespace Tools.Players
 
         public void Play(string fileName)
         {
-            ExecuteCmus("-q " + fileName);
-            ExecuteCmus("-n");
+            Stop();
+            ExecuteCmus("-q " + "\"" + fileName + "\"");
+            PlayNext();
         }
 
         public void PlayNext()
         {
+            ExecuteCmus("-n");
+            Resume();
             ExecuteCmus("-n");
         }
 
         public void PlayPrevious()
         {
             ExecuteCmus("-r");
+            ExecuteCmus("-r");
+            Resume();
         }
 
         public void Resume()
@@ -53,8 +58,11 @@ namespace Tools.Players
         private void ExecuteCmus(string arg)
         {
             var res = new RunCmd().Run(_cmus, arg);
-            if (res.Contains("cmus is not running"))
+            /*if (res["debug"] != "" && res["debug"] != null)*/
+               /* throw new Exception("Some debugging info: " + res["debug"] + "\nOutput: " + res["output"]);*/
+            if (res["debug"].Contains("cmus is not running"))
             {
+                throw new System.Exception("cmus not running.");
                 res = new RunCmd().Run("cmus & \n", "");
                 res = new RunCmd().Run(_cmus, arg);
             }
