@@ -1,4 +1,4 @@
-﻿using Microsoft.Bot.Builder;
+using Microsoft.Bot.Builder;
 using Microsoft.Bot.Schema;
 using System;
 using System.Collections.Generic;
@@ -61,7 +61,16 @@ namespace MusicMasterBot.TextToSpeech
                     }*/
                     foreach (Activity currentActivity in activities.Where(a => a.Type == ActivityTypes.Message))
                     {
-                        Voice.Speak(currentActivity.AsMessageActivity().Text);
+                        var text = currentActivity.AsMessageActivity().Text;
+                        if (text != null && !text.StartsWith("//"))
+                        {
+                            Console.WriteLine("Speaking: " + text);
+                            var speak = Voice.Speak(text);
+                            Console.WriteLine("Speech result: debug: " + speak["debug"] + ", output: " + speak["output"]);
+                        } else if (text != null)
+                        {
+                            currentActivity.AsMessageActivity().Text = text.Substring(2);
+                        }
                     }                    
                 }
 
