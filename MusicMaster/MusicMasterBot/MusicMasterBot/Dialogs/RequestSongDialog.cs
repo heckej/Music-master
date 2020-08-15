@@ -133,10 +133,14 @@ namespace MusicMasterBot.Dialogs
             if ((bool)stepContext.Result)
             {
                 var songRequest = (SongRequest)stepContext.Options;
-                
-                // get song of the given genre
-                var songDetails = (Song)
+                var songDetails = new Song()
+                {
+                    Title = songRequest.Title,
+                    Artist = songRequest.Artist,
+                    FilePath = SongToFilePath[songRequest.Title]
+                };
 
+                //return await stepContext.EndDialogAsync(songRequest, cancellationToken);
                 return await stepContext.EndDialogAsync(songDetails, cancellationToken);
             }
 
