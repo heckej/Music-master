@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -8,7 +9,7 @@ namespace Tools
     public class Voice
     {
         /// <see>https://www.c-sharpcorner.com/blogs/using-systemspeech-with-net-core-30</see>
-        public static string Speak(string textToSpeech, bool wait = false)
+        public static IDictionary<string, string> Speak(string textToSpeech, bool wait = false)
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                 return SpeakOnWindows(textToSpeech, wait);
@@ -18,13 +19,13 @@ namespace Tools
                 throw new Exception("No implementation exists for the current OS");
         }
 
-        private static string SpeakOnLinux(string textToSpeech, bool wait = false)
+        private static IDictionary<string,string> SpeakOnLinux(string textToSpeech, bool wait = false)
         {
             string param = "\"" + textToSpeech + "\"";
-            return new RunCmd().RunPython3("/home/jvh/Music-master/MusicMaster/Tools/tts.py", param);
+            return new RunCmd().RunPython3("tts.py", param);
         }
 
-        private static string SpeakOnWindows(string textToSpeech, bool wait = false)
+        private static IDictionary<string, string> SpeakOnWindows(string textToSpeech, bool wait = false)
         {
             /*string param = "\"" + textToSpeech + "\"";
             return new RunCmd().RunPython3("tts.py", param);*/
@@ -62,7 +63,7 @@ namespace Tools
             return null;
         }
 
-        public static string Listen()
+        public static IDictionary<string, string> Listen()
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
                 return ListenOnLinux();
@@ -70,9 +71,9 @@ namespace Tools
                 throw new Exception("No implementation exists for the current OS");
         }
 
-        public static string ListenOnLinux()
+        public static IDictionary<string, string> ListenOnLinux()
         {
-            return new RunCmd().RunPython3("/home/jvh/Music-master/MusicMaster/Tools/record.py", "");
+            return new RunCmd().RunPython3("record.py", "");
         }
 
     }
