@@ -89,9 +89,19 @@ namespace Metrics
             for (int i = 0; i < wordsLongestSentence.Count; i++)
             {
                 if (i < wordsShortestSentence.Count)
-                    results.Add(Compute(wordsLongestSentence[i], wordsShortestSentence[i]));
+                    if (!ratio)
+                        results.Add(Compute(wordsLongestSentence[i], wordsShortestSentence[i]));
+                    else
+                    {
+                        results.Add(ComputeSimilarityRatio(wordsLongestSentence[i], wordsShortestSentence[i]));
+                    }
                 else
-                    results.Add(wordsLongestSentence[i].Length);
+                {
+                    if (!ratio)
+                        results.Add(wordsLongestSentence[i].Length);
+                    else
+                        results.Add(0);
+                }
             }
 
             return results; 
