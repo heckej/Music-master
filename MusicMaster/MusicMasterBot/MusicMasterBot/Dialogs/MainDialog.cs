@@ -113,45 +113,45 @@ namespace MusicMasterBot.Dialogs
                     return await stepContext.BeginDialogAsync(nameof(RequestSongDialog), songRequest, cancellationToken);
 
                 case UserCommand.Intent.PlayRandom:
-                    // We haven't implemented the PlayRandomSongDialog so we just display a TODO message.
-                    var playRandomSongMessageText = "TODO: play random song here";
+                    musicPlayer.Play(randomSongPath);
+                    var playRandomSongMessageText = "Random song.";
                     var playRandomSongMessage = MessageFactory.Text(playRandomSongMessageText, playRandomSongMessageText, InputHints.IgnoringInput);
                     await stepContext.Context.SendActivityAsync(playRandomSongMessage, cancellationToken);
                     break;
 
                 case UserCommand.Intent.PreviousSong:
-                    // We haven't implemented the PlayRandomSongDialog so we just display a TODO message.
-                    var previousSongMessageText = "TODO: play previous song here";
+                    musicPlayer.PlayPrevious();
+                    var previousSongMessageText = "Previous song.";
                     var previousSongMessage = MessageFactory.Text(previousSongMessageText, previousSongMessageText, InputHints.IgnoringInput);
                     await stepContext.Context.SendActivityAsync(previousSongMessage, cancellationToken);
                     break;
                 case UserCommand.Intent.NextSong:
-                    // We haven't implemented the PlayRandomSongDialog so we just display a TODO message.
-                    var nextSongMessageText = "TODO: play next song here";
+                    musicPlayer.PlayNext();
+                    var nextSongMessageText = "Next song.";
                     var nextSongMessage = MessageFactory.Text(nextSongMessageText, nextSongMessageText, InputHints.IgnoringInput);
                     await stepContext.Context.SendActivityAsync(nextSongMessage, cancellationToken);
                     break;
                 case UserCommand.Intent.StartPlaying:
-                    // We haven't implemented the PlayRandomSongDialog so we just display a TODO message.
-                    var startPlayingMessageText = "TODO: resume playing here";
+                    musicPlayer.Resume();
+                    var startPlayingMessageText = "Music resumed.";
                     var startPlayingMessage = MessageFactory.Text(startPlayingMessageText, startPlayingMessageText, InputHints.IgnoringInput);
                     await stepContext.Context.SendActivityAsync(startPlayingMessage, cancellationToken);
                     break;
                 case UserCommand.Intent.StopPlaying:
-                    // We haven't implemented the PlayRandomSongDialog so we just display a TODO message.
-                    var stopPlayingMessageText = "TODO: stop playing here";
+                    musicPlayer.Pause();
+                    var stopPlayingMessageText = "Music paused.";
                     var stopPlayingMessage = MessageFactory.Text(stopPlayingMessageText, stopPlayingMessageText, InputHints.IgnoringInput);
                     await stepContext.Context.SendActivityAsync(stopPlayingMessage, cancellationToken);
                     break;
                 case UserCommand.Intent.VolumeDown:
-                    // We haven't implemented the PlayRandomSongDialog so we just display a TODO message.
-                    var volumeDownMessageText = "TODO: lower volume here";
+                    musicPlayer.VolumeDown();
+                    var volumeDownMessageText = "Volume decreased by 10%.";
                     var volumeDownMessage = MessageFactory.Text(volumeDownMessageText, volumeDownMessageText, InputHints.IgnoringInput);
                     await stepContext.Context.SendActivityAsync(volumeDownMessage, cancellationToken);
                     break;
                 case UserCommand.Intent.VolumeUp:
-                    // We haven't implemented the PlayRandomSongDialog so we just display a TODO message.
-                    var volumeUpMessageText = "TODO: increase volume here";
+                    musicPlayer.VolumeUp();
+                    var volumeUpMessageText = "Volume increased by 10%.";
                     var volumeUpMessage = MessageFactory.Text(volumeUpMessageText, volumeUpMessageText, InputHints.IgnoringInput);
                     await stepContext.Context.SendActivityAsync(volumeUpMessage, cancellationToken);
                     break;
