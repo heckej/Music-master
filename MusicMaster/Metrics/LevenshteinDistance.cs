@@ -65,13 +65,14 @@ namespace Metrics
         /// </summary>
         /// <param name="sentence1">The first sentence to be compared.</param>
         /// <param name="sentence2">The second sentence to be compared.</param>
+        /// <param name="ratio">Calculate as similarity ratios</param>
         /// <returns>A list of the Levenshtein distances between the respective words. 
         /// The list contains as much elements as there are words in the sentence with the most words.
         /// If one sentence is longer than the other, the words that don't have a respective word to 
         /// be compared to are compared to the empty string.</returns>
-        public static IList<int> ComputePerWordInSentence(string sentence1, string sentence2)
+        public static IList<double> ComputePerWordInSentence(string sentence1, string sentence2, bool ratio=false)
         {
-            IList<int> results = new List<int>();
+            IList<double> results = new List<double>();
             IList<string> wordsLongestSentence;
             IList<string> wordsShortestSentence;
 
