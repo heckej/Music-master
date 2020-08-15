@@ -12,6 +12,7 @@ using Microsoft.Bot.Schema;
 using Metrics;
 using System.Security.Policy;
 using MusicMasterBot.CognitiveModels;
+using System.Linq;
 
 namespace MusicMasterBot.Dialogs
 {
@@ -20,20 +21,11 @@ namespace MusicMasterBot.Dialogs
         private const string ArtistStepMsgText = "Who is the artist?";
         private const string TitleStepMsgText = "What is the title of the song?";
 
-        static string[] _artists = new string[] {
-                "Adele", "Coldplay", "The Beatles", "U2", "The Police", "George Ezra", "Billy Joel", "The Rolling Stones", "Agnes Obel", "Ed Sheeran"
-            };
-        private ISet<string> KnownArtists = new HashSet<string>(_artists);
-
-        static string[] _songs = new string[] {
-                "Someone Like You", "Viva La Vida", "Let It Be", "Bloody Sunday", "Every Breath You Take", "Shotgun", "Piano man", "Angie", "Riverside", "Castle On The Hill"
-            };
-        private ISet<string> KnownSongs = new HashSet<string>(_songs);
-
         private IDictionary<string, ISet<string>> ArtistsToSongs = new Dictionary<string, ISet<string>>();
-
-
         private Dictionary<string, string> SongToFilePath = new Dictionary<string, string>();
+
+        private ISet<string> KnownArtists;
+        private ISet<string> KnownSongs;
 
         int _levDistBoundary = 10;
         double _levDistPercentage = 0.5;
@@ -41,11 +33,36 @@ namespace MusicMasterBot.Dialogs
         public RequestSongDialog()
             : base(nameof(RequestSongDialog))
         {
-            for (int i=0; i<_artists.Length;i++)
-            {
-                ArtistsToSongs.Add(_artists[i], new HashSet<string>());
-                ArtistsToSongs[_artists[i]].Add(_songs[i]);
-            }
+
+            SongToFilePath.Add("Someone Like You", "/home/jvh/Muziek/Adele/21 [Australian Bonus Track Edition]/Adele Someone Like You.wma");
+            SongToFilePath.Add("Viva La Vida", "/home/jvh/Muziek/Coldplay/Viva la Vida/07 Viva la Vida.wma");
+            SongToFilePath.Add("Let It Be", "/home/jvh/Muziek/The Beatles/The Beatles #1/The Beatles Let It Be.wma");
+            SongToFilePath.Add("With Or Without You", "/home/jvh/Muziek/U2/U2 - With Or Without You.mp3");
+            SongToFilePath.Add("Every Breath You Take", "/home/jvh/Muziek/The Police/The Police - Every Breath You Take.mp3");
+            SongToFilePath.Add("Budapest", "/home/jvh/Muziek/George Ezra/George Ezra - Budapest (Official Video).mp3");
+            SongToFilePath.Add("Angie", "/home/jvh/Muziek/The Rolling Stones/Rolling Stones - Angie.mp3");
+            SongToFilePath.Add("Riverside", "/home/jvh/Muziek/Agnes Obel/Philharmonics/Agnes Obel Riverside.wma");
+
+            ArtistsToSongs.Add("Adele", new HashSet<string>());
+            ArtistsToSongs.Add("Coldplay", new HashSet<string>());
+            ArtistsToSongs.Add("The Beatles", new HashSet<string>());
+            ArtistsToSongs.Add("U2", new HashSet<string>());
+            ArtistsToSongs.Add("The Police", new HashSet<string>());
+            ArtistsToSongs.Add("George Ezra", new HashSet<string>());
+            ArtistsToSongs.Add("The Rolling Stones", new HashSet<string>());
+            ArtistsToSongs.Add("Agnes Obel", new HashSet<string>());
+
+            ArtistsToSongs["Adele"].Add("Someone Like You");
+            ArtistsToSongs["Coldplay"].Add("Viva La Vida");
+            ArtistsToSongs["The Beatles"].Add("Let It Be");
+            ArtistsToSongs["U2"].Add("With Or Without You");
+            ArtistsToSongs["The Police"].Add("Every Breath You Take");
+            ArtistsToSongs["George Ezra"].Add("Budapest");
+            ArtistsToSongs["The Rolling Stones"].Add("Angie");
+            ArtistsToSongs["Agnes Obel"].Add("Riverside");
+
+            KnownArtists = ArtistsToSongs.Keys.ToHashSet();
+            KnownSongs = SongToFilePath.Keys.ToHashSet();
 
             AddDialog(new TextPrompt(nameof(TextPrompt)));
             AddDialog(new ConfirmPrompt(nameof(ConfirmPrompt)));
@@ -87,6 +104,7 @@ namespace MusicMasterBot.Dialogs
                 songRequest.Artist = (string)stepContext.Result;
                 var (bestMatchArtist, levDistArtist) = GetBestMatch(songRequest.Artist, KnownArtists);
                 songRequest.Artist = bestMatchArtist;
+                songRequest.Title = ArtistsToSongs[bestMatchArtist].First();
             }
             if (songRequest.Intent == UserCommand.Intent.PlayByTitle || songRequest.Intent == UserCommand.Intent.PlayByTitleArtist)
             {
@@ -112,7 +130,10 @@ namespace MusicMasterBot.Dialogs
                 songRequest.Title = (string)stepContext.Result;
                 var (bestMatchTitle, levDist) = GetBestMatch(songRequest.Title, KnownSongs);
                 if (levDist < _levDistPercentage * bestMatchTitle.Length && IsSongOfArtist(bestMatchTitle, songRequest.Artist))
+                {
                     songRequest.Title = bestMatchTitle;
+                    songRequest.Artist = GetArtistOfSong(bestMatchTitle);
+                }
             }
 
             var messageText = $"Please confirm, I have you requesting: {songRequest.Title} by {songRequest.Artist}. Is this correct? ";
@@ -175,7 +196,15 @@ namespace MusicMasterBot.Dialogs
 
         private bool IsSongOfArtist(string songTitle, string artist)
         {
-            return songTitle == null || artist == null || (ArtistsToSongs.ContainsKey(artist) && ArtistsToSongs[artist].Contains(songTitle));
+            return songTitle != null && artist != null && (ArtistsToSongs.ContainsKey(artist) && ArtistsToSongs[artist].Contains(songTitle));
+        }
+
+        private string GetArtistOfSong(string songTitle)
+        {
+            foreach (string artist in KnownArtists)
+                if (IsSongOfArtist(songTitle, artist))
+                    return artist;
+            return null;
         }
     }
 }
