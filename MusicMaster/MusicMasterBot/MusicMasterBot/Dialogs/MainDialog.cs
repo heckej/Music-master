@@ -119,44 +119,44 @@ namespace MusicMasterBot.Dialogs
 
                 case UserCommand.Intent.PlayRandom:
                     musicPlayer.Play(randomSongPath);
-                    var playRandomSongMessageText = "Random song.";
+                    var playRandomSongMessageText = "//Random song.";
                     var playRandomSongMessage = MessageFactory.Text(playRandomSongMessageText, playRandomSongMessageText, InputHints.IgnoringInput);
                     await stepContext.Context.SendActivityAsync(playRandomSongMessage, cancellationToken);
                     break;
 
                 case UserCommand.Intent.PreviousSong:
                     musicPlayer.PlayPrevious();
-                    var previousSongMessageText = "Previous song.";
+                    var previousSongMessageText = "//Previous song.";
                     var previousSongMessage = MessageFactory.Text(previousSongMessageText, previousSongMessageText, InputHints.IgnoringInput);
                     await stepContext.Context.SendActivityAsync(previousSongMessage, cancellationToken);
                     break;
                 case UserCommand.Intent.NextSong:
                     musicPlayer.PlayNext();
-                    var nextSongMessageText = "Next song.";
+                    var nextSongMessageText = "//Next song.";
                     var nextSongMessage = MessageFactory.Text(nextSongMessageText, nextSongMessageText, InputHints.IgnoringInput);
                     await stepContext.Context.SendActivityAsync(nextSongMessage, cancellationToken);
                     break;
                 case UserCommand.Intent.StartPlaying:
                     musicPlayer.Resume();
-                    var startPlayingMessageText = "Music resumed.";
+                    var startPlayingMessageText = "//Music resumed.";
                     var startPlayingMessage = MessageFactory.Text(startPlayingMessageText, startPlayingMessageText, InputHints.IgnoringInput);
                     await stepContext.Context.SendActivityAsync(startPlayingMessage, cancellationToken);
                     break;
                 case UserCommand.Intent.StopPlaying:
                     musicPlayer.Pause();
-                    var stopPlayingMessageText = "Music paused.";
+                    var stopPlayingMessageText = "//Music paused.";
                     var stopPlayingMessage = MessageFactory.Text(stopPlayingMessageText, stopPlayingMessageText, InputHints.IgnoringInput);
                     await stepContext.Context.SendActivityAsync(stopPlayingMessage, cancellationToken);
                     break;
                 case UserCommand.Intent.VolumeDown:
                     musicPlayer.VolumeDown();
-                    var volumeDownMessageText = "Volume decreased by 10%.";
+                    var volumeDownMessageText = "//Volume decreased by 10%.";
                     var volumeDownMessage = MessageFactory.Text(volumeDownMessageText, volumeDownMessageText, InputHints.IgnoringInput);
                     await stepContext.Context.SendActivityAsync(volumeDownMessage, cancellationToken);
                     break;
                 case UserCommand.Intent.VolumeUp:
                     musicPlayer.VolumeUp();
-                    var volumeUpMessageText = "Volume increased by 10%.";
+                    var volumeUpMessageText = "//Volume increased by 10%.";
                     var volumeUpMessage = MessageFactory.Text(volumeUpMessageText, volumeUpMessageText, InputHints.IgnoringInput);
                     await stepContext.Context.SendActivityAsync(volumeUpMessage, cancellationToken);
                     break;
@@ -215,7 +215,7 @@ namespace MusicMasterBot.Dialogs
             }
 
             // Restart the main dialog with a different message the second time around
-            var promptMessage = "What else can I do for you?";
+            var promptMessage = "//What else can I do for you?";
             return await stepContext.ReplaceDialogAsync(InitialDialogId, promptMessage, cancellationToken);
         }
     }
