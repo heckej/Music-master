@@ -16,6 +16,7 @@ using Microsoft.Recognizers.Text.DataTypes.TimexExpression;
 
 using MusicMasterBot;
 using MusicMasterBot.CognitiveModels;
+using Tools;
 
 namespace MusicMasterBot.Dialogs
 {
@@ -73,7 +74,11 @@ namespace MusicMasterBot.Dialogs
             var songRequest = new SongRequest()
             {
                 Intent = luisResult.TopIntent().intent
-            }
+            };
+
+            var musicPlayer = new MusicPlayer();
+            var randomSongPath = "/home/jvh/Muziek/Einaudi/Divenire/Monday.wav"; // not so random song
+
             switch (luisResult.TopIntent().intent)
             {
                 case UserCommand.Intent.PlayByTitleArtist:
@@ -186,14 +191,26 @@ namespace MusicMasterBot.Dialogs
         {
             // If the child dialog ("RequestSongDialog") was cancelled, the user failed to confirm or if the intent wasn't PlayByTitleArtist
             // the Result here will be null.
-            if (stepContext.Result is SongRequest result)
+            if (stepContext.Result is Song result)
             {
+                string messageText;
+                Activity message;
                 // Now we have all the song details call the music player.
+                var musicPlayer = new MusicPlayer();
+                try
+                {
+                    musicPlayer.Play(result);
+                } catch(Exception e)
+                {
+                    messageText = e.ToString();
+                    message = MessageFactory.Text(messageText, messageText, InputHints.IgnoringInput);
+                    await stepContext.Context.SendActivityAsync(message, cancellationToken);
+                }
 
                 // If the call to the music player service was successful tell the user.
 
-                var messageText = $"I will now play {result.Title} by {result.Artist}.";
-                var message = MessageFactory.Text(messageText, messageText, InputHints.IgnoringInput);
+                messageText = $"I will now play {result.Title} by {result.Artist}.";
+                message = MessageFactory.Text(messageText, messageText, InputHints.IgnoringInput);
                 await stepContext.Context.SendActivityAsync(message, cancellationToken);
             }
 
