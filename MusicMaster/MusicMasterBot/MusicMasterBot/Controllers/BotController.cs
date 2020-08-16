@@ -3,6 +3,7 @@
 //
 // Generated with Bot Builder V4 SDK Template for Visual Studio CoreBot v4.9.2
 
+using System.Diagnostics;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Bot.Builder;
@@ -31,6 +32,7 @@ namespace MusicMasterBot.Controllers
         {
             // Delegate the processing of the HTTP POST to the adapter.
             // The adapter will invoke the bot.
+            Debug.WriteLine("Request: " + Request.Body.ToString());
             await Adapter.ProcessAsync(Request, Response, Bot);
         }
     }

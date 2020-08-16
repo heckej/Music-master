@@ -1,4 +1,4 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30011.22
@@ -16,6 +16,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicData", "MusicData\MusicData.csproj", "{83270825-FC93-4A15-9AC2-77D9CD13CE3D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserCommandLogic", "UserCommandLogic\UserCommandLogic.csproj", "{095F31BD-8854-4749-89F9-C0F44E9C6F5C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicMasterSpeechClient", "MusicMasterSpeechClient\MusicMasterSpeechClient.csproj", "{91301003-D1EF-4ACA-82AC-0F6EAFE363E8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
