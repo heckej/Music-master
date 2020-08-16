@@ -3,6 +3,9 @@ A bot that serves your taste of music (hopefully).
 
 Say something like 'Play Someone Like Me by Adele' and enjoy! 'Louder' if you don't hear it well, or 'Silent!' if you're tired for a moment. 'What about some hard rock?' or 'Do you know Let it be by The Beatles?'.
 
+## License
+MIT, Copyright 2020 heckej
+
 ## Dependencies
 * To play music (in Linux), you should install [cmus](https://cmus.github.io/) and add music to your library.
 * Speech recognition (in Linux) needs `python 3` with the [SpeechRecognition](https://pypi.org/project/SpeechRecognition/) library installed.
