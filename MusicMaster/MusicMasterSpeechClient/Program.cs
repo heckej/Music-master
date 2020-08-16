@@ -19,6 +19,10 @@ namespace MusicMasterSpeechClient
     {
         private static readonly HttpClient client = new HttpClient();
         static string endPoint = "http://localhost:3978/api/crunch";
+        static string mention1 = "music master";
+        static string mention2 = "musicmaster";
+        static double activeListeningTime = 5000;
+
         private static readonly JsonSerializerSettings JsonSerializerSettings = new JsonSerializerSettings
         {
             ContractResolver = new CamelCasePropertyNamesContractResolver(),
@@ -28,26 +32,74 @@ namespace MusicMasterSpeechClient
 
         static void Main(string[] args)
         {
+            var response = ProcessUserRequest("").Result;
+            Console.WriteLine("<< " + response);
+
             string userInput;
+            double timeLeft = 0;
+            IDictionary<string, string> listenResult;
+            var watch = System.Diagnostics.Stopwatch.StartNew();
+
             while (true)
             {
+                timeLeft -= watch.ElapsedMilliseconds;
+
                 // listen to mic input
-                /*Console.Write("> ");
-                userInput = Console.ReadLine();*/
-                userInput = Tools.Voice.Listen()["output"];
+                Console.Write("> ");
+                /*userInput = Console.ReadLine();*/
+                listenResult = Tools.Voice.Listen();
+                userInput = listenResult["output"];
+                Console.WriteLine(userInput);
+                var firstTimeNotAccepted = true;
+
+                while(userInput.Contains("not understood!") || (!userInput.ToLower().Contains(mention1) && !userInput.ToLower().Contains(mention2) && timeLeft <= 0))
+                {
+                    if (firstTimeNotAccepted && !userInput.Contains("not understood!"))
+                    {
+                        Console.WriteLine("<< Say \'Music Master\' to wake me.");
+                        Console.Write("> ");
+                        firstTimeNotAccepted = false;
+                    } else if (!userInput.Contains("not understood!"))
+                    {
+                        Console.WriteLine(userInput);
+                        Console.Write("> ");
+                    }
+                    
+                    listenResult = Tools.Voice.Listen();
+                    userInput = listenResult["output"];
+                    timeLeft -= watch.ElapsedMilliseconds;
+                }
+
+                Console.WriteLine(userInput);
+                Console.WriteLine("Debug info: " + listenResult["debug"]);
 
                 // print input
                 Console.WriteLine(">> " + userInput);
+
+                var filteredUserInput = userInput.Replace(mention1, "").Replace(mention2, "");
+
                 // process input
-                var response = ProcessUserRequest(userInput).Result;
+                if (!userInput.Contains("not understood!") && filteredUserInput.Replace(" ", "").Length != 0)
+                {
+                    response = ProcessUserRequest(userInput).Result;
 
-                if (!response.StartsWith("//"))
-                    Tools.Voice.Speak(response);
+                    if (response != null && !response.StartsWith("//"))
+                    {
+                        Tools.Voice.Speak(response);
+                        Console.WriteLine("Speaking...");
+                    }
+                    if (response != null)
+                        response = response.Replace("//", "");
+
+                    // say result out loud
+                    Console.WriteLine("<< " + response);
+                }
                 else
-                    response = response.Substring(2);
-
-                // say result out loud
-                Console.WriteLine("<< " + response);
+                {
+                    Console.WriteLine("Not understood!");
+                }
+                timeLeft = activeListeningTime;
+                watch.Restart();
 
             }
         }
@@ -74,7 +126,7 @@ namespace MusicMasterSpeechClient
 
             var musicMasterResponse =  JsonConvert.DeserializeObject<CrunchResponse>(responseContent, JsonSerializerSettings);
 
-            return musicMasterResponse.Response.Reprompt.OutputSpeech.Text;
+            return musicMasterResponse?.Response?.Reprompt?.OutputSpeech?.Text;
         }
     }
 }
