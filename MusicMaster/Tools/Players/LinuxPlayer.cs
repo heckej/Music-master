@@ -8,6 +8,9 @@ namespace Tools.Players
     class LinuxPlayer : IPlayer
     {
         string _cmus = "cmus-remote";
+        string _statusStopped = "status stopped";
+        string _statusPlaying = "status playing";
+        string _statusPaused = "status paused";
 
         public void Pause()
         {
@@ -16,7 +19,6 @@ namespace Tools.Players
 
         public void Play(string fileName)
         {
-            Stop();
             ExecuteCmus("-q " + "\"" + fileName + "\"");
             PlayNext();
         }
@@ -24,15 +26,16 @@ namespace Tools.Players
         public void PlayNext()
         {
             ExecuteCmus("-n");
-            Resume();
-            ExecuteCmus("-n");
+            if (ExecuteCmus("-Q").Contains(_statusStopped))
+                Resume();
         }
 
         public void PlayPrevious()
         {
             ExecuteCmus("-r");
             ExecuteCmus("-r");
-            Resume();
+            if (ExecuteCmus("-Q").Contains(_statusStopped))
+                Resume();
         }
 
         public void Resume()
@@ -55,7 +58,7 @@ namespace Tools.Players
             ExecuteCmus("-v +" + percentage + "%");
         }
 
-        private void ExecuteCmus(string arg)
+        private string ExecuteCmus(string arg)
         {
             var res = new RunCmd().Run(_cmus, arg);
             /*if (res["debug"] != "" && res["debug"] != null)*/
@@ -66,6 +69,7 @@ namespace Tools.Players
                 res = new RunCmd().Run("cmus & \n", "");
                 res = new RunCmd().Run(_cmus, arg);
             }
+            return res["output"];
         }
     }
 }
