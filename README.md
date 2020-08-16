@@ -26,5 +26,5 @@ The bot can respond by saying some things out loud using text to speech. It ther
 ## Python called from .NET Core
 In the code of the bot there is a class that allows to execute commands in a separate process, with a function specifically for `python3` scripts, however it should be easy enough to change this to be used in Windows too.
 
-## Command interpretation
+## User command interpretation
 To detect intents and entities a custom [LUIS](https://luis.ai) model is used.
