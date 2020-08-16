@@ -17,6 +17,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using MusicMasterBot.TextToSpeech;
 
 namespace Bot.Builder.Community.Adapters.Crunch
 {
@@ -33,8 +34,14 @@ namespace Bot.Builder.Community.Adapters.Crunch
         private readonly ILogger _logger;
         private readonly CrunchRequestMapper _requestMapper;
 
-        public CrunchAdapter(CrunchAdapterOptions options = null, ILogger logger = null)
+        public CrunchAdapter(CrunchAdapterOptions options = null, ILogger logger = null, VoiceMiddleware voiceMiddleware = null)
         {
+            if (voiceMiddleware != null)
+            {
+                // Add voice middleware to the adapter's middleware pipeline
+                Use(voiceMiddleware);
+            }
+
             _options = options ?? new CrunchAdapterOptions();
             _logger = logger ?? NullLogger.Instance;
 
