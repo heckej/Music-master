@@ -10,10 +10,12 @@ using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Integration.AspNet.Core;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-
+using MusicData;
 using MusicMasterBot.Bots;
 using MusicMasterBot.Dialogs;
 using MusicMasterBot.TextToSpeech;
+using System.Linq;
+using UserCommandLogic;
 
 namespace MusicMasterBot
 {
@@ -48,8 +50,22 @@ namespace MusicMasterBot
             // The MainDialog that will be run by the bot.
             services.AddSingleton<MainDialog>();
 
-            // Create the Voice Middleware that will be added to the middleware pipeline in the AdapterWithErrorHandler
-            services.AddSingleton<VoiceMiddleware>();
+            var con = new DatabaseConnector("localhost", "media", "media", "media");
+            var artistsToSongs = con.GetArtistsToSongs().Result;
+            var songToFilePath = con.GetSongToFilePath().Result;
+
+            var knownArtists = con.GetKnownArtists().Result;
+            var knownSongs = con.GetKnownSongs().Result;
+
+            Globals.ArtistsToSongs = artistsToSongs;
+            Globals.SongToFilePath = songToFilePath;
+            Globals.KnownArtists = knownArtists;
+            Globals.KnownSongs = knownSongs;
+            Globals.Songs = con.GetSongTable().Result.ToList();
+            Globals.SongChooser = new SongChooser(Globals.Songs);
+
+        // Create the Voice Middleware that will be added to the middleware pipeline in the AdapterWithErrorHandler
+        services.AddSingleton<VoiceMiddleware>();
 
             // Create the bot as a transient. In this case the ASP Controller is expecting an IBot.
             services.AddTransient<IBot, MusicAndWelcomeBot<MainDialog>>();

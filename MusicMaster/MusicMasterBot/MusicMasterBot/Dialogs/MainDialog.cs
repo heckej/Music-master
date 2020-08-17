@@ -17,6 +17,7 @@ using Microsoft.Recognizers.Text.DataTypes.TimexExpression;
 using MusicMasterBot;
 using MusicMasterBot.CognitiveModels;
 using Tools;
+using UserCommandLogic;
 
 namespace MusicMasterBot.Dialogs
 {
@@ -77,7 +78,6 @@ namespace MusicMasterBot.Dialogs
             };
 
             var musicPlayer = new MusicPlayer();
-            var randomSongPath = "/home/jvh/Muziek/Einaudi/Divenire/Monday.wav"; // not so random song
 
             switch (luisResult.TopIntent().intent)
             {
@@ -118,8 +118,10 @@ namespace MusicMasterBot.Dialogs
                     return await stepContext.BeginDialogAsync(nameof(RequestSongDialog), songRequest, cancellationToken);
 
                 case UserCommand.Intent.PlayRandom:
+                    var randomSong = Globals.SongChooser.ChooseRandomSong();
+                    var randomSongPath = randomSong.FilePath;
                     musicPlayer.Play(randomSongPath);
-                    var playRandomSongMessageText = "//Random song.";
+                    var playRandomSongMessageText = "//Random song: " + randomSong.Title + " by " + randomSong.Artist + ".";
                     var playRandomSongMessage = MessageFactory.Text(playRandomSongMessageText, playRandomSongMessageText, InputHints.IgnoringInput);
                     await stepContext.Context.SendActivityAsync(playRandomSongMessage, cancellationToken);
                     break;

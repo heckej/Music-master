@@ -24,6 +24,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Metrics\Metrics.csproj" />
+    <ProjectReference Include="..\..\MusicData\MusicData.csproj" />
     <ProjectReference Include="..\..\Tools\Tools.csproj" />
   </ItemGroup>
 

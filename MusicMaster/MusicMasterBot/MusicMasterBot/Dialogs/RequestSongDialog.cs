@@ -13,6 +13,7 @@ using Metrics;
 using System.Security.Policy;
 using MusicMasterBot.CognitiveModels;
 using System.Linq;
+using UserCommandLogic;
 
 namespace MusicMasterBot.Dialogs
 {
@@ -21,11 +22,11 @@ namespace MusicMasterBot.Dialogs
         private const string ArtistStepMsgText = "Who is the artist?";
         private const string TitleStepMsgText = "What is the title of the song?";
 
-        private IDictionary<string, ISet<string>> ArtistsToSongs = new Dictionary<string, ISet<string>>();
-        private Dictionary<string, string> SongToFilePath = new Dictionary<string, string>();
+        private IDictionary<string, ISet<string>> ArtistsToSongs = Globals.ArtistsToSongs;
+        private Dictionary<string, string> SongToFilePath = Globals.SongToFilePath;
 
-        private ISet<string> KnownArtists;
-        private ISet<string> KnownSongs;
+        private ISet<string> KnownArtists = Globals.KnownArtists;
+        private ISet<string> KnownSongs = Globals.KnownSongs;
 
         int _levDistBoundary = 10;
         double _levDistPercentage = 0.5;
@@ -34,7 +35,7 @@ namespace MusicMasterBot.Dialogs
             : base(nameof(RequestSongDialog))
         {
 
-            SongToFilePath.Add("Someone Like You", "/home/jvh/Muziek/Adele/21 [Australian Bonus Track Edition]/Adele Someone Like You.wma");
+            /*SongToFilePath.Add("Someone Like You", "/home/jvh/Muziek/Adele/21 [Australian Bonus Track Edition]/Adele Someone Like You.wma");
             SongToFilePath.Add("Viva La Vida", "/home/jvh/Muziek/Coldplay/Viva la Vida/07 Viva la Vida.wma");
             SongToFilePath.Add("Let It Be", "/home/jvh/Muziek/The Beatles/The Beatles #1/The Beatles Let It Be.wma");
             SongToFilePath.Add("With Or Without You", "/home/jvh/Muziek/U2/U2 - With Or Without You.mp3");
@@ -62,7 +63,7 @@ namespace MusicMasterBot.Dialogs
             ArtistsToSongs["Agnes Obel"].Add("Riverside");
 
             KnownArtists = ArtistsToSongs.Keys.ToHashSet();
-            KnownSongs = SongToFilePath.Keys.ToHashSet();
+            KnownSongs = SongToFilePath.Keys.ToHashSet();*/
 
             AddDialog(new TextPrompt(nameof(TextPrompt)));
             AddDialog(new ConfirmPrompt(nameof(ConfirmPrompt)));
@@ -104,7 +105,7 @@ namespace MusicMasterBot.Dialogs
                 songRequest.Artist = (string)stepContext.Result;
                 var (bestMatchArtist, levDistArtist) = GetBestMatch(songRequest.Artist, KnownArtists);
                 songRequest.Artist = bestMatchArtist;
-                songRequest.Title = ArtistsToSongs[bestMatchArtist].First();
+                songRequest.Title = Globals.SongChooser.ChooseSongByArtist(bestMatchArtist).Title;
             }
             if (songRequest.Intent == UserCommand.Intent.PlayByTitle || songRequest.Intent == UserCommand.Intent.PlayByTitleArtist)
             {
