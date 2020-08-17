@@ -10,7 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="Players\MacPlayer.cs" />
+    <ProjectReference Include="..\UserCommandLogic\UserCommandLogic.csproj" />
   </ItemGroup>
 
 </Project>

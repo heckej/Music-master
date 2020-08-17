@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace MusicMasterBot
+namespace UserCommandLogic
 {
     public class Song
     {
