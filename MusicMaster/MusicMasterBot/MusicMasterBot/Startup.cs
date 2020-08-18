@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 //
 // Generated with Bot Builder V4 SDK Template for Visual Studio CoreBot v4.9.2
@@ -66,11 +66,13 @@ namespace MusicMasterBot
             Globals.SongToFilePath = songToFilePath;
             Globals.KnownArtists = knownArtists;
             Globals.KnownSongs = knownSongs;
-            Globals.Songs = con.GetSongTable().Result.ToList();
-            Globals.SongChooser = new SongChooser(Globals.Songs);
 
-        // Create the Voice Middleware that will be added to the middleware pipeline in the AdapterWithErrorHandler
-        services.AddSingleton<VoiceMiddleware>();
+            services.AddSingleton(new SongChooser(con));
+            services.AddSingleton(con);
+            services.AddSingleton<IPlayer>();
+
+            // Create the Voice Middleware that will be added to the middleware pipeline in the AdapterWithErrorHandler
+            services.AddSingleton<VoiceMiddleware>();
 
             // Create the bot as a transient. In this case the ASP Controller is expecting an IBot.
             services.AddTransient<IBot, MusicAndWelcomeBot<MainDialog>>();
