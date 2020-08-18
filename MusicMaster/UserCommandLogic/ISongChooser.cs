@@ -19,9 +19,13 @@ namespace UserCommandLogic
 
         Song GetSongByClosestTitle(string title, string artist);
 
-        ISet<Song> GetAllSongsByClosestTitle(string title);
+        Song GetSongByClosestTitle(string title);
 
         Song GetSongByClosestArtist(string title, string artist);
+
+        Song GetSongByClosestArtistOrTitle(string title, string artist);
+
+        ISet<Song> GetAllSongsByClosestTitle(string title);
 
         (string bestMatch, double similarityRatio) GetClosestKnownArtist(string artist);
 

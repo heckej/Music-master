@@ -1,4 +1,4 @@
-using MusicData;
+﻿using MusicData;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -72,6 +72,11 @@ namespace UserCommandLogic
             return SelectSongByClosestArtist(artist, closestSongs);
         }
 
+        public Song GetSongByClosestTitle(string title)
+        {
+            return SelectSongByClosestTitle(title, _songs.ToImmutableHashSet());
+        }
+
         private Song SelectSongByClosestArtist(string artist, ISet<Song> songs)
         {
             var artists = new HashSet<string>();
@@ -90,13 +95,13 @@ namespace UserCommandLogic
             return GetAllSongsByClosestTitle(title, _knownSongTitles);
         }
 
-        public ISet<Song> GetAllSongsByClosestTitle(string title, ISet<string> setOfTitles)
+        public ISet<Song> GetAllSongsByClosestTitle(string title, ISet<string> setOfTitles, double ratio=0.80)
         {
             var results = new HashSet<Song>();
-            var titleMatches = LevenshteinDistance.GetAllBestMatches(title, setOfTitles, _thresholdSimilarityRatio, true);
+            var titleMatches = LevenshteinDistance.GetAllBestMatches(title, setOfTitles, ratio, true);
             foreach (var song in _songs)
             {
-                foreach (var (songTitle, score) in titleMatches)
+                foreach (var (songTitle, _) in titleMatches)
                     if (song.Title == songTitle)
                         results.Add(song);
             }
