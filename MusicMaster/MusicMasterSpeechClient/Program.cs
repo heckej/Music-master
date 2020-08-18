@@ -18,10 +18,10 @@ namespace MusicMasterSpeechClient
     class Program
     {
         private static readonly HttpClient client = new HttpClient();
-        static string endPoint = "http://localhost:3978/api/crunch";
-        static string mention1 = "music master";
-        static string mention2 = "musicmaster";
-        static double activeListeningTime = 5000;
+        static readonly string endPoint = "http://localhost:3978/api/crunch";
+        static readonly string mention1 = "music master";
+        static readonly string mention2 = "musicmaster";
+        static readonly double activeListeningTime = 5000;
 
         private static readonly JsonSerializerSettings JsonSerializerSettings = new JsonSerializerSettings
         {
@@ -30,7 +30,7 @@ namespace MusicMasterSpeechClient
             NullValueHandling = NullValueHandling.Ignore,
         };
 
-        static void Main(string[] args)
+        static void Main()
         {
             var response = ProcessUserRequest("").Result;
             Console.WriteLine("<< " + response);
