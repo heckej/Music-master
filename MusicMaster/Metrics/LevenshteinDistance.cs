@@ -107,7 +107,7 @@ namespace Metrics
             return results; 
         }
 
-        public static IList<double> ComputeBestPerWordInFirstSentence(string sentence1, string sentence2, bool ratio)
+        public static IList<double> ComputeBestPerWordInFirstSentence(string sentence1, string sentence2, bool ratio=false)
         {
             IList<double> results = new List<double>();
             var wordsSentence1 = sentence1.Split(' ');
@@ -147,6 +147,30 @@ namespace Metrics
         public static double ComputeSimilarityRatio(string s, string t)
         {
             return (double) (s.Length + t.Length - Compute(s,t)) / (s.Length + t.Length);
+        }
+        public static ISet<(string, double)> GetAllBestMatches(string value, ISet<string> setToMatch, double threshold, bool ratio=false)
+        {
+            var results = new HashSet<(string, double)>();
+            if (value == null)
+                return null;
+            value = value.ToLower();
+            double currentScore;
+            foreach (var item in setToMatch)
+            {
+                if (ratio)
+                {
+                    currentScore = ComputeSimilarityRatio(item, value);
+                    if (currentScore >= threshold)
+                        results.Add((item, currentScore));
+                }
+                else
+                {
+                    currentScore = Compute(item, value);
+                    if (currentScore <= threshold)
+                        results.Add((item, currentScore));
+                }
+            }
+            return results;
         }
     }
 }
