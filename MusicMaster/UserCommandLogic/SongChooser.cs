@@ -1,10 +1,13 @@
-using MusicData;
+﻿using MusicData;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using Metrics;
 using System.Collections.Immutable;
 using System.ComponentModel;
+using MusicMasterBot;
+using MusicMasterBot.CognitiveModels;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace UserCommandLogic
 {
@@ -16,7 +19,7 @@ namespace UserCommandLogic
         ///     
 
         private IList<Song> _songs;
-        private static Random _random = new Random();
+        private static readonly Random _random = new Random();
         private ISet<string> _knownArtists;
         private ISet<string> _knownSongTitles;
         private IDictionary<string, ISet<Song>> _artistsToSongs = new Dictionary<string, ISet<Song>>();
@@ -26,6 +29,18 @@ namespace UserCommandLogic
         double ISongChooser.ThresholdSimilarityRatio { get => _thresholdSimilarityRatio; set => _thresholdSimilarityRatio = value; }
 
         public SongChooser(DatabaseConnector databaseConnector)
+        {
+            SetDatabaseConnection(databaseConnector);
+        }
+
+        public SongChooser()
+        {
+            _songs = new List<Song>();
+            _knownArtists = new HashSet<string>();
+            _knownSongTitles = new HashSet<string>();
+        }
+
+        public void SetDatabaseConnection(DatabaseConnector databaseConnector)
         {
             _songs = databaseConnector.GetSongTable().Result.ToList();
             LinkArtistsToSongs();
@@ -169,8 +184,10 @@ namespace UserCommandLogic
 
         private void LinkArtistsToSongs()
         {
+
             foreach (var song in _songs)
             {
+                _artistsToSongs = new Dictionary<string, ISet<Song>>();
                 if (!_artistsToSongs.ContainsKey(song.Artist))
                     _artistsToSongs.Add(song.Artist, new HashSet<Song>());
                 _artistsToSongs[song.Artist].Add(song);
