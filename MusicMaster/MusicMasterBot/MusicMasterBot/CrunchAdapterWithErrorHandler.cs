@@ -1,13 +1,21 @@
 ﻿using Bot.Builder.Community.Adapters.Crunch;
 using Microsoft.Extensions.Logging;
+using MusicMasterBot.TextToSpeech;
 
 namespace MusicMasterBot
 {
     public class CrunchAdapterWithErrorHandler : CrunchAdapter
     {
-        public CrunchAdapterWithErrorHandler(ILogger<CrunchAdapter> logger)
+        public CrunchAdapterWithErrorHandler(ILogger<CrunchAdapter> logger, VoiceMiddleware voiceMiddleware = null)
             : base(new CrunchAdapterOptions() { ShouldEndSessionByDefault = false, ValidateIncomingCrunchRequests = false, AlexaSkillId = "XXXX" }, logger)
         {
+
+            if (voiceMiddleware != null)
+            {
+                // Add voice middleware to the adapter's middleware pipeline
+                Use(voiceMiddleware);
+            }
+
             //Adapter.Use(new AlexaIntentRequestToMessageActivityMiddleware());
 
             OnTurnError = async (turnContext, exception) =>

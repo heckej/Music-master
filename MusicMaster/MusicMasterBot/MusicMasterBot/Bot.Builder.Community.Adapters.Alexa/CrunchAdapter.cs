@@ -34,14 +34,8 @@ namespace Bot.Builder.Community.Adapters.Crunch
         private readonly ILogger _logger;
         private readonly CrunchRequestMapper _requestMapper;
 
-        public CrunchAdapter(CrunchAdapterOptions options = null, ILogger logger = null, VoiceMiddleware voiceMiddleware = null)
+        public CrunchAdapter(CrunchAdapterOptions options = null, ILogger logger = null)
         {
-            if (voiceMiddleware != null)
-            {
-                // Add voice middleware to the adapter's middleware pipeline
-                Use(voiceMiddleware);
-            }
-
             _options = options ?? new CrunchAdapterOptions();
             _logger = logger ?? NullLogger.Instance;
 
