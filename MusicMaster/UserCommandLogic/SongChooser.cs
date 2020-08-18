@@ -1,4 +1,4 @@
-﻿using MusicData;
+using MusicData;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -123,6 +123,15 @@ namespace UserCommandLogic
                     if (song.Title == bestMatch)
                         return song;
             return null;
+        }
+
+        public Song GetSongByClosestArtistOrTitle(string title, string artist)
+        {
+            var (bestMatchArtist, similarityRatioArtist) = GetClosestKnownArtist(artist, _thresholdSimilarityRatio);
+            var (bestMatchTitle, similarityRatioTitle) = GetClosestKnownSongTitle(title, _thresholdSimilarityRatio);
+            if (similarityRatioArtist >= similarityRatioTitle)
+                return GetSongByClosestArtist(title, bestMatchArtist);
+            return GetSongByClosestTitle(bestMatchTitle, artist);
         }
 
         public (string bestMatch, double similarityRatio) GetClosestKnownArtist(string artist)
