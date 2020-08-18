@@ -4,17 +4,12 @@
 // Generated with Bot Builder V4 SDK Template for Visual Studio CoreBot v4.9.2
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Schema;
 using Microsoft.Extensions.Logging;
-using Microsoft.Recognizers.Text.DataTypes.TimexExpression;
-
-using MusicMasterBot;
 using MusicMasterBot.CognitiveModels;
 using Tools;
 using UserCommandLogic;
@@ -82,147 +77,153 @@ namespace MusicMasterBot.Dialogs
                 Intent = luisResult.TopIntent().intent
             };
 
-            var musicPlayer = new MusicPlayer();
+            var inputHint = InputHints.IgnoringInput;
+            string messageText = "";
+            string spokenMessageText = "";
+            Song songToBePlayed = null;
 
             switch (luisResult.TopIntent().intent)
             {
                 case UserCommand.Intent.PlayByTitleArtist:
-                    await ShowWarningForUnknownSong(stepContext.Context, luisResult, cancellationToken);
 
                     // Initialize SongRequest with any entities we may have found in the response.
                     songRequest.Title = luisResult.SongTitle;
                     songRequest.Artist = luisResult.SongArtist;
 
-                    // Run the RequestSongDialog giving it whatever details we have from the LUIS call, it will fill out the remainder.
-                    return await stepContext.BeginDialogAsync(nameof(RequestSongDialog), songRequest, cancellationToken);
+                    songToBePlayed = _songChooser.GetSongByClosestArtistOrTitle(luisResult.SongTitle, luisResult.SongArtist);
+
+                    if (songToBePlayed is null)
+                    {
+                        // Run the RequestSongDialog giving it whatever details we have from the LUIS call, it will fill out the remainder.
+                        return await stepContext.BeginDialogAsync(nameof(RequestSongDialog), songRequest, cancellationToken);
+                    }
+                    break;
 
                 case UserCommand.Intent.PlayByArtist:
-                    await ShowWarningForUnknownSong(stepContext.Context, luisResult, cancellationToken);
 
                     // Initialize SongRequest with any entities we may have found in the response.
                     songRequest.Artist = luisResult.SongArtist;
 
-                    // Run the RequestSongDialog giving it whatever details we have from the LUIS call, it will fill out the remainder.
-                    return await stepContext.BeginDialogAsync(nameof(RequestSongDialog), songRequest, cancellationToken);
+                    var (bestMatchArtist, similarityRatioArtist) = _songChooser.GetClosestKnownArtist(luisResult.SongArtist, _songChooser.ThresholdSimilarityRatio);
+
+                    if (bestMatchArtist is null)
+                    {
+                        // Run the RequestSongDialog giving it whatever details we have from the LUIS call, it will fill out the remainder.
+                        return await stepContext.BeginDialogAsync(nameof(RequestSongDialog), songRequest, cancellationToken);
+                    }
+
+
+                    songToBePlayed = _songChooser.ChooseRandomSongByArtist(bestMatchArtist);
+                    messageText = "Random song by artist.";
+                    break;
 
                 case UserCommand.Intent.PlayByTitle:
-                    await ShowWarningForUnknownSong(stepContext.Context, luisResult, cancellationToken);
 
                     // Initialize SongRequest with any entities we may have found in the response.
                     songRequest.Title = luisResult.SongTitle;
 
-                    // Run the RequestSongDialog giving it whatever details we have from the LUIS call, it will fill out the remainder.
-                    return await stepContext.BeginDialogAsync(nameof(RequestSongDialog), songRequest, cancellationToken);
+                    var (bestMatchTitle, similarityRatioTitle) = _songChooser.GetClosestKnownSongTitle(luisResult.SongTitle, _songChooser.ThresholdSimilarityRatio);
+
+                    if (bestMatchTitle is null)
+                    {
+                        // Run the RequestSongDialog giving it whatever details we have from the LUIS call, it will fill out the remainder.
+                        return await stepContext.BeginDialogAsync(nameof(RequestSongDialog), songRequest, cancellationToken);
+                    }
+
+                    songToBePlayed = _songChooser.GetSongByClosestTitle(songRequest.Title);
+                    break;
 
                 case UserCommand.Intent.PlayByGenre:
 
                     // Initialize SongRequest with any entities we may have found in the response.
                     songRequest.Genre = luisResult.SongGenre;
 
-                    // Run the RequestSongDialog giving it whatever details we have from the LUIS call, it will fill out the remainder.
-                    return await stepContext.BeginDialogAsync(nameof(RequestSongDialog), songRequest, cancellationToken);
+                    var (bestMatchGenre, similarityRatioGenre) = _songChooser.GetClosestKnownGenre(luisResult.SongGenre, _songChooser.ThresholdSimilarityRatio);
+
+                    if (bestMatchGenre is null)
+                    {
+                        // Run the RequestSongByGenreDialog giving it whatever details we have from the LUIS call, it will fill out the remainder.
+                        return await stepContext.BeginDialogAsync(nameof(RequestSongByGenreDialog), songRequest, cancellationToken);
+                    }
+
+                    songToBePlayed = _songChooser.ChooseRandomSongByGenre(bestMatchGenre);
+                    messageText = "Random song by genre.";
+                    break;
 
                 case UserCommand.Intent.PlayRandom:
-                    var randomSong = Globals.SongChooser.ChooseRandomSong();
-                    var randomSongPath = randomSong.FilePath;
-                    musicPlayer.Play(randomSongPath);
-                    var playRandomSongMessageText = "//Random song: " + randomSong.Title + " by " + randomSong.Artist + ".";
-                    var playRandomSongMessage = MessageFactory.Text(playRandomSongMessageText, playRandomSongMessageText, InputHints.IgnoringInput);
-                    await stepContext.Context.SendActivityAsync(playRandomSongMessage, cancellationToken);
+                    songToBePlayed = _songChooser.ChooseRandomSong();
+                    messageText = "Random song.";
                     break;
 
                 case UserCommand.Intent.PreviousSong:
-                    musicPlayer.PlayPrevious();
-                    var previousSongMessageText = "//Previous song.";
-                    var previousSongMessage = MessageFactory.Text(previousSongMessageText, previousSongMessageText, InputHints.IgnoringInput);
-                    await stepContext.Context.SendActivityAsync(previousSongMessage, cancellationToken);
+                    _musicPlayer.PlayPrevious();
+                    messageText = "Previous song.";
                     break;
                 case UserCommand.Intent.NextSong:
-                    musicPlayer.PlayNext();
-                    var nextSongMessageText = "//Next song.";
-                    var nextSongMessage = MessageFactory.Text(nextSongMessageText, nextSongMessageText, InputHints.IgnoringInput);
-                    await stepContext.Context.SendActivityAsync(nextSongMessage, cancellationToken);
+                    _musicPlayer.PlayNext();
+                    messageText = "Next song.";
                     break;
                 case UserCommand.Intent.StartPlaying:
-                    musicPlayer.Resume();
-                    var startPlayingMessageText = "//Music resumed.";
-                    var startPlayingMessage = MessageFactory.Text(startPlayingMessageText, startPlayingMessageText, InputHints.IgnoringInput);
-                    await stepContext.Context.SendActivityAsync(startPlayingMessage, cancellationToken);
+                    _musicPlayer.Resume();
+                    messageText = "Music resumed.";
                     break;
                 case UserCommand.Intent.StopPlaying:
-                    musicPlayer.Pause();
-                    var stopPlayingMessageText = "//Music paused.";
-                    var stopPlayingMessage = MessageFactory.Text(stopPlayingMessageText, stopPlayingMessageText, InputHints.IgnoringInput);
-                    await stepContext.Context.SendActivityAsync(stopPlayingMessage, cancellationToken);
+                    _musicPlayer.Pause();
+                    messageText = "Music paused.";
                     break;
                 case UserCommand.Intent.VolumeDown:
-                    musicPlayer.VolumeDown();
-                    var volumeDownMessageText = "//Volume decreased by 10%.";
-                    var volumeDownMessage = MessageFactory.Text(volumeDownMessageText, volumeDownMessageText, InputHints.IgnoringInput);
-                    await stepContext.Context.SendActivityAsync(volumeDownMessage, cancellationToken);
+                    _musicPlayer.VolumeDown();
+                    messageText = "Volume decreased by 10%.";
                     break;
                 case UserCommand.Intent.VolumeUp:
-                    musicPlayer.VolumeUp();
-                    var volumeUpMessageText = "//Volume increased by 10%.";
-                    var volumeUpMessage = MessageFactory.Text(volumeUpMessageText, volumeUpMessageText, InputHints.IgnoringInput);
-                    await stepContext.Context.SendActivityAsync(volumeUpMessage, cancellationToken);
+                    _musicPlayer.VolumeUp(20);
+                    messageText = "Volume increased by 20%.";
                     break;
 
                 default:
                     // Catch all for unhandled intents
-                    var didntUnderstandMessageText = $"Sorry, I didn't get that. Please try asking in a different way (intent was {luisResult.TopIntent().intent})";
-                    var didntUnderstandMessage = MessageFactory.Text(didntUnderstandMessageText, didntUnderstandMessageText, InputHints.IgnoringInput);
-                    await stepContext.Context.SendActivityAsync(didntUnderstandMessage, cancellationToken);
+                    messageText = $"Sorry, I didn't get that. Please try asking in a different way (intent was {luisResult.TopIntent().intent})";
+                    (_, spokenMessageText) = SentenceGenerator.CommandNotUnderstood();
+                    inputHint = InputHints.ExpectingInput;
                     break;
             }
 
-            return await stepContext.NextAsync(null, cancellationToken);
-        }
+            var message = MessageFactory.Text(messageText, spokenMessageText, inputHint);
+            await stepContext.Context.SendActivityAsync(message, cancellationToken);
 
-        // Shows a warning if the requested MusicArtist or MusicSongTitle are recognized as entities but they are not in the entity list.
-        private static async Task ShowWarningForUnknownSong(ITurnContext context, UserCommand luisResult, CancellationToken cancellationToken)
-        {
-            var unknownkArtists = new List<string>();
-            var unknownSongTitles = new List<string>();
-
-            if (unknownkArtists.Any() || unknownSongTitles.Any())
-            {
-                var messageText = $"Sorry but the following artists are not known: {string.Join(',', unknownkArtists)}";
-                messageText += $"Sorry but the following song titles are not known: {string.Join(',', unknownSongTitles)}";
-                var message = MessageFactory.Text(messageText, messageText, InputHints.IgnoringInput);
-                await context.SendActivityAsync(message, cancellationToken);
-            }
+            return await stepContext.NextAsync(songToBePlayed, cancellationToken);
         }
 
         private async Task<DialogTurnResult> FinalStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
             // If the child dialog ("RequestSongDialog") was cancelled, the user failed to confirm or if the intent wasn't PlayByTitleArtist
             // the Result here will be null.
-            if (stepContext.Result is Song result)
+            if (stepContext.Result is Song songToBePlayed)
             {
                 string messageText;
+                string spokenMessageText;
                 Activity message;
                 // Now we have all the song details call the music player.
-                var musicPlayer = new MusicPlayer();
                 try
                 {
-                    musicPlayer.Play(result);
+                    _musicPlayer.Play(songToBePlayed);
+
+                    // If the call to the music player service was successful tell the user.
+                    (messageText, spokenMessageText) = SentenceGenerator.PresentSongToBePlayed(songToBePlayed);
+                    message = MessageFactory.Text(messageText, spokenMessageText, InputHints.IgnoringInput);
+                    await stepContext.Context.SendActivityAsync(message, cancellationToken);
                 } catch(Exception e)
                 {
                     messageText = e.ToString();
-                    message = MessageFactory.Text(messageText, messageText, InputHints.IgnoringInput);
+                    spokenMessageText = "Sorry, something went wrong, so I cannot play the song.";
+                    message = MessageFactory.Text(messageText, spokenMessageText, InputHints.IgnoringInput);
                     await stepContext.Context.SendActivityAsync(message, cancellationToken);
                 }
 
-                // If the call to the music player service was successful tell the user.
-
-                messageText = $"I will now play {result.Title} by {result.Artist}.";
-                message = MessageFactory.Text(messageText, messageText, InputHints.IgnoringInput);
-                await stepContext.Context.SendActivityAsync(message, cancellationToken);
             }
 
             // Restart the main dialog with a different message the second time around
-            var promptMessage = "//What else can I do for you?";
+            var (promptMessage, _) = SentenceGenerator.ProposeFurtherHelp();
             return await stepContext.ReplaceDialogAsync(InitialDialogId, promptMessage, cancellationToken);
         }
     }
