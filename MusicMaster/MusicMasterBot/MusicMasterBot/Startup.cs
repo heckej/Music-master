@@ -1,4 +1,4 @@
-﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 //
 // Generated with Bot Builder V4 SDK Template for Visual Studio CoreBot v4.9.2
@@ -16,13 +16,15 @@ using MusicMasterBot.Dialogs;
 using MusicMasterBot.TextToSpeech;
 using System.Linq;
 using UserCommandLogic;
+using Microsoft.Extensions.Configuration;
+using Tools;
 
 namespace MusicMasterBot
 {
     public class Startup
     {
         // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
+        public void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
             services.AddControllers().AddNewtonsoftJson();
 
@@ -50,7 +52,10 @@ namespace MusicMasterBot
             // The MainDialog that will be run by the bot.
             services.AddSingleton<MainDialog>();
 
-            var con = new DatabaseConnector("localhost", "media", "media", "media");
+            //  configuration["SongDatabase"], configuration["SongDatabase"]["Database"], 
+            // configuration["SongDatabase"]["User"], configuration["SongDatabase"]["Password"]);
+            var con = new DatabaseConnector(configuration["SongDatabase:Server"], configuration["SongDatabase:Database"], 
+                configuration["SongDatabase:User"], configuration["SongDatabase:Password"]);
             var artistsToSongs = con.GetArtistsToSongs().Result;
             var songToFilePath = con.GetSongToFilePath().Result;
 
