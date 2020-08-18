@@ -25,13 +25,18 @@ namespace MusicMasterBot.Dialogs
     {
         private readonly UserCommandRecognizer _luisRecognizer;
         protected readonly ILogger Logger;
+        private readonly ISongChooser _songChooser;
+        private readonly IPlayer _musicPlayer;
 
         // Dependency injection uses this constructor to instantiate MainDialog
-        public MainDialog(UserCommandRecognizer luisRecognizer, RequestSongDialog bookingDialog, ILogger<MainDialog> logger)
+        public MainDialog(UserCommandRecognizer luisRecognizer, RequestSongDialog bookingDialog, ILogger<MainDialog> logger, 
+            ISongChooser songChooser, IPlayer musicPlayer)
             : base(nameof(MainDialog))
         {
             _luisRecognizer = luisRecognizer;
             Logger = logger;
+            _songChooser = songChooser;
+            _musicPlayer = musicPlayer;
 
             AddDialog(new TextPrompt(nameof(TextPrompt)));
             AddDialog(bookingDialog);
