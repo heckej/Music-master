@@ -148,6 +148,35 @@ namespace Metrics
         {
             return (double) (s.Length + t.Length - Compute(s,t)) / (s.Length + t.Length);
         }
+        public static (string bestMatch, double levenshteinDistance) GetBestMatch(string value, ISet<string> setToMatch, bool ratio=false)
+        {
+            if (value == null)
+                return (null, 0);
+            value = value.ToLower();
+            string bestMatch = null;
+            double bestLevDist = int.MaxValue;
+            if (ratio)
+                bestLevDist = 0;
+            double currentLevDist;
+
+            foreach (var item in setToMatch)
+            {
+                if (ratio)
+                {
+                    currentLevDist = Compute(item, value);
+                    if (currentLevDist > bestLevDist)
+                        bestLevDist = currentLevDist;
+                }
+                else
+                {
+                    currentLevDist = ComputeSimilarityRatio(item, value);
+                    if (currentLevDist < bestLevDist)
+                        bestLevDist = currentLevDist;
+                }
+            }
+            return (bestMatch, bestLevDist);
+        }
+
         public static ISet<(string, double)> GetAllBestMatches(string value, ISet<string> setToMatch, double threshold, bool ratio=false)
         {
             var results = new HashSet<(string, double)>();
