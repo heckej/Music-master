@@ -56,18 +56,8 @@ namespace MusicMasterBot
             // configuration["SongDatabase"]["User"], configuration["SongDatabase"]["Password"]);
             var con = new DatabaseConnector(configuration["SongDatabase:Server"], configuration["SongDatabase:Database"], 
                 configuration["SongDatabase:User"], configuration["SongDatabase:Password"]);
-            var artistsToSongs = con.GetArtistsToSongs().Result;
-            var songToFilePath = con.GetSongToFilePath().Result;
 
-            var knownArtists = con.GetKnownArtists().Result;
-            var knownSongs = con.GetKnownSongs().Result;
-
-            Globals.ArtistsToSongs = artistsToSongs;
-            Globals.SongToFilePath = songToFilePath;
-            Globals.KnownArtists = knownArtists;
-            Globals.KnownSongs = knownSongs;
-
-            services.AddSingleton(new SongChooser(con));
+            services.AddSingleton(new SongChooser());
             services.AddSingleton(con);
             services.AddSingleton<IPlayer>();
 
