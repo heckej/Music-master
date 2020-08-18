@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MusicMasterBot;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -38,5 +39,7 @@ namespace UserCommandLogic
         (string bestMatch, double similarityRatio) GetClosestKnownGenre(string genre);
 
         (string bestMatch, double similarityRatio) GetClosestKnownGenre(string genre, double threshold);
+
+        Song ChooseByRequest(SongRequest songRequest);
     }
 }
