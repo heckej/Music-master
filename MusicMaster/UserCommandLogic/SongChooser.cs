@@ -1,4 +1,4 @@
-﻿using MusicData;
+using MusicData;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -206,6 +206,24 @@ namespace UserCommandLogic
         public (string bestMatch, double similarityRatio) GetClosestKnownGenre(string genre, double threshold)
         {
             throw new NotImplementedException();
+        }
+
+        public Song ChooseByRequest(SongRequest songRequest)
+        {
+            Song song = null;
+            switch (songRequest.Intent)
+            {
+                case UserCommand.Intent.PlayByTitle:
+                    song = GetSongByClosestTitle(songRequest.Title);
+                    break;
+                case UserCommand.Intent.PlayByArtist:
+                    song = ChooseRandomSongByArtist(songRequest.Artist);
+                    break;
+                case UserCommand.Intent.PlayByTitleArtist:
+                    song = GetSongByClosestArtistOrTitle(songRequest.Title, songRequest.Artist);
+                    break;
+            }
+            return song;
         }
     }
 }
