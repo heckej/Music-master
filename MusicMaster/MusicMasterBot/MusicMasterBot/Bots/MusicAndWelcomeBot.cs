@@ -45,18 +45,14 @@ namespace MusicMasterBot.Bots
         {
             var cardResourcePath = GetType().Assembly.GetManifestResourceNames().First(name => name.EndsWith("welcomeCard.json"));
 
-            using (var stream = GetType().Assembly.GetManifestResourceStream(cardResourcePath))
+            using var stream = GetType().Assembly.GetManifestResourceStream(cardResourcePath);
+            using var reader = new StreamReader(stream);
+            var adaptiveCard = reader.ReadToEnd();
+            return new Attachment()
             {
-                using (var reader = new StreamReader(stream))
-                {
-                    var adaptiveCard = reader.ReadToEnd();
-                    return new Attachment()
-                    {
-                        ContentType = "application/vnd.microsoft.card.adaptive",
-                        Content = JsonConvert.DeserializeObject(adaptiveCard),
-                    };
-                }
-            }
+                ContentType = "application/vnd.microsoft.card.adaptive",
+                Content = JsonConvert.DeserializeObject(adaptiveCard),
+            };
         }
     }
 }
