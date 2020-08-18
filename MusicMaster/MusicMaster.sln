@@ -11,8 +11,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Metrics", "Metrics\Metrics.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tools", "Tools\Tools.csproj", "{FBF6000C-9CD0-4868-BD11-C8B3D2F4D79D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo", "Demo\Demo.csproj", "{559F6855-1FBD-4AA4-A6EB-CDECC1F98EE9}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusicData", "MusicData\MusicData.csproj", "{83270825-FC93-4A15-9AC2-77D9CD13CE3D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserCommandLogic", "UserCommandLogic\UserCommandLogic.csproj", "{095F31BD-8854-4749-89F9-C0F44E9C6F5C}"
@@ -20,6 +18,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusicMasterSpeechClient", "MusicMasterSpeechClient\MusicMasterSpeechClient.csproj", "{91301003-D1EF-4ACA-82AC-0F6EAFE363E8}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DBConsole", "DBConsole\DBConsole.csproj", "{4A52A2D9-DAE7-4C11-BA45-2395B3AEDDCF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crunch.NET", "Crunch.NET\Crunch.NET.csproj", "{1FDB0249-B6EE-4B28-9824-95C0E78E93FB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -43,10 +43,6 @@ Global
 		{FBF6000C-9CD0-4868-BD11-C8B3D2F4D79D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FBF6000C-9CD0-4868-BD11-C8B3D2F4D79D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FBF6000C-9CD0-4868-BD11-C8B3D2F4D79D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{559F6855-1FBD-4AA4-A6EB-CDECC1F98EE9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{559F6855-1FBD-4AA4-A6EB-CDECC1F98EE9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{559F6855-1FBD-4AA4-A6EB-CDECC1F98EE9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{559F6855-1FBD-4AA4-A6EB-CDECC1F98EE9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{83270825-FC93-4A15-9AC2-77D9CD13CE3D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{83270825-FC93-4A15-9AC2-77D9CD13CE3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{83270825-FC93-4A15-9AC2-77D9CD13CE3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -63,6 +59,10 @@ Global
 		{4A52A2D9-DAE7-4C11-BA45-2395B3AEDDCF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4A52A2D9-DAE7-4C11-BA45-2395B3AEDDCF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4A52A2D9-DAE7-4C11-BA45-2395B3AEDDCF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1FDB0249-B6EE-4B28-9824-95C0E78E93FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1FDB0249-B6EE-4B28-9824-95C0E78E93FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1FDB0249-B6EE-4B28-9824-95C0E78E93FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1FDB0249-B6EE-4B28-9824-95C0E78E93FB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -35,6 +35,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Alexa.NET\Properties\" />
+    <Folder Include="Crunch.NET\Properties\" />
   </ItemGroup>
 </Project>
