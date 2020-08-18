@@ -9,8 +9,7 @@ namespace Tools
 {
     public class MusicPlayer : IPlayer
     {
-        private Song _currentSong;
-        private IPlayer _player;
+        private readonly IPlayer _player;
 
         public MusicPlayer()
         {
@@ -25,7 +24,7 @@ namespace Tools
         public void Play(Song song)
         {
             // play the song song.Title by song.Artist
-            _currentSong = song;
+            CurrentSong = song;
             Play(song.FilePath);
         }
 
@@ -71,6 +70,6 @@ namespace Tools
             _player.PlayPrevious();
         }
 
-        public Song CurrentSong => _currentSong;
+        public Song CurrentSong { get; private set; }
     }
 }

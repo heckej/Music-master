@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using UserCommandLogic;
 
 namespace Tools.Players
 {
@@ -9,6 +10,11 @@ namespace Tools.Players
         public void Pause()
         {
             throw new NotImplementedException();
+        }
+
+        public void Play(Song song)
+        {
+            Play(song.FilePath);
         }
 
         public void Play(string fileName)

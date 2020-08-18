@@ -2,19 +2,25 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using UserCommandLogic;
 
 namespace Tools.Players
 {
     class LinuxPlayer : IPlayer
     {
-        string _cmus = "cmus-remote";
-        string _statusStopped = "status stopped";
-        string _statusPlaying = "status playing";
-        string _statusPaused = "status paused";
+        readonly string _cmus = "cmus-remote";
+        readonly string _statusStopped = "status stopped";
+        readonly string _statusPlaying = "status playing";
+        readonly string _statusPaused = "status paused";
 
         public void Pause()
         {
             ExecuteCmus("-u");
+        }
+
+        public void Play(Song song)
+        {
+            Play(song.FilePath);
         }
 
         public void Play(string fileName)
@@ -66,8 +72,8 @@ namespace Tools.Players
             if (res["debug"].Contains("cmus is not running"))
             {
                 throw new System.Exception("cmus not running.");
-                res = new RunCmd().Run("cmus & \n", "");
-                res = new RunCmd().Run(_cmus, arg);
+                /*res = new RunCmd().Run("cmus & \n", "");
+                res = new RunCmd().Run(_cmus, arg);*/
             }
             return res["output"];
         }
