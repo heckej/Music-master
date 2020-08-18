@@ -41,5 +41,37 @@ namespace MusicMasterBot
             int r = _random.Next(sentences.Count);
             return sentences.ElementAt(r);
         }
+
+        public static (string written, string spoken) CommandNotUnderstood()
+        {
+            IList<(string, string)> sentences = new List<(string, string)>();
+            sentences.Add(($"I didn't understand that.", $"I didn't understand that."));
+            sentences.Add(($"What do you mean?", $"What do you mean?"));
+            sentences.Add(($"Sorry, I didn't get that.", $"Sorry, I didn't get that."));
+            sentences.Add(($"Sorry, I don't know what you mean.", $"Sorry, I don't know what you mean."));
+            sentences.Add(($"Could you please repeat that?", $"Could you please repeat that?"));
+            sentences.Add(($"Could you rephrase that?", $"Could you rephrase that?"));
+            sentences.Add(($"Maybe try to ask it differently?", $"Maybe try to ask it differently?"));
+            sentences.Add(($"I don't know what you're talking about.", $"I don't know what you're talking about."));
+
+            int r = _random.Next(sentences.Count);
+            return sentences.ElementAt(r);
+        }
+
+        public static (string written, string spoken) ProposeFurtherHelp()
+        {
+            IList<(string, string)> sentences = new List<(string, string)>();
+            sentences.Add(($"What else can I do for you?", $"What else can I do for you?"));
+            sentences.Add(($"Is there anything else I can do?", $"Is there anything else I can do?"));
+            sentences.Add(($"Anything else?", $"Anything else?"));
+            sentences.Add(($"Can I still be of service?", $"Can I still be of service?"));
+            sentences.Add(($"Shall I help you with something else?", $"Shall I help you with something else?"));
+            sentences.Add(($"What shall I do next?", $"What shall I do next?"));
+            sentences.Add(($"What do you want me to do next?", $"What do you want me to do next?"));
+            sentences.Add(($"Music Master, at your service.", $"Music Master, at your service."));
+
+            int r = _random.Next(sentences.Count);
+            return sentences.ElementAt(r);
+        }
     }
 }
