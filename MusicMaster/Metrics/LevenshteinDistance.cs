@@ -17,6 +17,8 @@ namespace Metrics
         /// <see>Code copied from Dot Net Perls: https://www.dotnetperls.com/levenshtein </see>
         public static int Compute(string s, string t)
         {
+            s = s.ToLower();
+            t = t.ToLower();
             int n = s.Length;
             int m = t.Length;
             int[,] d = new int[n + 1, m + 1];
@@ -115,7 +117,7 @@ namespace Metrics
             foreach (var word1 in wordsSentence1)
             {
                 double bestLev = word1.Length;
-                double currentLev = bestLev;
+                double currentLev;
                 if (ratio)
                     bestLev = 0;
                 foreach (var word2 in wordsSentence2)
@@ -163,15 +165,21 @@ namespace Metrics
             {
                 if (ratio)
                 {
-                    currentLevDist = Compute(item, value);
+                    currentLevDist = ComputeSimilarityRatio(item, value);
                     if (currentLevDist > bestLevDist)
+                    {
                         bestLevDist = currentLevDist;
+                        bestMatch = item;
+                    }
                 }
                 else
                 {
-                    currentLevDist = ComputeSimilarityRatio(item, value);
+                    currentLevDist = Compute(item, value);
                     if (currentLevDist < bestLevDist)
+                    {
                         bestLevDist = currentLevDist;
+                        bestMatch = item;
+                    }
                 }
             }
             return (bestMatch, bestLevDist);
