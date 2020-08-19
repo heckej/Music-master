@@ -97,6 +97,24 @@ namespace UserCommandLogic
             return songsByArtist.ElementAt(r);
         }
 
+        public Song ChooseByRequest(SongRequest songRequest)
+        {
+            Song song = null;
+            switch (songRequest.Intent)
+            {
+                case UserCommand.Intent.PlayByTitle:
+                    song = GetSongByClosestTitle(songRequest.Title);
+                    break;
+                case UserCommand.Intent.PlayByArtist:
+                    song = ChooseRandomSongByArtist(GetClosestKnownArtist(songRequest.Artist).bestMatch);
+                    break;
+                case UserCommand.Intent.PlayByTitleArtist:
+                    song = GetSongByClosestArtistOrTitle(songRequest.Title, songRequest.Artist);
+                    break;
+            }
+            return song;
+        }
+
         public Song GetSongData(string title, string artist)
         {
             if (IsKnownArtistWithSongs(artist))
