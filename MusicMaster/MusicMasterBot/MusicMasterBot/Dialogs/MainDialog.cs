@@ -64,15 +64,22 @@ namespace MusicMasterBot.Dialogs
 
         private async Task<DialogTurnResult> ActStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
+            var userInput = stepContext.Context.Activity.Text;
+            SongRequest songRequest;
             if (!_luisRecognizer.IsConfigured)
             {
+                songRequest = new SongRequest()
+                {
+                    Artist = _songChooser.GetKnownArtistFromSentence(userInput),
+                    Title = _songChooser.GetKnownSongTitleFromSentence(userInput)
+                };
                 // LUIS is not configured, we just run the RequestSongDialog path with an empty SongDetailsInstance.
-                return await stepContext.BeginDialogAsync(nameof(RequestSongDialog), new SongRequest(), cancellationToken);
+                return await stepContext.BeginDialogAsync(nameof(RequestSongDialog), songRequest, cancellationToken);
             }
 
             // Call LUIS and gather any potential song details. (Note the TurnContext has the response to the prompt.)
             var luisResult = await _luisRecognizer.RecognizeAsync<UserCommand>(stepContext.Context, cancellationToken);
-            var songRequest = new SongRequest()
+            songRequest = new SongRequest()
             {
                 Intent = luisResult.TopIntent().intent
             };
@@ -89,6 +96,10 @@ namespace MusicMasterBot.Dialogs
                     // Initialize SongRequest with any entities we may have found in the response.
                     songRequest.Title = luisResult.SongTitle;
                     songRequest.Artist = luisResult.SongArtist;
+                    if (songRequest.Artist is null)
+                        songRequest.Artist = _songChooser.GetKnownArtistFromSentence(userInput);
+                    if (songRequest.Title is null)
+                        songRequest.Title = _songChooser.GetKnownSongTitleFromSentence(userInput);
 
                     songToBePlayed = _songChooser.GetSongByClosestArtistOrTitle(luisResult.SongTitle, luisResult.SongArtist);
 
@@ -103,15 +114,17 @@ namespace MusicMasterBot.Dialogs
 
                     // Initialize SongRequest with any entities we may have found in the response.
                     songRequest.Artist = luisResult.SongArtist;
+                    if (songRequest.Artist is null)
+                        songRequest.Artist = _songChooser.GetKnownArtistFromSentence(userInput);
 
                     var (bestMatchArtist, similarityRatioArtist) = _songChooser.GetClosestKnownArtist(luisResult.SongArtist, _songChooser.ThresholdSimilarityRatio);
+                    Console.WriteLine(songRequest.Artist + " => " + bestMatchArtist);
 
                     if (bestMatchArtist is null)
                     {
                         // Run the RequestSongDialog giving it whatever details we have from the LUIS call, it will fill out the remainder.
                         return await stepContext.BeginDialogAsync(nameof(RequestSongDialog), songRequest, cancellationToken);
                     }
-
 
                     songToBePlayed = _songChooser.ChooseRandomSongByArtist(bestMatchArtist);
                     messageText = "Random song by artist.";
@@ -121,6 +134,8 @@ namespace MusicMasterBot.Dialogs
 
                     // Initialize SongRequest with any entities we may have found in the response.
                     songRequest.Title = luisResult.SongTitle;
+                    if (songRequest.Title is null)
+                        songRequest.Title = _songChooser.GetKnownSongTitleFromSentence(userInput);
 
                     var (bestMatchTitle, similarityRatioTitle) = _songChooser.GetClosestKnownSongTitle(luisResult.SongTitle, _songChooser.ThresholdSimilarityRatio);
 
