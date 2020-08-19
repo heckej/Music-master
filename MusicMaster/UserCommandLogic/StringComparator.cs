@@ -1,5 +1,6 @@
-﻿using Metrics;
+using Metrics;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 
@@ -56,6 +57,47 @@ namespace UserCommandLogic
             //  calculate levDist/common chars: if below threshold -> 'word occurs in sentence 2'
 
             return 0;
+        }
+        public static string PreprocessString(string s)
+        {
+            if (s is null)
+                return null;
+            foreach (var c in _charsToBeRemovedInPreprocessing)
+                s = s.Replace(c, "");
+            return s.ToLower().Replace("&", "and");
+        }
+
+        public static IList<string> PreprocessCollection(IList<string> list)
+        {
+            var results = new List<string>();
+            foreach (var s in list)
+            {
+                var str = PreprocessString(s);
+                results.Add(str);
+            }
+            return results;
+        }
+
+        public static HashSet<string> PreprocessCollection(HashSet<string> set)
+        {
+            var results = new HashSet<string>();
+            foreach (var s in set)
+            {
+                var str = PreprocessString(s);
+                results.Add(str);
+            }
+            return results;
+        }
+
+        public static SortedSet<string> PreprocessCollection(SortedSet<string> set)
+        {
+            var results = new SortedSet<string>();
+            foreach (var s in set)
+            {
+                var str = PreprocessString(s);
+                results.Add(str);
+            }
+            return results;
         }
     }
 }
