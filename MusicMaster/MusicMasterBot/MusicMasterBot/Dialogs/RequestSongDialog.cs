@@ -15,6 +15,7 @@ using MusicMasterBot.CognitiveModels;
 using System.Linq;
 using UserCommandLogic;
 using Crunch.NET.Response.Ssml;
+using System;
 
 namespace MusicMasterBot.Dialogs
 {
@@ -47,9 +48,12 @@ namespace MusicMasterBot.Dialogs
             if (songRequest.Intent == UserCommand.Intent.PlayByArtist || songRequest.Intent == UserCommand.Intent.PlayByTitleArtist)
             {
                 var (bestMatchArtist, _) = _songChooser.GetClosestKnownArtist(songRequest.Artist, _songChooser.ThresholdSimilarityRatio);
+                Console.WriteLine(songRequest.Artist + " => " + bestMatchArtist);
+
                 if (bestMatchArtist is null)
                 {
                     (bestMatchArtist, _) = _songChooser.GetClosestKnownArtist(songRequest.Artist);
+                    Console.WriteLine(songRequest.Artist + " => " + bestMatchArtist);
                     var (messageText, spokenMessageText) = SentenceGenerator.AskArtistName(bestMatchArtist);
                     var promptMessage = MessageFactory.Text(messageText, spokenMessageText, InputHints.ExpectingInput);
                     return await stepContext.PromptAsync(nameof(TextPrompt), new PromptOptions { Prompt = promptMessage }, cancellationToken);
@@ -65,6 +69,17 @@ namespace MusicMasterBot.Dialogs
             if (songRequest.Intent == UserCommand.Intent.PlayByArtist || songRequest.Intent == UserCommand.Intent.PlayByTitleArtist)
             {
                 songRequest.Artist = (string)stepContext.Result;
+                var knownArtistInResult = _songChooser.GetKnownArtistFromSentence(songRequest.Artist);
+
+                if (!(knownArtistInResult is null))
+                    songRequest.Artist = knownArtistInResult;
+                else
+                {
+                    knownArtistInResult = _songChooser.ExpandSentenceToKnownArtist(songRequest.Artist);
+                    if (!(knownArtistInResult is null))
+                        songRequest.Artist = knownArtistInResult;
+                }
+
                 /*var (bestMatchArtist, _) = _songChooser.GetClosestKnownArtist(songRequest.Artist, _songChooser.ThresholdSimilarityRatio);
                 if (!(bestMatchArtist is null))
                     songRequest.Artist = bestMatchArtist;*/
@@ -72,9 +87,13 @@ namespace MusicMasterBot.Dialogs
             if (songRequest.Intent == UserCommand.Intent.PlayByTitle || songRequest.Intent == UserCommand.Intent.PlayByTitleArtist)
             {
                 var (bestMatchTitle, _) = _songChooser.GetClosestKnownSongTitle(songRequest.Title, _songChooser.ThresholdSimilarityRatio);
+                Console.WriteLine(songRequest.Title + " => " + bestMatchTitle);
+                if (bestMatchTitle is null)
+                    bestMatchTitle = _songChooser.GetKnownSongTitleFromSentence(songRequest.Title);
                 if (bestMatchTitle is null)
                 {
                     (bestMatchTitle, _) = _songChooser.GetClosestKnownSongTitle(songRequest.Title);
+                    Console.WriteLine(songRequest.Title + " => " + bestMatchTitle);
                     var (messageText, spokenMessageText) = SentenceGenerator.AskSongTitle(bestMatchTitle);
                     var promptMessage = MessageFactory.Text(messageText, spokenMessageText, InputHints.ExpectingInput);
                     return await stepContext.PromptAsync(nameof(TextPrompt), new PromptOptions { Prompt = promptMessage }, cancellationToken);
@@ -91,6 +110,19 @@ namespace MusicMasterBot.Dialogs
             if (songRequest.Intent == UserCommand.Intent.PlayByTitle || songRequest.Intent == UserCommand.Intent.PlayByTitleArtist)
             {
                 songRequest.Title = (string)stepContext.Result;
+                var knownSongTitle = _songChooser.GetKnownSongTitleFromSentence(songRequest.Title);
+                Console.WriteLine(songRequest.Title + " => " + knownSongTitle);
+
+                if (!(knownSongTitle is null) && !(_songChooser.GetSongByClosestTitle(knownSongTitle, songRequest.Artist) is null))
+                    songRequest.Title = knownSongTitle;
+                else
+                {
+                    knownSongTitle = _songChooser.ExpandSentenceToKnownSongTitle(songRequest.Title);
+                    Console.WriteLine(songRequest.Title + " => " + knownSongTitle);
+                    if (!(knownSongTitle is null))
+                        songRequest.Title = knownSongTitle;
+                }
+
                 /*var (bestMatchTitle, _) = _songChooser.GetClosestKnownSongTitle(songRequest.Title);
                 if (!(bestMatchTitle is null))
                     songRequest.Title = bestMatchTitle;*/
@@ -100,7 +132,10 @@ namespace MusicMasterBot.Dialogs
             string spokenMessageText =  "";
 
             var (bestMatchTitle, _) = _songChooser.GetClosestKnownSongTitle(songRequest.Title, _songChooser.ThresholdSimilarityRatio);
+            Console.WriteLine(songRequest.Title + " => " + bestMatchTitle);
+
             var (bestMatchArtist, _) = _songChooser.GetClosestKnownArtist(songRequest.Artist, _songChooser.ThresholdSimilarityRatio);
+            Console.WriteLine(songRequest.Artist + " => " + bestMatchArtist);
 
             if (bestMatchArtist is null && (songRequest.Intent is UserCommand.Intent.PlayByArtist || songRequest.Intent is UserCommand.Intent.PlayByTitleArtist))
             {
