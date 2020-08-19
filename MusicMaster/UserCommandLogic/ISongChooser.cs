@@ -1,4 +1,5 @@
-﻿using MusicMasterBot;
+﻿using MusicData;
+using MusicMasterBot;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -9,6 +10,8 @@ namespace UserCommandLogic
     {
 
         double ThresholdSimilarityRatio { get; set; }
+
+        void SetDatabaseConnection(DatabaseConnector databaseConnector);
 
         Song ChooseRandomSong();
 
@@ -41,5 +44,21 @@ namespace UserCommandLogic
         (string bestMatch, double similarityRatio) GetClosestKnownGenre(string genre, double threshold);
 
         Song ChooseByRequest(SongRequest songRequest);
+
+        bool IsKnownArtist(string artist);
+
+        bool IsKnownSongTitle(string song);
+
+        ISet<string> GetKnownArtists();
+
+        ISet<string> GetKnownSongTitles();
+
+        IList<Song> GetSongs();
+
+        IDictionary<string, ISet<Song>> GetArtistsToSongs();
+
+        string GetKnownArtistFromSentence(string sentence);
+
+        string GetKnownSongTitleFromSentence(string sentence);
     }
 }

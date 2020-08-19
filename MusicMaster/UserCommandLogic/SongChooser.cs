@@ -1,4 +1,4 @@
-﻿using MusicData;
+using MusicData;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +8,8 @@ using System.ComponentModel;
 using MusicMasterBot;
 using MusicMasterBot.CognitiveModels;
 using Microsoft.EntityFrameworkCore.Storage;
+using MySql.Data.MySqlClient;
+using System.Diagnostics;
 
 namespace UserCommandLogic
 {
@@ -19,6 +21,7 @@ namespace UserCommandLogic
         ///     
 
         private IList<Song> _songs;
+        public DatabaseConnector DatabaseConnector { get; set; }
         private static readonly Random _random = new Random();
         private ISet<string> _knownArtists;
         private ISet<string> _knownSongTitles;
@@ -28,11 +31,6 @@ namespace UserCommandLogic
 
         double ISongChooser.ThresholdSimilarityRatio { get => _thresholdSimilarityRatio; set => _thresholdSimilarityRatio = value; }
 
-        public SongChooser(DatabaseConnector databaseConnector)
-        {
-            SetDatabaseConnection(databaseConnector);
-        }
-
         public SongChooser()
         {
             _songs = new List<Song>();
@@ -40,12 +38,39 @@ namespace UserCommandLogic
             _knownSongTitles = new HashSet<string>();
         }
 
+        public SongChooser(DatabaseConnector databaseConnector)
+        {
+            if (databaseConnector.SettingsHaveBeenSet)
+                SetDatabaseConnection(databaseConnector);
+            DatabaseConnector = databaseConnector;
+        }
+
         public void SetDatabaseConnection(DatabaseConnector databaseConnector)
         {
-            _songs = databaseConnector.GetSongTable().Result.ToList();
-            LinkArtistsToSongs();
-            _knownArtists = _artistsToSongs.Keys.ToImmutableHashSet();
-            _knownSongTitles = databaseConnector.GetKnownSongs().Result;
+            if (!databaseConnector.SettingsHaveBeenSet)
+                throw new ArgumentException("DatabaseConnector settings have to be set.");
+            try
+            {
+                _songs = databaseConnector.GetSongTable().Result.ToList();
+                LinkArtistsToSongs();
+                _knownArtists = databaseConnector.GetKnownArtists().Result;
+                _knownSongTitles = databaseConnector.GetKnownSongs().Result;
+            }
+            catch (MySqlException e)
+            {
+                Debug.WriteLine("No connection established with database, so no songs have been loaded. Please rerun the code to try again:\n" + e.ToString());
+                _songs = new List<Song>();
+                _knownArtists = new HashSet<string>();
+                _knownSongTitles = new HashSet<string>();
+            }
+            catch (AggregateException e)
+            {
+                Debug.WriteLine("No connection established with database, so no songs have been loaded. Please rerun the code to try again:\n" + e.ToString());
+                _songs = new List<Song>();
+                _knownArtists = new HashSet<string>();
+                _knownSongTitles = new HashSet<string>();
+            }
+            DatabaseConnector = databaseConnector;
         }
 
         public Song ChooseRandomSong()
