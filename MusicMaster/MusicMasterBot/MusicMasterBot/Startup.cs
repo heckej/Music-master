@@ -18,13 +18,14 @@ using System.Linq;
 using UserCommandLogic;
 using Microsoft.Extensions.Configuration;
 using Tools;
+using System;
 
 namespace MusicMasterBot
 {
     public class Startup
     {
         // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services, IConfiguration configuration)
+        public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers().AddNewtonsoftJson();
 
