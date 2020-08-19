@@ -227,10 +227,9 @@ namespace UserCommandLogic
 
         private void LinkArtistsToSongs()
         {
-
+            _artistsToSongs = new Dictionary<string, ISet<Song>>();
             foreach (var song in _songs)
             {
-                _artistsToSongs = new Dictionary<string, ISet<Song>>();
                 if (!_artistsToSongs.ContainsKey(song.Artist))
                     _artistsToSongs.Add(song.Artist, new HashSet<Song>());
                 _artistsToSongs[song.Artist].Add(song);
