@@ -61,7 +61,7 @@ namespace MusicMasterBot.TextToSpeech
                     }*/
                     foreach (Activity currentActivity in activities.Where(a => a.Type == ActivityTypes.Message))
                     {
-                        var text = currentActivity.AsMessageActivity().Text;
+                        var text = currentActivity.AsMessageActivity().Speak;
                         if (text != null && !text.StartsWith("//"))
                         {
                             Console.WriteLine("Speaking: " + text);
