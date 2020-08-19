@@ -201,7 +201,13 @@ namespace UserCommandLogic
         {
             if (_knownArtists.Contains(artist))
                 return (artist, 1.0);
-            return LevenshteinDistance.GetBestMatch(artist, _knownArtists, true);
+            artist = StringComparator.PreprocessString(artist);
+            var artists = StringComparator.PreprocessCollection((HashSet<string>)_knownArtists);
+            var match  = LevenshteinDistance.GetBestMatch(artist, artists, true);
+            foreach (var artistName in _knownArtists)
+                if (StringComparator.PreprocessString(artistName) == match.bestMatch)
+                    return (artistName, match.levenshteinDistance);
+            return (null, 0);
         }
 
         public (string bestMatch, double similarityRatio) GetClosestKnownArtist(string artist, double threshold)
@@ -212,13 +218,21 @@ namespace UserCommandLogic
             return (null, 0);
         }
 
-        public (string bestMatch, double similarityRatio) GetClosestKnownSongTitle(string songTitle)
+        public (string bestMatch, double similarityRatio) GetClosestKnownSongTitle(string title)
         {
-            return LevenshteinDistance.GetBestMatch(songTitle, _knownSongTitles, true);
+            title = StringComparator.PreprocessString(title);
+            var titles = StringComparator.PreprocessCollection((HashSet<string>) _knownSongTitles);
+            var match = LevenshteinDistance.GetBestMatch(title, titles, true);
+            foreach (var songTitle in _knownSongTitles)
+                if (StringComparator.PreprocessString(songTitle) == match.bestMatch)
+                    return (songTitle, match.levenshteinDistance);
+            return (null, 0);
         }
 
         public (string bestMatch, double similarityRatio) GetClosestKnownSongTitle(string songTitle, double threshold)
         {
+            if (_knownSongTitles.Contains(songTitle))
+                return (songTitle, 1.0);
             var (bestMatch, similarityRatio) = GetClosestKnownArtist(songTitle);
             if (similarityRatio >= threshold)
                 return (bestMatch, similarityRatio);
