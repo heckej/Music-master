@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Policy;
 using System.Threading.Tasks;
 using UserCommandLogic;
 
@@ -140,7 +139,7 @@ namespace MusicMasterBot
             return (guessSentenceWritten, guessSentenceWrittenSpoken);
         }
 
-        public static (string written, string spoken) UnknownArtist(string artist = null)
+        public static (string written, string spoken) UnknownArtist(string artist)
         {
             if (artist is null)
                 return UnknownArtist();
@@ -168,6 +167,40 @@ namespace MusicMasterBot
                 ($"I have never heard of the artist you just said.", $"I have never heard of the artist you just said."),
                 ($"The name of that artist doesn't remind me of anything.", $"The name of that artist doesn't remind me of anything."),
                 ($"Unfortunately I don't know any artist called called like that.", $"Unfortunately I don't know any artist called called like that.")
+            };
+
+            int r = _random.Next(sentences.Count);
+            return sentences.ElementAt(r);
+        }
+
+        public static (string written, string spoken) UnknownSongTitle(string title)
+        {
+            if (title is null)
+                return UnknownSongTitle();
+            IList<(string, string)> sentences = new List<(string, string)>
+            {
+                ($"I don't know the song {title}.", $"I don't know the song {title}."),
+                ($"{title} is not in my playlist.", $"{title} is not in my playlist."),
+                ($"The song {title}? Never heard of.", $"The song {title}? Never heard of."),
+                ($"I have never heard of the song {title}.", $"I have never heard of the song {title}."),
+                ($"The song {title} doesn't remind me of anything.", $"The song {title} doesn't remind me of anything."),
+                ($"Unfortunately I don't know any song called {title}.", $"Unfortunately I don't know any song called {title}.")
+            };
+
+            int r = _random.Next(sentences.Count);
+            return sentences.ElementAt(r);
+        }
+
+        public static (string written, string spoken) UnknownSongTitle()
+        {
+            IList<(string, string)> sentences = new List<(string, string)>
+            {
+                ($"I don't know that song.", $"I don't know that song."),
+                ($"That song is not in my playlist.", $"That song is not in my playlist."),
+                ($"That song? Never heard of.", $"That song? Never heard of."),
+                ($"I have never heard of the song title you just said.", $"I have never heard of the song title you just said."),
+                ($"The title of that song doesn't remind me of anything.", $"The title of that song doesn't remind me of anything."),
+                ($"Unfortunately I don't know any song called called like that.", $"Unfortunately I don't know any song called called like that.")
             };
 
             int r = _random.Next(sentences.Count);
