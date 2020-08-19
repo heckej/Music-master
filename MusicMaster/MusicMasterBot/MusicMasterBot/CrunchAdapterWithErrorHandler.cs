@@ -1,6 +1,7 @@
 ﻿using Bot.Builder.Community.Adapters.Crunch;
 using Microsoft.Extensions.Logging;
 using MusicMasterBot.TextToSpeech;
+using System;
 
 namespace MusicMasterBot
 {
@@ -20,6 +21,7 @@ namespace MusicMasterBot
 
             OnTurnError = async (turnContext, exception) =>
             {
+                Console.WriteLine(exception);
                 // Log any leaked exception from the application.
                 logger.LogError($"Exception caught : {exception.Message}");
 
