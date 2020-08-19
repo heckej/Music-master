@@ -19,7 +19,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusicMasterSpeechClient", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DBConsole", "DBConsole\DBConsole.csproj", "{4A52A2D9-DAE7-4C11-BA45-2395B3AEDDCF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crunch.NET", "Crunch.NET\Crunch.NET.csproj", "{1FDB0249-B6EE-4B28-9824-95C0E78E93FB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Crunch.NET", "Crunch.NET\Crunch.NET.csproj", "{1FDB0249-B6EE-4B28-9824-95C0E78E93FB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -63,6 +63,10 @@ Global
 		{1FDB0249-B6EE-4B28-9824-95C0E78E93FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1FDB0249-B6EE-4B28-9824-95C0E78E93FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1FDB0249-B6EE-4B28-9824-95C0E78E93FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{11BEA60F-E34E-43A5-A1CD-42F27EE7EFB4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{11BEA60F-E34E-43A5-A1CD-42F27EE7EFB4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{11BEA60F-E34E-43A5-A1CD-42F27EE7EFB4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{11BEA60F-E34E-43A5-A1CD-42F27EE7EFB4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
