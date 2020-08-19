@@ -58,7 +58,7 @@ namespace MusicMasterBot.Dialogs
 
             // Use the text provided in FinalStepAsync or the default if it is the first time.
             var messageText = stepContext.Options?.ToString() ?? "What can I help you with today?\nSay something like \"Play Someone Like You by Adele\"";
-            var promptMessage = MessageFactory.Text(messageText, messageText, InputHints.ExpectingInput);
+            var promptMessage = MessageFactory.Text(messageText, "", InputHints.ExpectingInput);
             return await stepContext.PromptAsync(nameof(TextPrompt), new PromptOptions { Prompt = promptMessage }, cancellationToken);
         }
 
@@ -96,17 +96,41 @@ namespace MusicMasterBot.Dialogs
                     // Initialize SongRequest with any entities we may have found in the response.
                     songRequest.Title = luisResult.SongTitle;
                     songRequest.Artist = luisResult.SongArtist;
-                    if (songRequest.Artist is null)
+                    Console.WriteLine(songRequest.Artist + " ?=>? " + _songChooser.GetClosestKnownArtist(songRequest.Artist).bestMatch);
+                    Console.WriteLine(songRequest.Artist + " ?=>? " + _songChooser.GetKnownArtistFromSentence(userInput));
+                    Console.WriteLine(songRequest.Title + " ?=>? " + _songChooser.GetClosestKnownSongTitle(songRequest.Title).bestMatch);
+                    Console.WriteLine(songRequest.Artist + " ?=>? " + _songChooser.GetKnownSongTitleFromSentence(userInput));
+
+                    var closestKnownArtist = _songChooser.GetClosestKnownArtist(songRequest.Artist).bestMatch;
+                    var closestKnownTitle = _songChooser.GetClosestKnownSongTitle(songRequest.Title).bestMatch;
+                    if (songRequest.Artist is null || closestKnownArtist is null)
                         songRequest.Artist = _songChooser.GetKnownArtistFromSentence(userInput);
-                    if (songRequest.Title is null)
+                    if (songRequest.Title is null || closestKnownTitle is null)
                         songRequest.Title = _songChooser.GetKnownSongTitleFromSentence(userInput);
 
-                    songToBePlayed = _songChooser.GetSongByClosestArtistOrTitle(luisResult.SongTitle, luisResult.SongArtist);
+                    songToBePlayed = _songChooser.GetSongByClosestArtistOrTitle(songRequest.Title, songRequest.Artist);
 
                     if (songToBePlayed is null)
                     {
-                        // Run the RequestSongDialog giving it whatever details we have from the LUIS call, it will fill out the remainder.
-                        return await stepContext.BeginDialogAsync(nameof(RequestSongDialog), songRequest, cancellationToken);
+                        Console.WriteLine(songRequest.Artist + ", " + songRequest.Title);
+                        if (songRequest.Artist is null && closestKnownArtist is null)
+                            songRequest.Artist = _songChooser.ExpandSentenceToKnownArtist(userInput);
+                        if (songRequest.Title is null && closestKnownTitle is null)
+                            songRequest.Title = _songChooser.ExpandSentenceToKnownSongTitle(userInput);
+
+                        songToBePlayed = _songChooser.GetSongByClosestArtistOrTitle(songRequest.Title, songRequest.Artist);
+
+                        if (songToBePlayed is null)
+                        {
+                            // Reset song request if both known, but not a pair
+                            if (!(songRequest.Title is null || songRequest.Artist is null))
+                                if (songRequest.Title.Length > songRequest.Artist.Length)
+                                    songRequest.Artist = null;
+                                else
+                                    songRequest.Title = null;
+                            // Run the RequestSongDialog giving it whatever details we have from the LUIS call, it will fill out the remainder.
+                            return await stepContext.BeginDialogAsync(nameof(RequestSongDialog), songRequest, cancellationToken);
+                        }
                     }
                     break;
 
@@ -122,11 +146,17 @@ namespace MusicMasterBot.Dialogs
 
                     if (bestMatchArtist is null)
                     {
-                        // Run the RequestSongDialog giving it whatever details we have from the LUIS call, it will fill out the remainder.
-                        return await stepContext.BeginDialogAsync(nameof(RequestSongDialog), songRequest, cancellationToken);
-                    }
+                        songRequest.Artist = _songChooser.ExpandSentenceToKnownArtist(userInput);
 
-                    songToBePlayed = _songChooser.ChooseRandomSongByArtist(bestMatchArtist);
+                        if (songRequest.Artist is null)
+                        {
+                            // Run the RequestSongDialog giving it whatever details we have from the LUIS call, it will fill out the remainder.
+                            return await stepContext.BeginDialogAsync(nameof(RequestSongDialog), songRequest, cancellationToken);
+                        }
+                        bestMatchArtist = songRequest.Artist;
+                    }
+                    songRequest.Artist = bestMatchArtist;
+                    songToBePlayed = _songChooser.ChooseRandomSongByArtist(songRequest.Artist);
                     messageText = "Random song by artist.";
                     break;
 
@@ -141,10 +171,16 @@ namespace MusicMasterBot.Dialogs
 
                     if (bestMatchTitle is null)
                     {
-                        // Run the RequestSongDialog giving it whatever details we have from the LUIS call, it will fill out the remainder.
-                        return await stepContext.BeginDialogAsync(nameof(RequestSongDialog), songRequest, cancellationToken);
-                    }
+                        songRequest.Title = _songChooser.ExpandSentenceToKnownSongTitle(userInput);
 
+                        if (songRequest.Title is null)
+                        {
+                            // Run the RequestSongDialog giving it whatever details we have from the LUIS call, it will fill out the remainder.
+                            return await stepContext.BeginDialogAsync(nameof(RequestSongDialog), songRequest, cancellationToken);
+                        }
+                        bestMatchTitle = songRequest.Title;
+                    }
+                    songRequest.Title = bestMatchTitle;
                     songToBePlayed = _songChooser.GetSongByClosestTitle(songRequest.Title);
                     break;
 
