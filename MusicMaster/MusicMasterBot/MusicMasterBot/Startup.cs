@@ -1,4 +1,4 @@
-﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 //
 // Generated with Bot Builder V4 SDK Template for Visual Studio CoreBot v4.9.2
@@ -52,14 +52,11 @@ namespace MusicMasterBot
             // The MainDialog that will be run by the bot.
             services.AddSingleton<MainDialog>();
 
-            //  configuration["SongDatabase"], configuration["SongDatabase"]["Database"], 
-            // configuration["SongDatabase"]["User"], configuration["SongDatabase"]["Password"]);
-            var con = new DatabaseConnector(configuration["SongDatabase:Server"], configuration["SongDatabase:Database"], 
-                configuration["SongDatabase:User"], configuration["SongDatabase:Password"]);
+            var databaseConnector = new DatabaseConnector();
 
-            services.AddSingleton(new SongChooser());
-            services.AddSingleton(con);
-            services.AddSingleton<IPlayer>();
+            services.AddSingleton<ISongChooser>(new SongChooser(databaseConnector));
+            services.AddSingleton(databaseConnector);
+            services.AddSingleton<IPlayer, MusicPlayer>();
 
             // Create the Voice Middleware that will be added to the middleware pipeline in the AdapterWithErrorHandler
             services.AddSingleton<VoiceMiddleware>();
@@ -69,8 +66,12 @@ namespace MusicMasterBot
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IConfiguration configuration, DatabaseConnector databaseConnector, ISongChooser songChooser)
         {
+            databaseConnector.Setup(configuration["SongDatabase:Server"], configuration["SongDatabase:Database"],
+                configuration["SongDatabase:User"], configuration["SongDatabase:Password"]);
+            songChooser.SetDatabaseConnection(databaseConnector);
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
