@@ -86,9 +86,9 @@ namespace UserCommandLogic
 
         public Song ChooseRandomSongByArtist(string artist)
         {
-            var (bestMatch, _) = GetClosestKnownArtist(artist, _thresholdSimilarityRatio);
+            var (bestMatch, _) = GetClosestKnownArtist(artist);
             if (bestMatch is null)
-                throw new ArgumentOutOfRangeException("Unknown artist: " + artist);
+                return null;
             if (!IsKnownArtistWithSongs(artist))
                 throw new ArgumentException("No songs known by artist " + artist);
 
