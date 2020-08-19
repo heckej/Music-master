@@ -102,16 +102,16 @@ namespace MusicMasterBot.Dialogs
             var (bestMatchTitle, _) = _songChooser.GetClosestKnownSongTitle(songRequest.Title, _songChooser.ThresholdSimilarityRatio);
             var (bestMatchArtist, _) = _songChooser.GetClosestKnownArtist(songRequest.Artist, _songChooser.ThresholdSimilarityRatio);
 
-            if (bestMatchArtist is null)
+            if (bestMatchArtist is null && (songRequest.Intent is UserCommand.Intent.PlayByArtist || songRequest.Intent is UserCommand.Intent.PlayByTitleArtist))
             {
                 var (messageText1, spokenMessageText1) = SentenceGenerator.UnknownArtist(songRequest.Artist);
                 messageText += messageText1 + " ";
                 spokenMessageText += spokenMessageText1 + " ";
             }
                 
-            if (bestMatchTitle is null)
+            if (bestMatchTitle is null && (songRequest.Intent is UserCommand.Intent.PlayByTitle || songRequest.Intent is UserCommand.Intent.PlayByTitleArtist))
             {
-                var (messageText1, spokenMessageText1) = SentenceGenerator.UnknownArtist(songRequest.Artist);
+                var (messageText1, spokenMessageText1) = SentenceGenerator.UnknownSongTitle(songRequest.Title);
                 messageText += messageText1;
                 spokenMessageText += spokenMessageText1;
             }
