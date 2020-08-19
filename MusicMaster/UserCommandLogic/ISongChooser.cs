@@ -60,5 +60,9 @@ namespace UserCommandLogic
         string GetKnownArtistFromSentence(string sentence);
 
         string GetKnownSongTitleFromSentence(string sentence);
+
+        string ExpandSentenceToKnownArtist(string sentence);
+
+        string ExpandSentenceToKnownSongTitle(string sentence);
     }
 }

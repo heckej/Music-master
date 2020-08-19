@@ -274,19 +274,57 @@ namespace UserCommandLogic
             {
         public string GetKnownArtistFromSentence(string sentence)
         {
-            sentence = sentence.ToLower().Replace(" ", "").Replace("\n", "");
-            foreach (var artist in _knownArtists)
-                if (sentence.Contains(artist.ToLower().Replace(" ", "").Replace("\n", "")))
+            var sorted = from s in _knownArtists
+                         orderby s.Length descending
+                         select s;
+            sentence = StringComparator.PreprocessString(sentence);
+            foreach (var artist in sorted)
+                if (!(sentence is null) && sentence.Contains(StringComparator.PreprocessString(artist)))
+                {
+                    Console.WriteLine("From sentence: " + artist);
                     return artist;
+                }
             return null;
         }
 
         public string GetKnownSongTitleFromSentence(string sentence)
         {
-            sentence = sentence.ToLower().Replace(" ", "").Replace("\n", "");
-            foreach (var songTitle in _knownSongTitles)
-                if (sentence.Contains(songTitle.ToLower().Replace(" ", "").Replace("\n", "")))
+            Console.Write("-> " + sentence);
+            var sorted = from s in _knownSongTitles
+                         orderby s.Length descending
+                         select s;
+            sentence = StringComparator.PreprocessString(sentence);
+            Console.WriteLine(" =>  " + sentence);
+            foreach (var songTitle in sorted)
+                if (!(sentence is null) && sentence.Contains(StringComparator.PreprocessString(songTitle)))
                     return songTitle;
+            return null;
+        }
+
+        public string ExpandSentenceToKnownArtist(string sentence)
+        {
+            return ExpandSentenceToKnownFromCollection(sentence, _knownArtists);
+        }
+
+        public string ExpandSentenceToKnownSongTitle(string sentence)
+        {
+            return ExpandSentenceToKnownFromCollection(sentence, _knownSongTitles);
+        }
+
+        private string ExpandSentenceToKnownFromCollection(string sentence, IEnumerable<string> collection)
+        {
+            var sorted = from s in collection
+                         orderby s.Length ascending
+                         select s;
+            sentence = StringComparator.PreprocessString(sentence);
+            foreach (var value in sorted)
+            {
+                var processedValue = StringComparator.PreprocessString(value);
+                if (!(processedValue is null) && processedValue.Contains(sentence))
+                {
+                    return value;
+                }
+            }
             return null;
         }
     }
