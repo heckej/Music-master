@@ -11,6 +11,8 @@ namespace MusicData
     {
         MySqlConnectionStringBuilder builder;
 
+        public bool SettingsHaveBeenSet { get; private set; } = false;
+
         public DatabaseConnector(string server, string database, string userID, string password)
         {
             builder = new MySqlConnectionStringBuilder
@@ -21,6 +23,25 @@ namespace MusicData
                 Password = password,
                 SslMode = MySqlSslMode.None,
             };
+            SettingsHaveBeenSet = true;
+        }
+
+        public DatabaseConnector()
+        {
+
+        }
+
+        public void Setup(string server, string database, string userID, string password)
+        {
+            builder = new MySqlConnectionStringBuilder
+            {
+                Server = server,
+                Database = database,
+                UserID = userID,
+                Password = password,
+                SslMode = MySqlSslMode.None,
+            };
+            SettingsHaveBeenSet = true;
         }
 
         public async Task<ISet<Song>> GetSongTable() 
