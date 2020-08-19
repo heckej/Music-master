@@ -23,6 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Crunch.NET\Crunch.NET.csproj" />
     <ProjectReference Include="..\..\Metrics\Metrics.csproj" />
     <ProjectReference Include="..\..\MusicData\MusicData.csproj" />
     <ProjectReference Include="..\..\Tools\Tools.csproj" />
@@ -32,9 +33,5 @@
     <Content Update="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Crunch.NET\Properties\" />
   </ItemGroup>
 </Project>
