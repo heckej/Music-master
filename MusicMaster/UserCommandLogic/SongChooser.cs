@@ -272,17 +272,22 @@ namespace UserCommandLogic
             Song song = null;
             switch (songRequest.Intent)
             {
-                case UserCommand.Intent.PlayByTitle:
-                    song = GetSongByClosestTitle(songRequest.Title);
-                    break;
-                case UserCommand.Intent.PlayByArtist:
-                    song = ChooseRandomSongByArtist(songRequest.Artist);
-                    break;
-                case UserCommand.Intent.PlayByTitleArtist:
-                    song = GetSongByClosestArtistOrTitle(songRequest.Title, songRequest.Artist);
-                    break;
-            }
-            return song;
+        public string GetKnownArtistFromSentence(string sentence)
+        {
+            sentence = sentence.ToLower().Replace(" ", "").Replace("\n", "");
+            foreach (var artist in _knownArtists)
+                if (sentence.Contains(artist.ToLower().Replace(" ", "").Replace("\n", "")))
+                    return artist;
+            return null;
+        }
+
+        public string GetKnownSongTitleFromSentence(string sentence)
+        {
+            sentence = sentence.ToLower().Replace(" ", "").Replace("\n", "");
+            foreach (var songTitle in _knownSongTitles)
+                if (sentence.Contains(songTitle.ToLower().Replace(" ", "").Replace("\n", "")))
+                    return songTitle;
+            return null;
         }
     }
 }
