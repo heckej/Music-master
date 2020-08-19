@@ -254,7 +254,7 @@ namespace UserCommandLogic
 
         private bool IsKnownArtistWithSongs(string artist)
         {
-            return _artistsToSongs.ContainsKey(artist) && _artistsToSongs[artist] != null && _artistsToSongs[artist].Count > 0;
+            return _artistsToSongs.ContainsKey(artist) && !(_artistsToSongs[artist] is null) && _artistsToSongs[artist].Count > 0;
         }
 
         public (string bestMatch, double similarityRatio) GetClosestKnownGenre(string genre)
