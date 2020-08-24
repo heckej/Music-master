@@ -24,7 +24,6 @@ namespace Tools
         public void Play(Song song)
         {
             // play the song song.Title by song.Artist
-            CurrentSong = song;
             Play(song.FilePath);
         }
 
@@ -70,6 +69,9 @@ namespace Tools
             _player.PlayPrevious();
         }
 
-        public Song CurrentSong { get; private set; }
+        public IPlayerStatus GetPlayerStatus()
+        {
+            return _player.GetPlayerStatus();
+        }
     }
 }

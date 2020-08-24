@@ -17,5 +17,6 @@ namespace Tools
         void VolumeDown(double percentage = 10);
         void PlayNext();
         void PlayPrevious();
+        IPlayerStatus GetPlayerStatus();
     }
 }

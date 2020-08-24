@@ -1,0 +1,22 @@
+﻿status playing
+file /home/jvh/Muziek/Alicia Keys/Girl On Fire/Karaoke Girl On Fire (Main Version) - Alicia Keys -.mp3
+duration 241
+position 183
+tag artist Alicia Keys
+tag album Girl On Fire
+tag title Girl on fire karaoke
+tag date 2012
+tag genre Pop
+set aaa_mode album
+set continue true
+set play_library true
+set play_sorted true
+set replaygain disabled
+set replaygain_limit true
+set replaygain_preamp 0.000000
+set repeat false
+set repeat_current false
+set shuffle true
+set softvol false
+set vol_left 70
+set vol_right 70
