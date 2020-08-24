@@ -9,9 +9,27 @@ namespace Tools.Players
     class LinuxPlayer : IPlayer
     {
         readonly string _cmus = "cmus-remote";
-        readonly string _statusStopped = "status stopped";
-        readonly string _statusPlaying = "status playing";
-        readonly string _statusPaused = "status paused";
+        readonly IPlayerStatus _playerStatus = new CmusStatus();
+
+        public Song GetCurrentSong()
+        {
+            throw new NotImplementedException();
+        }
+
+        public double GetCurrentPosition()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Song GetNextSong()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Song GetPreviousSong()
+        {
+            throw new NotImplementedException();
+        }
 
         public void Pause()
         {
@@ -32,7 +50,7 @@ namespace Tools.Players
         public void PlayNext()
         {
             ExecuteCmus("-n");
-            if (ExecuteCmus("-Q").Contains(_statusStopped))
+            if (GetPlayerStatus().GetStatus().Equals(Status.Stopped))
                 Resume();
         }
 
@@ -40,7 +58,7 @@ namespace Tools.Players
         {
             ExecuteCmus("-r");
             ExecuteCmus("-r");
-            if (ExecuteCmus("-Q").Contains(_statusStopped))
+            if (GetPlayerStatus().GetStatus().Equals(Status.Stopped))
                 Resume();
         }
 
@@ -76,6 +94,11 @@ namespace Tools.Players
                 res = new RunCmd().Run(_cmus, arg);*/
             }
             return res["output"];
+        }
+
+        public IPlayerStatus GetPlayerStatus()
+        {
+            return _playerStatus;
         }
     }
 }

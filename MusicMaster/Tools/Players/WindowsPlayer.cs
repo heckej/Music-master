@@ -7,6 +7,11 @@ namespace Tools.Players
 {
     class WindowsPlayer : IPlayer
     {
+        public IPlayerStatus GetPlayerStatus()
+        {
+            throw new NotImplementedException();
+        }
+
         public void Pause()
         {
             throw new NotImplementedException();
