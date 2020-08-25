@@ -249,29 +249,33 @@ namespace MusicMasterBot.Dialogs
         {
             // If the child dialog ("RequestSongDialog") was cancelled, the user failed to confirm or if the intent wasn't PlayByTitleArtist
             // the Result here will be null.
-            if (stepContext.Result is Song songToBePlayed)
+            string messageText;
+            string spokenMessageText;
+            Activity message;
+            switch (stepContext.Result)
             {
-                string messageText;
-                string spokenMessageText;
-                Activity message;
-                // Now we have all the song details call the music player.
-                try
-                {
-                    _musicPlayer.Play(songToBePlayed);
+                case Song songToBePlayed:
+                    // Now we have all the song details call the music player.
+                    try
+                    {
+                        _musicPlayer.Play(songToBePlayed);
 
-                    // If the call to the music player service was successful tell the user.
-                    (messageText, spokenMessageText) = SentenceGenerator.PresentSongToBePlayed(songToBePlayed);
+                        // If the call to the music player service was successful tell the user.
+                        (messageText, spokenMessageText) = SentenceGenerator.PresentSongToBePlayed(songToBePlayed);
+                        message = MessageFactory.Text(messageText, spokenMessageText, InputHints.IgnoringInput);
+                    } catch(Exception e)
+                    {
+                        messageText = e.ToString();
+                        spokenMessageText = "Sorry, something went wrong, so I cannot play the song.";
+                        message = MessageFactory.Text(messageText, spokenMessageText, InputHints.IgnoringInput);
+                    }
+                    break;
+                default:
+                    (messageText, spokenMessageText) = SentenceGenerator.CommandNotUnderstood();
                     message = MessageFactory.Text(messageText, spokenMessageText, InputHints.IgnoringInput);
-                    await stepContext.Context.SendActivityAsync(message, cancellationToken);
-                } catch(Exception e)
-                {
-                    messageText = e.ToString();
-                    spokenMessageText = "Sorry, something went wrong, so I cannot play the song.";
-                    message = MessageFactory.Text(messageText, spokenMessageText, InputHints.IgnoringInput);
-                    await stepContext.Context.SendActivityAsync(message, cancellationToken);
-                }
-
+                    break;
             }
+            await stepContext.Context.SendActivityAsync(message, cancellationToken);
 
             // Restart the main dialog with a different message the second time around
             var (promptMessage, _) = SentenceGenerator.ProposeFurtherHelp();
