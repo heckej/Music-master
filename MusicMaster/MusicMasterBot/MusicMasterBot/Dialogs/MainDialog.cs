@@ -36,7 +36,7 @@ namespace MusicMasterBot.Dialogs
             _musicPlayer = musicPlayer;
 
             AddDialog(new TextPrompt(nameof(TextPrompt)));
-            AddDialog(bookingDialog);
+            AddDialog(requestSongDialog);
             AddDialog(new WaterfallDialog(nameof(WaterfallDialog), new WaterfallStep[]
             {
                 IntroStepAsync,
