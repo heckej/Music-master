@@ -23,12 +23,68 @@ namespace MusicMasterBot
             return sentences.ElementAt(r);
         }
 
+
+        public static (string written, string spoken) DescribeTitleCurrentSong(Song song)
+        {
+            IList<(string, string)> sentences = new List<(string, string)>
+            {
+                ($"This song is {song.Title}.", $"This song is {song.Title}."),
+                ($"You are currently listening to {song.Title}.", $"{song.Title}."),
+                ($"The current song is {song.Title}.", $"{song.Title}.")
+            };
+
+            int r = _random.Next(sentences.Count);
+            return sentences.ElementAt(r);
+        }
+
+
+        public static (string written, string spoken) DescribeArtistCurrentSong(Song song)
+        {
+            IList<(string, string)> sentences = new List<(string, string)>
+            {
+                ($"This song was made by {song.Artist}.", $"This song was made by {song.Artist}."),
+                ($"You are currently listening to a song by {song.Artist}.", $"The current artist is {song.Artist}."),
+                ($"The current song is by {song.Artist}.", $"{song.Artist}.")
+            };
+
+            int r = _random.Next(sentences.Count);
+            return sentences.ElementAt(r);
+        }
+
         public static (string written, string spoken) DescribeAlbumYearCurrentSong(Song song)
         {
             IList<(string, string)> sentences = new List<(string, string)>
             {
                 ($"This song is from the album {song.Album}, made in {song.Year}.", $"This is a song from the album {song.Album}, from {song.Year}."),
                 ($"The current album is {song.Album}. It was published in {song.Year}", $"The album is {song.Album}, from {song.Year}.")
+            };
+
+            int r = _random.Next(sentences.Count);
+            return sentences.ElementAt(r);
+        }
+
+
+
+        public static (string written, string spoken) DescribeAlbumCurrentSong(Song song)
+        {
+            IList<(string, string)> sentences = new List<(string, string)>
+            {
+                ($"This song is from the album {song.Album}.", $"This is a song from the album {song.Album}."),
+                ($"The current album is {song.Album}.", $"The album is {song.Album}.")
+            };
+
+            int r = _random.Next(sentences.Count);
+            return sentences.ElementAt(r);
+        }
+
+
+
+        public static (string written, string spoken) DescribeYearCurrentSong(Song song)
+        {
+            IList<(string, string)> sentences = new List<(string, string)>
+            {
+                ($"This song was made in {song.Year}.", $"This is a song from {song.Year}."),
+                ($"It was published in {song.Year}", $"{song.Year}")
             };
 
             int r = _random.Next(sentences.Count);
