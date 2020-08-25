@@ -18,17 +18,19 @@ namespace MusicMasterBot.Dialogs
 {
     public class MainDialog : ComponentDialog
     {
-        private readonly UserCommandRecognizer _luisRecognizer;
+        private readonly UserCommandRecognizer _luisCommandRecognizer;
+        private readonly UserQuestionRecognizer _luisQuestionRecognizer;
         protected readonly ILogger Logger;
         private readonly ISongChooser _songChooser;
         private readonly IPlayer _musicPlayer;
 
         // Dependency injection uses this constructor to instantiate MainDialog
-        public MainDialog(UserCommandRecognizer luisRecognizer, RequestSongDialog bookingDialog, ILogger<MainDialog> logger, 
+        public MainDialog(UserCommandRecognizer luisCommandRecognizer, UserQuestionRecognizer luisQuestionRecognizer, RequestSongDialog requestSongDialog, ILogger<MainDialog> logger, 
             ISongChooser songChooser, IPlayer musicPlayer)
             : base(nameof(MainDialog))
         {
-            _luisRecognizer = luisRecognizer;
+            _luisCommandRecognizer = luisCommandRecognizer;
+            _luisQuestionRecognizer = luisQuestionRecognizer;
             Logger = logger;
             _songChooser = songChooser;
             _musicPlayer = musicPlayer;
@@ -48,7 +50,7 @@ namespace MusicMasterBot.Dialogs
 
         private async Task<DialogTurnResult> IntroStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
-            if (!_luisRecognizer.IsConfigured)
+            if (!_luisCommandRecognizer.IsConfigured || !_luisQuestionRecognizer.IsConfigured)
             {
                 await stepContext.Context.SendActivityAsync(
                     MessageFactory.Text("NOTE: LUIS is not configured. To enable all capabilities, add 'LuisAppId', 'LuisAPIKey' and 'LuisAPIHostName' to the appsettings.json file.", inputHint: InputHints.IgnoringInput), cancellationToken);
@@ -66,7 +68,7 @@ namespace MusicMasterBot.Dialogs
         {
             var userInput = stepContext.Context.Activity.Text;
             SongRequest songRequest;
-            if (!_luisRecognizer.IsConfigured)
+            if (!_luisCommandRecognizer.IsConfigured)
             {
                 songRequest = new SongRequest()
                 {
@@ -78,10 +80,10 @@ namespace MusicMasterBot.Dialogs
             }
 
             // Call LUIS and gather any potential song details. (Note the TurnContext has the response to the prompt.)
-            var luisResult = await _luisRecognizer.RecognizeAsync<UserCommand>(stepContext.Context, cancellationToken);
+            var luisCommandResult = await _luisCommandRecognizer.RecognizeAsync<UserCommand>(stepContext.Context, cancellationToken);
             songRequest = new SongRequest()
             {
-                Intent = luisResult.TopIntent().intent
+                Intent = luisCommandResult.TopIntent().intent
             };
 
             var inputHint = InputHints.IgnoringInput;
@@ -89,13 +91,13 @@ namespace MusicMasterBot.Dialogs
             string spokenMessageText = "";
             Song songToBePlayed = null;
 
-            switch (luisResult.TopIntent().intent)
+            switch (luisCommandResult.TopIntent().intent)
             {
                 case UserCommand.Intent.PlayByTitleArtist:
 
                     // Initialize SongRequest with any entities we may have found in the response.
-                    songRequest.Title = luisResult.SongTitle;
-                    songRequest.Artist = luisResult.SongArtist;
+                    songRequest.Title = luisCommandResult.SongTitle;
+                    songRequest.Artist = luisCommandResult.SongArtist;
                     Console.WriteLine(songRequest.Artist + " ?=>? " + _songChooser.GetClosestKnownArtist(songRequest.Artist).bestMatch);
                     Console.WriteLine(songRequest.Artist + " ?=>? " + _songChooser.GetKnownArtistFromSentence(userInput));
                     Console.WriteLine(songRequest.Title + " ?=>? " + _songChooser.GetClosestKnownSongTitle(songRequest.Title).bestMatch);
@@ -137,11 +139,11 @@ namespace MusicMasterBot.Dialogs
                 case UserCommand.Intent.PlayByArtist:
 
                     // Initialize SongRequest with any entities we may have found in the response.
-                    songRequest.Artist = luisResult.SongArtist;
+                    songRequest.Artist = luisCommandResult.SongArtist;
                     if (songRequest.Artist is null)
                         songRequest.Artist = _songChooser.GetKnownArtistFromSentence(userInput);
 
-                    var (bestMatchArtist, similarityRatioArtist) = _songChooser.GetClosestKnownArtist(luisResult.SongArtist, _songChooser.ThresholdSimilarityRatio);
+                    var (bestMatchArtist, similarityRatioArtist) = _songChooser.GetClosestKnownArtist(luisCommandResult.SongArtist, _songChooser.ThresholdSimilarityRatio);
                     Console.WriteLine(songRequest.Artist + " => " + bestMatchArtist);
 
                     if (bestMatchArtist is null)
@@ -163,11 +165,11 @@ namespace MusicMasterBot.Dialogs
                 case UserCommand.Intent.PlayByTitle:
 
                     // Initialize SongRequest with any entities we may have found in the response.
-                    songRequest.Title = luisResult.SongTitle;
+                    songRequest.Title = luisCommandResult.SongTitle;
                     if (songRequest.Title is null)
                         songRequest.Title = _songChooser.GetKnownSongTitleFromSentence(userInput);
 
-                    var (bestMatchTitle, similarityRatioTitle) = _songChooser.GetClosestKnownSongTitle(luisResult.SongTitle, _songChooser.ThresholdSimilarityRatio);
+                    var (bestMatchTitle, similarityRatioTitle) = _songChooser.GetClosestKnownSongTitle(luisCommandResult.SongTitle, _songChooser.ThresholdSimilarityRatio);
 
                     if (bestMatchTitle is null)
                     {
@@ -187,9 +189,9 @@ namespace MusicMasterBot.Dialogs
                 case UserCommand.Intent.PlayByGenre:
 
                     // Initialize SongRequest with any entities we may have found in the response.
-                    songRequest.Genre = luisResult.SongGenre;
+                    songRequest.Genre = luisCommandResult.SongGenre;
 
-                    var (bestMatchGenre, similarityRatioGenre) = _songChooser.GetClosestKnownGenre(luisResult.SongGenre, _songChooser.ThresholdSimilarityRatio);
+                    var (bestMatchGenre, similarityRatioGenre) = _songChooser.GetClosestKnownGenre(luisCommandResult.SongGenre, _songChooser.ThresholdSimilarityRatio);
 
                     if (bestMatchGenre is null)
                     {
@@ -233,7 +235,7 @@ namespace MusicMasterBot.Dialogs
 
                 default:
                     // Catch all for unhandled intents
-                    messageText = $"Sorry, I didn't get that. Please try asking in a different way (intent was {luisResult.TopIntent().intent})";
+                    messageText = $"Sorry, I didn't get that. Please try asking in a different way (intent was {luisCommandResult.TopIntent().intent})";
                     (_, spokenMessageText) = SentenceGenerator.CommandNotUnderstood();
                     inputHint = InputHints.ExpectingInput;
                     break;
