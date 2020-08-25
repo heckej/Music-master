@@ -4,8 +4,10 @@
 // Generated with Bot Builder V4 SDK Template for Visual Studio CoreBot v4.9.2
 
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Schema;
@@ -79,6 +81,60 @@ namespace MusicMasterBot.Dialogs
                 return await stepContext.BeginDialogAsync(nameof(RequestSongDialog), songRequest, cancellationToken);
             }
 
+            if (_luisQuestionRecognizer.IsConfigured)
+            {
+                var luisQuestionResult = await _luisQuestionRecognizer.RecognizeAsync<UserQuestion>(stepContext.Context, cancellationToken);
+                var (intent, score) = luisQuestionResult.TopIntent();
+                if (!(intent is UserQuestion.Intent.None))
+                {
+                    var feedbackScoreThreshold = 0.8;
+                    Answer answer = new Answer()
+                    {
+                        Text = "",
+                        Speak = ""
+                    };
+                    switch (intent)
+                    {
+                        case UserQuestion.Intent.CurrentSongInformationRequest:
+                            var question = new Question()
+                            {
+                                Text = userInput,
+                                Intent = intent
+                            };
+                            answer = new Answer(question);
+
+                            // Which song 
+                            /*switch (luisQuestionResult.SongDescription)
+                            {
+                                case "current song":
+                                    break;
+                                case "next song":
+                                case "last song":
+                                default:
+                                    break;
+                            }*/
+
+                            // Which information requested
+                            var song = _musicPlayer.GetPlayerStatus().GetCurrentSong();
+                            (answer.Text, answer.Speak) = GenerateResponseToInformationRequest(luisQuestionResult.SongInformation, song);
+                            break;
+                        case UserQuestion.Intent.NegativeFeedback:
+                            // check certainty percentage to avoid false positives
+                            if (score > feedbackScoreThreshold)
+                                break;
+                            break;
+                        case UserQuestion.Intent.PositiveFeedback:
+                            // check certainty percentage to avoid false positives
+                            if (score > feedbackScoreThreshold)
+                                break;
+                            break;
+                        default:
+                            break;
+                    }
+                    return await stepContext.NextAsync(answer, cancellationToken);
+                }
+            }
+
             // Call LUIS and gather any potential song details. (Note the TurnContext has the response to the prompt.)
             var luisCommandResult = await _luisCommandRecognizer.RecognizeAsync<UserCommand>(stepContext.Context, cancellationToken);
             songRequest = new SongRequest()
@@ -98,41 +154,18 @@ namespace MusicMasterBot.Dialogs
                     // Initialize SongRequest with any entities we may have found in the response.
                     songRequest.Title = luisCommandResult.SongTitle;
                     songRequest.Artist = luisCommandResult.SongArtist;
-                    Console.WriteLine(songRequest.Artist + " ?=>? " + _songChooser.GetClosestKnownArtist(songRequest.Artist).bestMatch);
-                    Console.WriteLine(songRequest.Artist + " ?=>? " + _songChooser.GetKnownArtistFromSentence(userInput));
-                    Console.WriteLine(songRequest.Title + " ?=>? " + _songChooser.GetClosestKnownSongTitle(songRequest.Title).bestMatch);
-                    Console.WriteLine(songRequest.Artist + " ?=>? " + _songChooser.GetKnownSongTitleFromSentence(userInput));
-
-                    var closestKnownArtist = _songChooser.GetClosestKnownArtist(songRequest.Artist).bestMatch;
-                    var closestKnownTitle = _songChooser.GetClosestKnownSongTitle(songRequest.Title).bestMatch;
-                    if (songRequest.Artist is null || closestKnownArtist is null)
-                        songRequest.Artist = _songChooser.GetKnownArtistFromSentence(userInput);
-                    if (songRequest.Title is null || closestKnownTitle is null)
-                        songRequest.Title = _songChooser.GetKnownSongTitleFromSentence(userInput);
-
-                    songToBePlayed = _songChooser.GetSongByClosestArtistOrTitle(songRequest.Title, songRequest.Artist);
+                    songToBePlayed = SelectSongToBePlayedByTitleArtist(songRequest, userInput);
 
                     if (songToBePlayed is null)
                     {
-                        Console.WriteLine(songRequest.Artist + ", " + songRequest.Title);
-                        if (songRequest.Artist is null && closestKnownArtist is null)
-                            songRequest.Artist = _songChooser.ExpandSentenceToKnownArtist(userInput);
-                        if (songRequest.Title is null && closestKnownTitle is null)
-                            songRequest.Title = _songChooser.ExpandSentenceToKnownSongTitle(userInput);
-
-                        songToBePlayed = _songChooser.GetSongByClosestArtistOrTitle(songRequest.Title, songRequest.Artist);
-
-                        if (songToBePlayed is null)
-                        {
-                            // Reset song request if both known, but not a pair
-                            if (!(songRequest.Title is null || songRequest.Artist is null))
-                                if (songRequest.Title.Length > songRequest.Artist.Length)
-                                    songRequest.Artist = null;
-                                else
-                                    songRequest.Title = null;
-                            // Run the RequestSongDialog giving it whatever details we have from the LUIS call, it will fill out the remainder.
-                            return await stepContext.BeginDialogAsync(nameof(RequestSongDialog), songRequest, cancellationToken);
-                        }
+                        // Reset song request if both known, but not a pair
+                        if (!(songRequest.Title is null || songRequest.Artist is null))
+                            if (songRequest.Title.Length > songRequest.Artist.Length)
+                                songRequest.Artist = null;
+                            else
+                                songRequest.Title = null;
+                        // Run the RequestSongDialog giving it whatever details we have from the LUIS call, it will fill out the remainder.
+                        return await stepContext.BeginDialogAsync(nameof(RequestSongDialog), songRequest, cancellationToken);
                     }
                     break;
 
@@ -272,6 +305,10 @@ namespace MusicMasterBot.Dialogs
                         message = MessageFactory.Text(messageText, spokenMessageText, InputHints.IgnoringInput);
                     }
                     break;
+                case Answer answer:
+                    (messageText, spokenMessageText) = (answer.Text, answer.Speak);
+                    message = MessageFactory.Text(messageText, spokenMessageText, InputHints.IgnoringInput);
+                     break;
                 default:
                     (messageText, spokenMessageText) = SentenceGenerator.CommandNotUnderstood();
                     message = MessageFactory.Text(messageText, spokenMessageText, InputHints.IgnoringInput);
@@ -282,6 +319,66 @@ namespace MusicMasterBot.Dialogs
             // Restart the main dialog with a different message the second time around
             var (promptMessage, _) = SentenceGenerator.ProposeFurtherHelp();
             return await stepContext.ReplaceDialogAsync(InitialDialogId, promptMessage, cancellationToken);
+        }
+
+        private (string writtenText, string spokenText) GenerateResponseToInformationRequest(string[] requestInformation, Song song)
+        {
+
+            if (requestInformation.Contains("title") && requestInformation.Contains("artist"))
+            {
+                return SentenceGenerator.DescribeTitleArtistCurrentSong(song);
+            }
+            else if (requestInformation.Contains("title"))
+            {
+                return SentenceGenerator.DescribeTitleCurrentSong(song);
+            }
+            else if (requestInformation.Contains("artist"))
+            {
+                return SentenceGenerator.DescribeArtistCurrentSong(song);
+            }
+            else if (requestInformation.Contains("when") && requestInformation.Contains("album"))
+            {
+                return SentenceGenerator.DescribeAlbumYearCurrentSong(song);
+            }
+            else if (requestInformation.Contains("when"))
+            {
+                return SentenceGenerator.DescribeYearCurrentSong(song);
+            }
+            else if (requestInformation.Contains("album"))
+            {
+                return SentenceGenerator.DescribeAlbumCurrentSong(song);
+            }
+            return ("", "");
+        }
+
+        private Song SelectSongToBePlayedByTitleArtist(SongRequest songRequest, string userInput)
+        {
+            Song songToBePlayed;
+            Console.WriteLine(songRequest.Artist + " ?=>? " + _songChooser.GetClosestKnownArtist(songRequest.Artist).bestMatch);
+            Console.WriteLine(songRequest.Artist + " ?=>? " + _songChooser.GetKnownArtistFromSentence(userInput));
+            Console.WriteLine(songRequest.Title + " ?=>? " + _songChooser.GetClosestKnownSongTitle(songRequest.Title).bestMatch);
+            Console.WriteLine(songRequest.Artist + " ?=>? " + _songChooser.GetKnownSongTitleFromSentence(userInput));
+
+            var closestKnownArtist = _songChooser.GetClosestKnownArtist(songRequest.Artist).bestMatch;
+            var closestKnownTitle = _songChooser.GetClosestKnownSongTitle(songRequest.Title).bestMatch;
+            if (songRequest.Artist is null || closestKnownArtist is null)
+                songRequest.Artist = _songChooser.GetKnownArtistFromSentence(userInput);
+            if (songRequest.Title is null || closestKnownTitle is null)
+                songRequest.Title = _songChooser.GetKnownSongTitleFromSentence(userInput);
+
+            songToBePlayed = _songChooser.GetSongByClosestArtistOrTitle(songRequest.Title, songRequest.Artist);
+
+            if (songToBePlayed is null)
+            {
+                Console.WriteLine(songRequest.Artist + ", " + songRequest.Title);
+                if (songRequest.Artist is null && closestKnownArtist is null)
+                    songRequest.Artist = _songChooser.ExpandSentenceToKnownArtist(userInput);
+                if (songRequest.Title is null && closestKnownTitle is null)
+                    songRequest.Title = _songChooser.ExpandSentenceToKnownSongTitle(userInput);
+
+                songToBePlayed = _songChooser.GetSongByClosestArtistOrTitle(songRequest.Title, songRequest.Artist);
+            }
+            return songToBePlayed;
         }
     }
 }
