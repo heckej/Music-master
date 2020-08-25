@@ -47,6 +47,9 @@ namespace MusicMasterBot
             // Register LUIS recognizer
             services.AddSingleton<UserCommandRecognizer>();
 
+            // Register LUIS recognizer
+            services.AddSingleton<UserQuestionRecognizer>();
+
             // Register the BookingDialog.
             services.AddSingleton<RequestSongDialog>();
 
