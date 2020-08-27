@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,26 +10,6 @@ namespace Tools.Players
     {
         readonly string _cmus = "cmus-remote";
         readonly IPlayerStatus _playerStatus = new CmusStatus();
-
-        public Song GetCurrentSong()
-        {
-            throw new NotImplementedException();
-        }
-
-        public double GetCurrentPosition()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Song GetNextSong()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Song GetPreviousSong()
-        {
-            throw new NotImplementedException();
-        }
 
         public void Pause()
         {
