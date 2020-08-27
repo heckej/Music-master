@@ -146,6 +146,7 @@ namespace MusicMasterBot.Dialogs
             string messageText = "";
             string spokenMessageText = "";
             Song songToBePlayed = null;
+            var intentScoreThreshold = 0.5;
 
             switch (luisCommandResult.TopIntent().intent)
             {
@@ -237,17 +238,26 @@ namespace MusicMasterBot.Dialogs
                     break;
 
                 case UserCommand.Intent.PlayRandom:
-                    songToBePlayed = _songChooser.ChooseRandomSong();
-                    messageText = "Random song.";
+                    if (luisCommandResult.TopIntent().score > intentScoreThreshold)
+                    {
+                        songToBePlayed = _songChooser.ChooseRandomSong();
+                        messageText = "Random song.";
+                    }
                     break;
 
                 case UserCommand.Intent.PreviousSong:
-                    _musicPlayer.PlayPrevious();
-                    messageText = "Previous song.";
+                    if (luisCommandResult.TopIntent().score > intentScoreThreshold)
+                    {
+                        _musicPlayer.PlayPrevious();
+                        messageText = "Previous song.";
+                    }
                     break;
                 case UserCommand.Intent.NextSong:
-                    _musicPlayer.PlayNext();
-                    messageText = "Next song.";
+                    if (luisCommandResult.TopIntent().score > intentScoreThreshold)
+                    {
+                        _musicPlayer.PlayNext();
+                        messageText = "Next song.";
+                    }
                     break;
                 case UserCommand.Intent.StartPlaying:
                     _musicPlayer.Resume();
@@ -258,8 +268,11 @@ namespace MusicMasterBot.Dialogs
                     messageText = "Music paused.";
                     break;
                 case UserCommand.Intent.VolumeDown:
-                    _musicPlayer.VolumeDown();
-                    messageText = "Volume decreased by 10%.";
+                    if (luisCommandResult.TopIntent().score > intentScoreThreshold)
+                    {
+                        _musicPlayer.VolumeDown();
+                        messageText = "Volume decreased by 10%.";
+                    }
                     break;
                 case UserCommand.Intent.VolumeUp:
                     _musicPlayer.VolumeUp(20);
