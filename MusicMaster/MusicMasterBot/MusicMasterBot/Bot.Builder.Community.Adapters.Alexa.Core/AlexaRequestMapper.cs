@@ -33,33 +33,33 @@ namespace Bot.Builder.Community.Adapters.Crunch.Core
         /// for all request types with the activity type, and additional properties, set depending 
         /// on the specific request type.
         /// </summary>
-        /// <param name="skillRequest">The SkillRequest to be used to create an Activity object.</param>
+        /// <param name="userRequest">The SkillRequest to be used to create an Activity object.</param>
         /// <returns>Activity</returns>
-        public Activity RequestToActivity(CrunchRequest skillRequest)
+        public Activity RequestToActivity(CrunchRequest userRequest)
         {
-            if (skillRequest.Request == null)
+            if (userRequest.Request == null)
             {
-                throw new ValidationException("Bad Request. Skill request missing Request property.");
+                throw new ValidationException("Bad Request. User request missing Request property.");
             }
 
-            switch (skillRequest.Request)
+            switch (userRequest.Request)
             {
                 case string intentRequest:
                     if (intentRequest != null)
                     {
-                        return RequestToMessageActivity(skillRequest, intentRequest);
+                        return RequestToMessageActivity(userRequest, intentRequest);
                     }
                     else
                     {
                         if (intentRequest == "AMAZON.StopIntent")
                         {
-                            return RequestToEndOfConversationActivity(skillRequest);
+                            return RequestToEndOfConversationActivity(userRequest);
                         }
 
-                        return RequestToEventActivity(skillRequest);
+                        return RequestToEventActivity(userRequest);
                     }
                 default:
-                    return RequestToEventActivity(skillRequest);
+                    return RequestToEventActivity(userRequest);
             }
         }
 
@@ -276,7 +276,7 @@ namespace Bot.Builder.Community.Adapters.Crunch.Core
             activity.Conversation = new ConversationAccount(isGroup: false, id: skillRequest.Session ?? skillRequest.Request);
             activity.Timestamp = null;
             activity.ChannelData = skillRequest;
-            activity.Locale = skillRequest.Request;
+            activity.Locale = skillRequest.Language;
 
             return activity;
         }
