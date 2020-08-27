@@ -1,4 +1,4 @@
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -56,6 +56,21 @@ namespace Tools
         public Song GetCurrentSong()
         {
             UpdateStatus();
+            if (!_status.ContainsKey("artist"))
+                _status.Add("artist", null);
+            if (!_status.ContainsKey("title"))
+                _status.Add("title", null);
+            if (!_status.ContainsKey("date"))
+                _status.Add("date", "0");
+            if (!_status.ContainsKey("album"))
+                _status.Add("album", null);
+            if (!_status.ContainsKey("genre"))
+                _status.Add("genre", null);
+            else if (_status["genre"] != null)
+                _status["genre"] = _status["genre"].ToLower();
+            if (!_status.ContainsKey("file"))
+                _status.Add("file", null);
+
             return new Song()
             {
                 Title = _status["title"],
