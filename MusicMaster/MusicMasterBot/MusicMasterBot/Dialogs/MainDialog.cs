@@ -340,7 +340,8 @@ namespace MusicMasterBot.Dialogs
 
         private (string writtenText, string spokenText) GenerateResponseToInformationRequest(string[] requestInformation, Song song)
         {
-
+            if (requestInformation is null)
+                return ("", "");
             if (requestInformation.Contains("title") && requestInformation.Contains("artist"))
             {
                 return SentenceGenerator.DescribeTitleArtistCurrentSong(song);
