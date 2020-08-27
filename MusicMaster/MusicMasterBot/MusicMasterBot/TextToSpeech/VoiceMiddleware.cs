@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Tools;
+using UserCommandLogic;
 
 namespace MusicMasterBot.TextToSpeech
 {
@@ -15,12 +16,17 @@ namespace MusicMasterBot.TextToSpeech
     /// </summary>
     public class VoiceMiddleware : IMiddleware
     {
+        private readonly IPlayer _player;
+        private readonly double _dimmedVolumeLevel = 40;
+        private readonly ISongChooser _songChooser;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="VoiceMiddleware"/> class.
         /// </summary>
-        public VoiceMiddleware(UserState userState)
+        public VoiceMiddleware(UserState userState, IPlayer player, ISongChooser songChooser)
         {
+            _player = player;
+            _songChooser = songChooser;
         }
 
         private bool shouldSpeak = true;
@@ -59,10 +65,16 @@ namespace MusicMasterBot.TextToSpeech
                     {
                         await Task.WhenAll(tasks).ConfigureAwait(false);
                     }*/
+
+                    // Lower the volume for a moment.
+
+                    var previousVolume = _player.GetPlayerStatus().GetVolume();
+                    _player.SetVolume(_dimmedVolumeLevel);
+
                     foreach (Activity currentActivity in activities.Where(a => a.Type == ActivityTypes.Message))
                     {
                         var text = currentActivity.AsMessageActivity().Speak;
-                        if (text != null && !text.StartsWith("//"))
+                        if (text != null)
                         {
                             Console.WriteLine("Speaking: " + text);
                             var speak = Voice.Speak(text);
@@ -73,6 +85,9 @@ namespace MusicMasterBot.TextToSpeech
                             currentActivity.AsMessageActivity().Text = text.Substring(2);
                         }
                     }                    
+
+                    // Reset volume to previous values
+                    _player.SetVolume(previousVolume.volumeLeft, previousVolume.volumeRight);
                 }
 
                 return await nextSend();
