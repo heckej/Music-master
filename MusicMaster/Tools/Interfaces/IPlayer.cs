@@ -15,7 +15,10 @@ namespace Tools
         void Stop();
         void VolumeUp(double percentage = 10);
         void VolumeDown(double percentage = 10);
+        void SetVolume(double percentage);
+        void SetVolume(double percentageLeft, double percentageRight);
         void PlayNext();
         void PlayPrevious();
+        IPlayerStatus GetPlayerStatus();
     }
 }

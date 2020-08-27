@@ -9,9 +9,7 @@ namespace Tools.Players
     class LinuxPlayer : IPlayer
     {
         readonly string _cmus = "cmus-remote";
-        readonly string _statusStopped = "status stopped";
-        readonly string _statusPlaying = "status playing";
-        readonly string _statusPaused = "status paused";
+        readonly IPlayerStatus _playerStatus = new CmusStatus();
 
         public void Pause()
         {
@@ -32,7 +30,7 @@ namespace Tools.Players
         public void PlayNext()
         {
             ExecuteCmus("-n");
-            if (ExecuteCmus("-Q").Contains(_statusStopped))
+            if (GetPlayerStatus().GetStatus().Equals(Status.Stopped))
                 Resume();
         }
 
@@ -40,7 +38,7 @@ namespace Tools.Players
         {
             ExecuteCmus("-r");
             ExecuteCmus("-r");
-            if (ExecuteCmus("-Q").Contains(_statusStopped))
+            if (GetPlayerStatus().GetStatus().Equals(Status.Stopped))
                 Resume();
         }
 
@@ -56,17 +54,19 @@ namespace Tools.Players
 
         public void VolumeDown(double percentage = 10)
         {
-            ExecuteCmus("-v -" + percentage + "%");
+            ExecuteCmus("-v -" + (int) percentage + "%");
         }
 
         public void VolumeUp(double percentage = 10)
         {
-            ExecuteCmus("-v +" + percentage + "%");
+            ExecuteCmus("-v +" + (int) percentage + "%");
         }
 
         private string ExecuteCmus(string arg)
         {
             var res = new RunCmd().Run(_cmus, arg);
+            Console.Write("Output cmus: " + res["output"]);
+            Console.Write("Debug cmus: " + res["debug"]);
             /*if (res["debug"] != "" && res["debug"] != null)*/
                /* throw new Exception("Some debugging info: " + res["debug"] + "\nOutput: " + res["output"]);*/
             if (res["debug"].Contains("cmus is not running"))
@@ -76,6 +76,21 @@ namespace Tools.Players
                 res = new RunCmd().Run(_cmus, arg);*/
             }
             return res["output"];
+        }
+
+        public IPlayerStatus GetPlayerStatus()
+        {
+            return _playerStatus;
+        }
+
+        public void SetVolume(double percentage)
+        {
+            ExecuteCmus("-v \"" + (int) percentage + "%\"");
+        }
+
+        public void SetVolume(double percentageLeft, double percentageRight)
+        {
+            ExecuteCmus("-v " + "\"" + (int) percentageLeft + "% " + (int) percentageRight + "%\"");
         }
     }
 }

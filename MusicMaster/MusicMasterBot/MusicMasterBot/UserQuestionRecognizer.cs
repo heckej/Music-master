@@ -9,19 +9,19 @@ using Microsoft.Extensions.Configuration;
 
 namespace MusicMasterBot
 {
-    public class UserCommandRecognizer : IRecognizer
+    public class UserQuestionRecognizer : IRecognizer
     {
         private readonly LuisRecognizer _recognizer;
 
-        public UserCommandRecognizer(IConfiguration configuration)
+        public UserQuestionRecognizer(IConfiguration configuration)
         {
-            var luisIsConfigured = !string.IsNullOrEmpty(configuration["UserCommand:LuisAppId"]) && !string.IsNullOrEmpty(configuration["UserCommand:LuisAPIKey"]) && !string.IsNullOrEmpty(configuration["UserCommand:LuisAPIHostName"]);
+            var luisIsConfigured = !string.IsNullOrEmpty(configuration["UserQuestion:LuisAppId"]) && !string.IsNullOrEmpty(configuration["UserQuestion:LuisAPIKey"]) && !string.IsNullOrEmpty(configuration["UserQuestion:LuisAPIHostName"]);
             if (luisIsConfigured)
             {
                 var luisApplication = new LuisApplication(
-                    configuration["UserCommand:LuisAppId"],
-                    configuration["UserCommand:LuisAPIKey"],
-                    $"https://{configuration["UserCommand:LuisAPIHostName"]}.api.cognitive.microsoft.com");
+                    configuration["UserQuestion:LuisAppId"],
+                    configuration["UserQuestion:LuisAPIKey"],
+                    $"https://{configuration["UserQuestion:LuisAPIHostName"]}.api.cognitive.microsoft.com");
 
                 // Set the recognizer options depending on which endpoint version you want to use.
                 // More details can be found in https://docs.microsoft.com/en-gb/azure/cognitive-services/luis/luis-migration-api-v3

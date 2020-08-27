@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace UserCommandLogic
@@ -25,6 +26,7 @@ namespace UserCommandLogic
         public void UpdateByDatabase()
         {
             /// find the song in the database based on title, artist; if not found, note the best matches for artist and title with their best matches for the other parameter respectively
+            throw new NotImplementedException();
         }
     }
 }

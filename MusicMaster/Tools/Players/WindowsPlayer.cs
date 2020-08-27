@@ -7,6 +7,11 @@ namespace Tools.Players
 {
     class WindowsPlayer : IPlayer
     {
+        public IPlayerStatus GetPlayerStatus()
+        {
+            throw new NotImplementedException();
+        }
+
         public void Pause()
         {
             throw new NotImplementedException();
@@ -33,6 +38,16 @@ namespace Tools.Players
         }
 
         public void Resume()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetVolume(double percentage)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetVolume(double percentageLeft, double percentageRight)
         {
             throw new NotImplementedException();
         }
