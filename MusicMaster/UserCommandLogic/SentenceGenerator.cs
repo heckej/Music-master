@@ -53,11 +53,27 @@ namespace MusicMasterBot
 
         public static (string written, string spoken) DescribeAlbumYearCurrentSong(Song song)
         {
-            IList<(string, string)> sentences = new List<(string, string)>
+            IList<(string, string)> sentences;
+            if (song.Year is 0)
             {
-                ($"This song is from the album {song.Album}, made in {song.Year}.", $"This is a song from the album {song.Album}, from {song.Year}."),
-                ($"The current album is {song.Album}. It was published in {song.Year}", $"The album is {song.Album}, from {song.Year}.")
-            };
+                sentences = new List<(string, string)>
+                {
+                    ($"I don't know from which album this song is.", $"I don't know from which album this song is."),
+                    ($"I honestly wouldn't know.", $"I honestly wouldn't know."),
+                    ($"To be honest, I have no idea.", $"To be honest, I have no idea."),
+                    ($"That's a big secret to me.", $"That's a big secret to me."),
+                    ($"I'd be really smart if I knew that.", "I'd be really smart if I knew that."),
+                    ($"I'm sorry. Apparently I don't know that much.", $"I'm sorry. Apparently I don't know that much.")
+                };
+            }
+            else
+            {
+                sentences = new List<(string, string)>
+                {
+                    ($"This song is from the album {song.Album}, made in {song.Year}.", $"This is a song from the album {song.Album}, from {song.Year}."),
+                    ($"The current album is {song.Album}. It was published in {song.Year}.", $"The album is {song.Album}, from {song.Year}.")
+                };
+            }
 
             int r = _random.Next(sentences.Count);
             return sentences.ElementAt(r);
@@ -67,11 +83,27 @@ namespace MusicMasterBot
 
         public static (string written, string spoken) DescribeAlbumCurrentSong(Song song)
         {
-            IList<(string, string)> sentences = new List<(string, string)>
+            IList<(string, string)> sentences;
+            if (song.Album is null)
             {
-                ($"This song is from the album {song.Album}.", $"This is a song from the album {song.Album}."),
-                ($"The current album is {song.Album}.", $"The album is {song.Album}.")
-            };
+                sentences = new List<(string, string)>
+                {
+                    ($"I don't know from which album this song is.", $"I don't know from which album this song is."),
+                    ($"I honestly wouldn't know.", $"I honestly wouldn't know."),
+                    ($"To be honest, I have no idea.", $"To be honest, I have no idea."),
+                    ($"That's a big secret to me.", $"That's a big secret to me."),
+                    ($"I'd be really smart if I knew that.", "I'd be really smart if I knew that."),
+                    ($"I'm sorry. Apparently I don't know that much.", $"I'm sorry. Apparently I don't know that much.")
+                };
+            }
+            else
+            {
+                sentences = new List<(string, string)>
+                {
+                    ($"This song is from the album {song.Album}.", $"This is a song from the album {song.Album}."),
+                    ($"The current album is {song.Album}.", $"The album is {song.Album}.")
+                };
+            }
 
             int r = _random.Next(sentences.Count);
             return sentences.ElementAt(r);
@@ -81,11 +113,27 @@ namespace MusicMasterBot
 
         public static (string written, string spoken) DescribeYearCurrentSong(Song song)
         {
-            IList<(string, string)> sentences = new List<(string, string)>
+            IList<(string, string)> sentences;
+            if (song.Year == 0)
             {
-                ($"This song was made in {song.Year}.", $"This is a song from {song.Year}."),
-                ($"It was published in {song.Year}", $"{song.Year}")
-            };
+                sentences = new List<(string, string)>
+                {
+                    ($"I don't know when this song has been made.", $"I don't know when this song has been made.."),
+                    ($"I honestly wouldn't know.", $"I honestly wouldn't know."),
+                    ($"To be honest, I have no idea.", $"To be honest, I have no idea."),
+                    ($"That's a big secret to me.", $"That's a big secret to me."),
+                    ($"I'd be really smart if I knew that.", "I'd be really smart if I knew that."),
+                    ($"I'm sorry. Apparently I don't know that much.", $"I'm sorry. Apparently I don't know that much.")
+                };
+            }
+            else
+            {
+                sentences = new List<(string, string)>
+                {
+                    ($"This song was made in {song.Year}.", $"This is a song from {song.Year}."),
+                    ($"It was published in {song.Year}.", $"{song.Year}.")
+                };
+            }
 
             int r = _random.Next(sentences.Count);
             return sentences.ElementAt(r);
