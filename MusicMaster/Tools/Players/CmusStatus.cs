@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -98,6 +98,18 @@ namespace Tools
                 throw new System.Exception("cmus not running.");
             }
             return res["output"];
+        }
+
+        public (double volumeLeft, double volumeRight) GetVolume()
+        {
+            UpdateStatus();
+            double volumeLeft = 0;
+            double volumeRight = 0;
+            if (_status.ContainsKey("vol_left"))
+                volumeLeft = Double.Parse(_status["vol_left"]);
+            if (_status.ContainsKey("vol_right"))
+                volumeRight = Double.Parse(_status["vol_right"]);
+            return (volumeLeft, volumeRight);
         }
     }
 }

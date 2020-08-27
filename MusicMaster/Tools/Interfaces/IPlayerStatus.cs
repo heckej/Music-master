@@ -12,5 +12,6 @@ namespace Tools
         Song GetPreviousSong();
         double GetCurrentPosition();
         Status GetStatus();
+        (double volumeLeft, double volumeRight) GetVolume();
     }
 }
