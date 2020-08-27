@@ -56,8 +56,8 @@ if __name__ == "__main__":
     # create recognizer and mic instances
     recognizer = sr.Recognizer()
     microphone = sr.Microphone()
-    guess = recognize_speech_from_mic(recognizer, microphone)
-    if guess["success"] and guess["transcription"]:
-        print(guess["transcription"])
-    else:
-        print("not understood!")
+    guess = None
+    while guess == None or guess["transcription"] == "" or guess["transcription"] is None:
+        guess = recognize_speech_from_mic(recognizer, microphone)
+        if guess["success"] and guess["transcription"] and guess["transcription"] != "":
+            print(guess["transcription"])
