@@ -121,12 +121,12 @@ namespace MusicMasterBot.Dialogs
                         case UserQuestion.Intent.NegativeFeedback:
                             // check certainty percentage to avoid false positives
                             if (score > feedbackScoreThreshold)
-                                break;
+                                (answer.Text, answer.Speak) = ("I don't like it either.", "I don't like it either.");
                             break;
                         case UserQuestion.Intent.PositiveFeedback:
                             // check certainty percentage to avoid false positives
                             if (score > feedbackScoreThreshold)
-                                break;
+                                (answer.Text, answer.Speak) = ("It's nice indeed.", "It's nice indeed.");
                             break;
                         default:
                             break;
