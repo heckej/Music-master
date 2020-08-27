@@ -68,11 +68,11 @@ namespace Bot.Builder.Community.Adapters.Crunch
                 body = await sr.ReadToEndAsync();
             }
 
-            var skillRequest = JsonConvert.DeserializeObject<CrunchRequest>(body, JsonSerializerSettings);
+            var userRequest = JsonConvert.DeserializeObject<CrunchRequest>(body, JsonSerializerSettings);
 
-            if (skillRequest.Version != "1.0")
+            if (userRequest.Version != "1.0")
             {
-                throw new Exception($"Unexpected request version of '{skillRequest.Version}' received.");
+                throw new Exception($"Unexpected request version of '{userRequest.Version}' received.");
             }
 
             if (_options.ValidateIncomingCrunchRequests)
@@ -80,17 +80,17 @@ namespace Bot.Builder.Community.Adapters.Crunch
                 throw new AuthenticationException("Failed to validate incoming request.");
             }
 
-            var alexaResponse = await ProcessAlexaRequestAsync(skillRequest, bot.OnTurnAsync);
+            var userResponse = await ProcessUserRequestAsync(userRequest, bot.OnTurnAsync);
 
-            if (alexaResponse == null)
+            if (userResponse == null)
             {
-                throw new ArgumentNullException(nameof(alexaResponse));
+                throw new ArgumentNullException(nameof(userResponse));
             }
             
             httpResponse.ContentType = "application/json";
             httpResponse.StatusCode = (int)HttpStatusCode.OK;
 
-            var responseJson = JsonConvert.SerializeObject(alexaResponse, JsonSerializerSettings);
+            var responseJson = JsonConvert.SerializeObject(userResponse, JsonSerializerSettings);
             var responseData = Encoding.UTF8.GetBytes(responseJson);
             await httpResponse.Body.WriteAsync(responseData, 0, responseData.Length, cancellationToken).ConfigureAwait(false);
         }
@@ -139,9 +139,9 @@ namespace Bot.Builder.Community.Adapters.Crunch
             return Task.FromException(new NotImplementedException("Alexa adapter does not support deleteActivity."));
         }
 
-        private async Task<CrunchResponse> ProcessAlexaRequestAsync(CrunchRequest alexaRequest, BotCallbackHandler logic)
+        private async Task<CrunchResponse> ProcessUserRequestAsync(CrunchRequest userRequest, BotCallbackHandler logic)
         {
-            var activity = RequestToActivity(alexaRequest);
+            var activity = RequestToActivity(userRequest);
             var context = new TurnContextEx(this, activity);
 
             await RunPipelineAsync(context, logic, default).ConfigureAwait(false);
@@ -150,7 +150,7 @@ namespace Bot.Builder.Community.Adapters.Crunch
 
             var outgoingActivity = ProcessOutgoingActivities(activities);
 
-            var response = _requestMapper.ActivityToResponse(outgoingActivity, alexaRequest);
+            var response = _requestMapper.ActivityToResponse(outgoingActivity, userRequest);
 
             return response;
         }
