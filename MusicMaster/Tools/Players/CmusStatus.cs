@@ -2,6 +2,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using UserCommandLogic;
 
@@ -40,7 +41,8 @@ namespace Tools
                 var splittedLine = line.Split(new char[] { ' ' }, 2);
                 if (_twoArgumentStatus.Contains(splittedLine[0]))
                     splittedLine = splittedLine[1].Split(new char[] { ' ' }, 2);
-                status.Add(splittedLine[0], splittedLine[1]);
+                if (splittedLine.Length > 1)
+                    status.Add(splittedLine[0], splittedLine[1].Trim());
             }
             return status;
         }
