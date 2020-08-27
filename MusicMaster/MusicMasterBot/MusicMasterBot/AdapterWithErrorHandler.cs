@@ -10,15 +10,23 @@ using Microsoft.Bot.Builder.TraceExtensions;
 using Microsoft.Bot.Schema;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using MusicMasterBot.Middleware.Language;
 using MusicMasterBot.TextToSpeech;
 
 namespace MusicMasterBot
 {
     public class AdapterWithErrorHandler : BotFrameworkHttpAdapter
     {
-        public AdapterWithErrorHandler(IConfiguration configuration, ILogger<BotFrameworkHttpAdapter> logger, VoiceMiddleware voiceMiddleware, ConversationState conversationState = null)
+        public AdapterWithErrorHandler(IConfiguration configuration, ILogger<BotFrameworkHttpAdapter> logger, Translator translatorMiddleware, VoiceMiddleware voiceMiddleware, ConversationState conversationState = null)
             : base(configuration, logger)
         {
+
+            if (translatorMiddleware != null)
+            {
+                // Add translator middleware to the adapter's middleware pipeline
+                Use(translatorMiddleware);
+            }
+
             if (voiceMiddleware == null)
             {
                 throw new NullReferenceException(nameof(voiceMiddleware));

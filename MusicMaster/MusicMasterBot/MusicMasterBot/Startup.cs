@@ -19,6 +19,7 @@ using UserCommandLogic;
 using Microsoft.Extensions.Configuration;
 using Tools;
 using System;
+using MusicMasterBot.Middleware.Language;
 
 namespace MusicMasterBot
 {
@@ -61,6 +62,9 @@ namespace MusicMasterBot
             services.AddSingleton<ISongChooser>(new SongChooser(databaseConnector));
             services.AddSingleton(databaseConnector);
             services.AddSingleton<IPlayer, MusicPlayer>();
+
+            // Translator Middleware
+            services.AddSingleton<Translator>();
 
             // Create the Voice Middleware that will be added to the middleware pipeline in the AdapterWithErrorHandler
             services.AddSingleton<VoiceMiddleware>();

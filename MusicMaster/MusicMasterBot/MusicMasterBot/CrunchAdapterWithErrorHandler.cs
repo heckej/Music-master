@@ -1,5 +1,6 @@
 ﻿using Bot.Builder.Community.Adapters.Crunch;
 using Microsoft.Extensions.Logging;
+using MusicMasterBot.Middleware.Language;
 using MusicMasterBot.TextToSpeech;
 using System;
 
@@ -7,9 +8,15 @@ namespace MusicMasterBot
 {
     public class CrunchAdapterWithErrorHandler : CrunchAdapter
     {
-        public CrunchAdapterWithErrorHandler(ILogger<CrunchAdapter> logger, VoiceMiddleware voiceMiddleware = null)
+        public CrunchAdapterWithErrorHandler(ILogger<CrunchAdapter> logger, Translator translatorMiddleware = null, VoiceMiddleware voiceMiddleware = null)
             : base(new CrunchAdapterOptions() { ShouldEndSessionByDefault = false, ValidateIncomingCrunchRequests = false, AlexaSkillId = "XXXX" }, logger)
         {
+
+            if (translatorMiddleware != null)
+            {
+                // Add translator middleware to the adapter's middleware pipeline
+                Use(translatorMiddleware);
+            }
 
             if (voiceMiddleware != null)
             {
