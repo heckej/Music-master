@@ -30,7 +30,7 @@ namespace MusicMasterBot.CognitiveModels
         public class _Entities
         {
             // Simple entities
-            public string[] Negative;
+            public string[][] Negative;
 
             public string[] Positve;
 

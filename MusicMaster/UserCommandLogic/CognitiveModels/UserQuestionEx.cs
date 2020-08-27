@@ -6,7 +6,7 @@ namespace MusicMasterBot.CognitiveModels
     public partial class UserQuestion
     {
         public string Negative
-            => Entities.Negative?.FirstOrDefault();
+            => Entities.Negative?.FirstOrDefault()?.FirstOrDefault();
 
         public string Positive
             => Entities.Positve?.FirstOrDefault();
