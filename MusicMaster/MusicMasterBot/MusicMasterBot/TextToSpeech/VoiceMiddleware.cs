@@ -100,7 +100,7 @@ namespace MusicMasterBot.TextToSpeech
                 {
                     if (shouldSpeak)
                     {
-                        Voice.Speak(activity.AsMessageActivity().Text);
+                        Voice.Speak(activity.AsMessageActivity().Speak);
                     }
                 }
 
