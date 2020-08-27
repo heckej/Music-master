@@ -73,5 +73,15 @@ namespace Tools
         {
             return _player.GetPlayerStatus();
         }
+
+        public void SetVolume(double percentage)
+        {
+            _player.SetVolume(percentage);
+        }
+
+        public void SetVolume(double percentageLeft, double percentageRight)
+        {
+            _player.SetVolume(percentageLeft, percentageRight);
+        }
     }
 }
