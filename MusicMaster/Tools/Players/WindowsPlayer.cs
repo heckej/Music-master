@@ -42,6 +42,16 @@ namespace Tools.Players
             throw new NotImplementedException();
         }
 
+        public void SetVolume(double percentage)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetVolume(double percentageLeft, double percentageRight)
+        {
+            throw new NotImplementedException();
+        }
+
         public void Stop()
         {
             throw new NotImplementedException();
