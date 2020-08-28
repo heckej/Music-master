@@ -17,6 +17,9 @@ namespace Crunch.NET.Request
         [JsonProperty("request")]
         public string Request { get; set; }
 
+        [JsonProperty("language")]
+        public string Language { get; set; }
+
         public System.Type GetRequestType()
         {
             return null;

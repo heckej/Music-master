@@ -10,12 +10,12 @@ namespace Bot.Builder.Community.Samples.Alexa.Controllers
     // achieved by specifying a more specific type for the bot constructor argument.
     [Route("api/crunch")]
     [ApiController]
-    public class AlexaController : ControllerBase
+    public class CrunchController : ControllerBase
     {
         private readonly CrunchAdapter Adapter;
         private readonly IBot Bot;
 
-        public AlexaController(CrunchAdapter adapter, IBot bot)
+        public CrunchController(CrunchAdapter adapter, IBot bot)
         { 
             Adapter = adapter;
             Bot = bot;
