@@ -1,5 +1,5 @@
 # Music-master
-A bot that serves your taste of music (hopefully).
+Music maestro, it's time for a bot that serves your taste of music - let's hope.
 
 Say something like 
 > `>> Play Someone Like Me by Adele` and enjoy! 
