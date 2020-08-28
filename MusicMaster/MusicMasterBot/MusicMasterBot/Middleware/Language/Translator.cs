@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
+﻿using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Schema;
 using System;
@@ -93,6 +93,7 @@ namespace MusicMasterBot.Middleware.Language
                 {"titel", "title"},
                 {"wat dacht je van wat muziek", "what about some music"},
                 {"wat muziek", "some music"},
+                {"iets van muziek", "some music"},
                 {"nummer", "song"},
                 {"liedje", "song"},
                 {"lied", "song"},
@@ -102,20 +103,46 @@ namespace MusicMasterBot.Middleware.Language
                 {"voor me", "me"},
                 {"eens", ""},
                 {"iets van", "something by"},
-                {"iets van muziek", "some music"},
                 {"luider", "louder"},
                 {"omhoog", "up"},
                 {"hoger", "up"},
                 {"stilte", "silence"},
                 {"stil", "silent"},
-                {"let", "laat"},
+                {"laat", "let"},
                 {"laat me iets horen", "let me hear something"},
                 {"van", "by"},
                 {"de", "the"},
                 {"het", "it"},
                 {"wat", "what"},
-                {"who", "wie"},
-                {"dit", "this"}
+                {"wie", "who"},
+                {"dit", "this"},
+                {"een", "a" },
+                {"deze", "this" },
+                {"pauze", "pause" },
+                {"afspelen", "play" },
+                {"spelen", "play" },
+                {"hervatten", "resume" },
+                {"volgende", "next" },
+                {"volgend", "next" },
+                {"vorige", "previous" },
+                {"vorig", "previous" },
+                {"voorgaand", "previous" },
+                {"ken", "know" },
+                {"niet", "not"},
+                {"mijn", "my"},
+                {"nooit", "never" },
+                {"gehoord", "heard" },
+                {"heb", "have" },
+                {"iets", "anything" },
+                {"doet me niet denken aan", "doesn't reming me of" },
+                {"jammer genoeg", "unfortunately" },
+                {"ik", "I" },
+                {"één", "any" },
+                {"genaamd", "called" },
+                {"gemaakt", "made" },
+                {"wanneer", "when" },
+                {"jaar", "year" },
+                {"welk", "which" }
             };
         }
 
