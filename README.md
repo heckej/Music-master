@@ -56,3 +56,5 @@ In the code of the bot there is a class that allows to execute commands in a sep
 
 ### User command interpretation
 To detect intents and entities a custom [LUIS](https://luis.ai) model is used.
+
+For more information: see the [wiki](https://github.com/heckej/Music-master/wiki)
