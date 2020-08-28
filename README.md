@@ -14,6 +14,9 @@ or
 
 > `>> Do you know Let it be by The Beatles?`
 
+It's all
+> `<< Music Master, at your service!
+
 _*Playing songs by genre has not been implemented (yet)._
 
 ## In short
