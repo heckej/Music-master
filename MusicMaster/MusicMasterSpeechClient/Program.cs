@@ -18,11 +18,7 @@ namespace MusicMasterSpeechClient
     class Program
     {
         private static readonly HttpClient client = new HttpClient();
-        static readonly string endPoint = "http://localhost:3978/api/crunch";
-        static readonly string mention1 = "music master";
-        static readonly string mention2 = "musicmaster";
-        static readonly double activeListeningTime = 5000;
-
+        static string endPoint = "http://localhost:3978/api/crunch";
         private static readonly JsonSerializerSettings JsonSerializerSettings = new JsonSerializerSettings
         {
             ContractResolver = new CamelCasePropertyNamesContractResolver(),
@@ -30,88 +26,53 @@ namespace MusicMasterSpeechClient
             NullValueHandling = NullValueHandling.Ignore,
         };
 
-        static void Main()
+        static void Main(string[] args)
         {
-            var response = ProcessUserRequest("").Result;
-            Console.WriteLine("<< " + response);
-
             string userInput;
-            double timeLeft = 0;
-            IDictionary<string, string> listenResult;
-            var watch = System.Diagnostics.Stopwatch.StartNew();
-
+            string language;
             while (true)
             {
-                timeLeft -= watch.ElapsedMilliseconds;
-
                 // listen to mic input
-                Console.Write("> ");
-                /*userInput = Console.ReadLine();*/
-                listenResult = Tools.Voice.Listen();
-                userInput = listenResult["output"];
+                Console.WriteLine("Enter a command.");
+                Console.Write(">> ");
+                //userInput = Console.ReadLine();
+                var listenResult = Tools.Voice.Listen();
+                //if (!listenResult["debug"].Contains("ALSA lib"))
+                    Console.WriteLine(listenResult["debug"]);
+                var results = listenResult["output"].Split("\n");
+                Console.WriteLine("output contains " + results.Length + " elements");
+                foreach (var res in results)
+                    Console.WriteLine(res);
+                language = results[0];
+                userInput = results[1];
                 Console.WriteLine(userInput);
-                var firstTimeNotAccepted = true;
-
-                while(userInput.Contains("not understood!") || (!userInput.ToLower().Contains(mention1) && !userInput.ToLower().Contains(mention2) && timeLeft <= 0))
-                {
-                    if (firstTimeNotAccepted && !userInput.Contains("not understood!"))
-                    {
-                        Console.WriteLine("<< Say \'Music Master\' to wake me.");
-                        Console.Write("> ");
-                        firstTimeNotAccepted = false;
-                    } else if (!userInput.Contains("not understood!"))
-                    {
-                        Console.WriteLine(userInput);
-                        Console.Write("> ");
-                    }
-                    
-                    listenResult = Tools.Voice.Listen();
-                    userInput = listenResult["output"];
-                    timeLeft -= watch.ElapsedMilliseconds;
-                }
-
-                Console.WriteLine(userInput);
-                Console.WriteLine("Debug info: " + listenResult["debug"]);
-
                 // print input
-                Console.WriteLine(">> " + userInput);
-
-                var filteredUserInput = userInput.Replace(mention1, "").Replace(mention2, "");
 
                 // process input
-                if (!userInput.Contains("not understood!") && filteredUserInput.Replace(" ", "").Length != 0)
-                {
-                    response = ProcessUserRequest(userInput).Result;
+                var response = ProcessUserRequest(userInput, language).Result;
 
-                    if (response != null && !response.StartsWith("//"))
-                    {
-                        Tools.Voice.Speak(response);
-                        Console.WriteLine("Speaking...");
-                    }
-                    if (response != null)
-                        response = response.Replace("//", "");
-
-                    // say result out loud
-                    Console.WriteLine("<< " + response);
-                }
+                /*if (!response.StartsWith("//"))
+                    Tools.Voice.Speak(response);
                 else
-                {
-                    Console.WriteLine("Not understood!");
-                }
-                timeLeft = activeListeningTime;
-                watch.Restart();
+                    response = response.Substring(2);*/
+
+                // say result out loud
+                Console.WriteLine("<< " + response);
 
             }
         }
 
-        private static async Task<string> ProcessUserRequest(string userRequest)
+        private static async Task<string> ProcessUserRequest(string userRequest, string language="en")
         {
+            if (language != "en")
+                language = "nl";
             var request = new CrunchRequest()
             {
                 Context = "none",
                 Request = userRequest,
                 Session = "abc123",
-                Version = "1.0"
+                Version = "1.0",
+                Language = language
             };
             var content = System.Text.Json.JsonSerializer.Serialize<CrunchRequest>(request);
             var httpContent = new StringContent(content, Encoding.UTF8, "application/json");
@@ -125,8 +86,12 @@ namespace MusicMasterSpeechClient
             var responseContent = await response.Content.ReadAsStringAsync();
 
             var musicMasterResponse =  JsonConvert.DeserializeObject<CrunchResponse>(responseContent, JsonSerializerSettings);
-
-            return musicMasterResponse?.Response?.Reprompt?.OutputSpeech?.Text;
+            try {
+                return musicMasterResponse.Response.Reprompt.OutputSpeech.Text;
+            } catch (Exception e) {
+                Console.WriteLine(e);
+                return "";
+            }
         }
     }
 }
