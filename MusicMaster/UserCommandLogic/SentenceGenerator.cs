@@ -118,7 +118,7 @@ namespace MusicMasterBot
             {
                 sentences = new List<(string, string)>
                 {
-                    ($"I don't know when this song has been made.", $"I don't know when this song has been made.."),
+                    ($"I don't know when this song has been made.", $"I don't know when this song has been made."),
                     ($"I honestly wouldn't know.", $"I honestly wouldn't know."),
                     ($"To be honest, I have no idea.", $"To be honest, I have no idea."),
                     ($"That's a big secret to me.", $"That's a big secret to me."),
