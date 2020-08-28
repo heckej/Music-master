@@ -1,7 +1,9 @@
 # Music-master
 A bot that serves your taste of music (hopefully).
 
-Say something like 'Play Someone Like Me by Adele' and enjoy! 'Louder' if you don't hear it well, or 'Silent!' if you're tired for a moment. 'What about some hard rock?' or 'Do you know Let it be by The Beatles?'.
+Say something like 'Play Someone Like Me by Adele' and enjoy! 'Louder' if you don't hear it well, or 'Silent!' if you're tired for a moment. 'What about some hard rock?'* or 'Do you know Let it be by The Beatles?'.
+
+_*Playing songs by genre currently has not been implemented._
 
 ## License
 MIT, Copyright 2020 heckej
