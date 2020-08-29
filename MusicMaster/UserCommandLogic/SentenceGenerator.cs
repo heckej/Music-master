@@ -8,8 +8,17 @@ namespace MusicMasterBot
 {
     public static class SentenceGenerator
     {
+        /// <summary>
+        /// A random number generator, to be used to randomly select a sentence from a list.
+        /// </summary>
         private static readonly Random _random = new Random();
 
+
+        /// <summary>
+        /// Returns both a sentence to be written and to be spoken, describing the title and
+        /// artist of a given song, as if it is the song that is currently being played.
+        /// </summary>
+        /// <param name="song">The song of which the title and artist should be described.</param>
         public static (string written, string spoken) DescribeTitleArtistCurrentSong(Song song)
         {
             IList<(string, string)> sentences = new List<(string, string)>
@@ -24,6 +33,11 @@ namespace MusicMasterBot
         }
 
 
+        /// <summary>
+        /// Returns both a sentence to be written and to be spoken, describing the title of a 
+        /// given song, as if it is the song that is currently being played.
+        /// </summary>
+        /// <param name="song">The song of which the title should be described.</param>
         public static (string written, string spoken) DescribeTitleCurrentSong(Song song)
         {
             IList<(string, string)> sentences = new List<(string, string)>
@@ -38,6 +52,11 @@ namespace MusicMasterBot
         }
 
 
+        /// <summary>
+        /// Returns both a sentence to be written and to be spoken, describing the artist of a 
+        /// given song, as if it is the song that is currently being played.
+        /// </summary>
+        /// <param name="song">The song of which the artist should be described.</param>
         public static (string written, string spoken) DescribeArtistCurrentSong(Song song)
         {
             IList<(string, string)> sentences = new List<(string, string)>
@@ -51,10 +70,17 @@ namespace MusicMasterBot
             return sentences.ElementAt(r);
         }
 
+
+        /// <summary>
+        /// Returns both a sentence to be written and to be spoken, describing the album and
+        /// year of a given song, as if it is the song that is currently being played.
+        /// </summary>
+        /// <param name="song">The song of which the album and year should be described.
+        /// If the album of the given song is not set, an apologise is returned.</param>
         public static (string written, string spoken) DescribeAlbumYearCurrentSong(Song song)
         {
             IList<(string, string)> sentences;
-            if (song.Year is 0)
+            if (song.Album is null)
             {
                 sentences = new List<(string, string)>
                 {
@@ -80,7 +106,12 @@ namespace MusicMasterBot
         }
 
 
-
+        /// <summary>
+        /// Returns both a sentence to be written and to be spoken, describing the album of a 
+        /// given song, as if it is the song that is currently being played.
+        /// </summary>
+        /// <param name="song">The song of which the album should be described.
+        /// If the album of the given song is not set, an apologise is returned.</param>
         public static (string written, string spoken) DescribeAlbumCurrentSong(Song song)
         {
             IList<(string, string)> sentences;
@@ -110,7 +141,12 @@ namespace MusicMasterBot
         }
 
 
-
+        /// <summary>
+        /// Returns both a sentence to be written and to be spoken, describing the year of a 
+        /// given song, as if it is the song that is currently being played.
+        /// </summary>
+        /// <param name="song">The song of which the year should be described.
+        /// If the year of the given song is not set, an apologise is returned.</param>
         public static (string written, string spoken) DescribeYearCurrentSong(Song song)
         {
             IList<(string, string)> sentences;
@@ -139,6 +175,12 @@ namespace MusicMasterBot
             return sentences.ElementAt(r);
         }
 
+
+        /// <summary>
+        /// Returns both a sentence to be written and to be spoken, presenting a
+        /// given song, as if it is the song that will be played next.
+        /// </summary>
+        /// <param name="song">The song that should be presented.</param>
         public static (string written, string spoken) PresentSongToBePlayed(Song song)
         {
             IList<(string, string)> sentences = new List<(string, string)>
@@ -152,6 +194,11 @@ namespace MusicMasterBot
             return sentences.ElementAt(r);
         }
 
+
+        /// <summary>
+        /// Returns both a sentence to be written and to be spoken to tell the user
+        /// that something was not clear.
+        /// </summary>
         public static (string written, string spoken) CommandNotUnderstood()
         {
             IList<(string, string)> sentences = new List<(string, string)>
@@ -170,6 +217,10 @@ namespace MusicMasterBot
             return sentences.ElementAt(r);
         }
 
+
+        /// <summary>
+        /// Returns both a sentence to be written and to be spoken to propose further help.
+        /// </summary>
         public static (string written, string spoken) ProposeFurtherHelp()
         {
             IList<(string, string)> sentences = new List<(string, string)>
@@ -188,6 +239,11 @@ namespace MusicMasterBot
             return sentences.ElementAt(r);
         }
 
+
+        /// <summary>
+        /// Returns both a sentence to be written and to be spoken asking for an artist name.
+        /// </summary>
+        /// <param name="titleGuess">If the given guess is not null, then it is used in the result.</param>
         public static (string written, string spoken) AskArtistName(string titleGuess=null)
         {
             IList<(string, string)> sentences = new List<(string, string)>
@@ -206,6 +262,11 @@ namespace MusicMasterBot
             return (sentenceWritten1 + " " + sentenceWritten2, sentenceSpoken1 + " " + sentenceSpoken2);
         }
 
+
+        /// <summary>
+        /// Returns both a sentence to be written and to be spoken to asking for a song title.
+        /// </summary>
+        /// <param name="titleGuess">If the given guess is not null, then it is used in the result.</param>
         public static (string written, string spoken) AskSongTitle(string artistGuess=null)
         {
             IList<(string, string)> sentences = new List<(string, string)>
@@ -224,6 +285,12 @@ namespace MusicMasterBot
             return (sentenceWritten1 + " " + sentenceWritten2, sentenceSpoken1 + " " + sentenceSpoken2);
         }
 
+
+        /// <summary>
+        /// Returns both a sentence to be written and to be spoken explaining that the 
+        /// given guess has been recognised.
+        /// </summary>
+        /// <param name="titleGuess">If the given guess is not null, then it is used in the result.</param>
         public static (string written, string spoken) SayGuess(string guess=null)
         {
             var (guessSentenceWritten, guessSentenceWrittenSpoken) = ("", "");
@@ -243,6 +310,12 @@ namespace MusicMasterBot
             return (guessSentenceWritten, guessSentenceWrittenSpoken);
         }
 
+
+        /// <summary>
+        /// Returns both a sentence to be written and to be spoken telling that the given artist
+        /// hasn't been recognised.
+        /// </summary>
+        /// <param name="titleGuess">The artist that is not known.</param>
         public static (string written, string spoken) UnknownArtist(string artist)
         {
             if (artist is null)
@@ -261,6 +334,11 @@ namespace MusicMasterBot
             return sentences.ElementAt(r);
         }
 
+
+        /// <summary>
+        /// Returns both a sentence to be written and to be spoken telling that some artist
+        /// hasn't been recognised.
+        /// </summary>
         public static (string written, string spoken) UnknownArtist()
         {
             IList<(string, string)> sentences = new List<(string, string)>
@@ -277,6 +355,12 @@ namespace MusicMasterBot
             return sentences.ElementAt(r);
         }
 
+
+        /// <summary>
+        /// Returns both a sentence to be written and to be spoken telling that the given song title
+        /// hasn't been recognised.
+        /// </summary>
+        /// <param name="titleGuess">The song title that is not known.</param>
         public static (string written, string spoken) UnknownSongTitle(string title)
         {
             if (title is null)
@@ -295,6 +379,11 @@ namespace MusicMasterBot
             return sentences.ElementAt(r);
         }
 
+
+        /// <summary>
+        /// Returns both a sentence to be written and to be spoken telling that some song title
+        /// hasn't been recognised.
+        /// </summary>
         public static (string written, string spoken) UnknownSongTitle()
         {
             IList<(string, string)> sentences = new List<(string, string)>
