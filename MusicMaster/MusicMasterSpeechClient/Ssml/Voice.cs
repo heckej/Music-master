@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Xml.Linq;
 
 namespace Crunch.NET.Response.Ssml
 {
-    public class Voice:ICommonSsml
+    public class Voice : ICommonSsml
     {
         public string Name { get; set; }
 
@@ -25,7 +24,7 @@ namespace Crunch.NET.Response.Ssml
 
         public XNode ToXml()
         {
-            return new XElement("voice", new XAttribute("name",Name), Elements.Select(e => e.ToXml()));
+            return new XElement("voice", new XAttribute("name", Name), Elements.Select(e => e.ToXml()));
         }
     }
 }

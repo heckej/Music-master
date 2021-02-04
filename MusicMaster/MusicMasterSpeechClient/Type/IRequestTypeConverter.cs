@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Crunch.NET.Request.Type
+﻿namespace Crunch.NET.Request.Type
 {
     public interface IRequestTypeConverter
     {

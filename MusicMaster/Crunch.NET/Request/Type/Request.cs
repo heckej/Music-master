@@ -1,13 +1,13 @@
+using Crunch.NET.Helpers;
 using Newtonsoft.Json;
 using System;
-using Crunch.NET.Helpers;
 
 namespace Crunch.NET.Request.Type
 {
     [JsonConverter(typeof(RequestConverter))]
     public abstract class Request
     {
-        [JsonProperty("type",Required = Required.Always)]
+        [JsonProperty("type", Required = Required.Always)]
         public string Type { get; set; }
 
         [JsonProperty("requestId")]
@@ -16,7 +16,7 @@ namespace Crunch.NET.Request.Type
         [JsonProperty("locale")]
         public string Locale { get; set; }
 
-        [JsonProperty("timestamp"),JsonConverter(typeof(MixedDateTimeConverter))]
+        [JsonProperty("timestamp"), JsonConverter(typeof(MixedDateTimeConverter))]
         public DateTime Timestamp { get; set; }
 
         [JsonProperty("command")]

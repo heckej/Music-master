@@ -3,13 +3,12 @@
 //
 // Generated with Bot Builder V4 SDK Template for Visual Studio CoreBot v4.9.2
 
-using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.Azure.CognitiveServices.Language.LUIS.Runtime.Models;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Schema;
 using Microsoft.Extensions.Logging;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace MusicMasterBot.Bots
 {

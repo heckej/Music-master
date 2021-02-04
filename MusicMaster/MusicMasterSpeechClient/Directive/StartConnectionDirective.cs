@@ -1,10 +1,9 @@
-﻿using System;
-using Crunch.NET.ConnectionTasks;
+﻿using Crunch.NET.ConnectionTasks;
 using Newtonsoft.Json;
 
 namespace Crunch.NET.Response.Directive
 {
-    public class StartConnectionDirective:IDirective
+    public class StartConnectionDirective : IDirective
     {
         [JsonProperty("type")]
         public string Type => "Connections.StartConnection";
@@ -15,10 +14,10 @@ namespace Crunch.NET.Response.Directive
         [JsonProperty("input")]
         public IConnectionTask Input { get; set; }
 
-        [JsonProperty("token",NullValueHandling = NullValueHandling.Ignore)]
+        [JsonProperty("token", NullValueHandling = NullValueHandling.Ignore)]
         public string Token { get; set; }
 
-        public StartConnectionDirective(){}
+        public StartConnectionDirective() { }
 
         public StartConnectionDirective(IConnectionTask input, string token)
         {

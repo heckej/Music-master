@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using static MusicMasterBot.CognitiveModels.UserCommand;
 
 namespace MusicMasterBot
@@ -15,7 +14,7 @@ namespace MusicMasterBot
 
         public string Genre { get; set; }
 
-        public  Intent Intent { get; set; }
+        public Intent Intent { get; set; }
 
         private bool _titleInDatabase = false;
         private bool _artistInDatabase = false;

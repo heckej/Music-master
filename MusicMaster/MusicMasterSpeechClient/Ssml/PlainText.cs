@@ -1,9 +1,8 @@
-﻿using System;
-using System.Xml.Linq;
+﻿using System.Xml.Linq;
 
 namespace Crunch.NET.Response.Ssml
 {
-    public class PlainText:ICommonSsml
+    public class PlainText : ICommonSsml
     {
         public PlainText(string text)
         {

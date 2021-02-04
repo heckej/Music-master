@@ -61,12 +61,12 @@ namespace Crunch.NET
 
         public static CrunchResponse TellWithReprompt(string speechResponse, Reprompt reprompt, Session sessionAttributes)
         {
-            return TellWithReprompt(new PlainTextOutputSpeech { Text = speechResponse }, reprompt,sessionAttributes);
+            return TellWithReprompt(new PlainTextOutputSpeech { Text = speechResponse }, reprompt, sessionAttributes);
         }
 
         public static CrunchResponse TellWithReprompt(Response.Ssml.Speech speechResponse, Reprompt reprompt, Session sessionAttributes)
         {
-            return TellWithReprompt(new SsmlOutputSpeech { Ssml = speechResponse.ToXml() }, reprompt,sessionAttributes);
+            return TellWithReprompt(new SsmlOutputSpeech { Ssml = speechResponse.ToXml() }, reprompt, sessionAttributes);
         }
 
         public static CrunchResponse TellWithCard(IOutputSpeech speechResponse, string title, string content)
@@ -101,12 +101,12 @@ namespace Crunch.NET
 
         public static CrunchResponse TellWithCard(string speechResponse, string title, string content, Session sessionAttributes)
         {
-            return TellWithCard(new PlainTextOutputSpeech { Text = speechResponse }, title, content,sessionAttributes);
+            return TellWithCard(new PlainTextOutputSpeech { Text = speechResponse }, title, content, sessionAttributes);
         }
 
         public static CrunchResponse TellWithCard(Response.Ssml.Speech speechResponse, string title, string content, Session sessionAttributes)
         {
-            return TellWithCard(new SsmlOutputSpeech { Ssml = speechResponse.ToXml() }, title, content,sessionAttributes);
+            return TellWithCard(new SsmlOutputSpeech { Ssml = speechResponse.ToXml() }, title, content, sessionAttributes);
         }
 
         public static CrunchResponse TellWithLinkAccountCard(IOutputSpeech speechResponse)
@@ -135,33 +135,33 @@ namespace Crunch.NET
 
         public static CrunchResponse TellWithLinkAccountCard(string speechResponse, Session sessionAttributes)
         {
-            return TellWithLinkAccountCard(new PlainTextOutputSpeech { Text = speechResponse },sessionAttributes);
+            return TellWithLinkAccountCard(new PlainTextOutputSpeech { Text = speechResponse }, sessionAttributes);
         }
 
         public static CrunchResponse TellWithLinkAccountCard(Response.Ssml.Speech speechResponse, Session sessionAttributes)
         {
-            return TellWithLinkAccountCard(new SsmlOutputSpeech { Ssml = speechResponse.ToXml() },sessionAttributes);
+            return TellWithLinkAccountCard(new SsmlOutputSpeech { Ssml = speechResponse.ToXml() }, sessionAttributes);
         }
 
         public static CrunchResponse TellWithAskForPermissionsConsentCard(IOutputSpeech speechResponse, IEnumerable<string> permissions)
         {
-            AskForPermissionsConsentCard card = new AskForPermissionsConsentCard {Permissions = permissions.ToList()};
+            AskForPermissionsConsentCard card = new AskForPermissionsConsentCard { Permissions = permissions.ToList() };
             return BuildResponse(speechResponse, true, null, null, card);
         }
 
         public static CrunchResponse TellWithAskForPermissionConsentCard(string speechResponse, IEnumerable<string> permissions)
         {
-            return TellWithAskForPermissionsConsentCard(new PlainTextOutputSpeech { Text = speechResponse },permissions);
+            return TellWithAskForPermissionsConsentCard(new PlainTextOutputSpeech { Text = speechResponse }, permissions);
         }
 
         public static CrunchResponse TellWithAskForPermissionConsentCard(Response.Ssml.Speech speechResponse, IEnumerable<string> permissions)
         {
-            return TellWithAskForPermissionsConsentCard(new SsmlOutputSpeech { Ssml = speechResponse.ToXml() },permissions);
+            return TellWithAskForPermissionsConsentCard(new SsmlOutputSpeech { Ssml = speechResponse.ToXml() }, permissions);
         }
 
         public static CrunchResponse TellWithAskForPermissionsConsentCard(IOutputSpeech speechResponse, IEnumerable<string> permissions, Session sessionAttributes)
         {
-            AskForPermissionsConsentCard card = new AskForPermissionsConsentCard {Permissions = permissions.ToList()};
+            AskForPermissionsConsentCard card = new AskForPermissionsConsentCard { Permissions = permissions.ToList() };
             return BuildResponse(speechResponse, true, sessionAttributes, null, card);
         }
 
@@ -170,9 +170,9 @@ namespace Crunch.NET
             return TellWithAskForPermissionsConsentCard(new PlainTextOutputSpeech { Text = speechResponse }, permissions, sessionAttributes);
         }
 
-        public static CrunchResponse TellWithAskForPermissionConsentCard(Response.Ssml.Speech speechResponse, IEnumerable<string> permissions,Session sessionAttributes)
+        public static CrunchResponse TellWithAskForPermissionConsentCard(Response.Ssml.Speech speechResponse, IEnumerable<string> permissions, Session sessionAttributes)
         {
-            return TellWithAskForPermissionsConsentCard(new SsmlOutputSpeech { Ssml = speechResponse.ToXml() }, permissions,sessionAttributes);
+            return TellWithAskForPermissionsConsentCard(new SsmlOutputSpeech { Ssml = speechResponse.ToXml() }, permissions, sessionAttributes);
         }
 
         #endregion
@@ -185,12 +185,12 @@ namespace Crunch.NET
 
         public static CrunchResponse Ask(string speechResponse, Reprompt reprompt)
         {
-            return Ask(new PlainTextOutputSpeech {Text = speechResponse}, reprompt);
+            return Ask(new PlainTextOutputSpeech { Text = speechResponse }, reprompt);
         }
 
         public static CrunchResponse Ask(Response.Ssml.Speech speechResponse, Reprompt reprompt)
         {
-            return Ask(new SsmlOutputSpeech {Ssml = speechResponse.ToXml()}, reprompt);
+            return Ask(new SsmlOutputSpeech { Ssml = speechResponse.ToXml() }, reprompt);
         }
 
         public static CrunchResponse Ask(IOutputSpeech speechResponse, Reprompt reprompt, Session sessionAttributes)
@@ -322,7 +322,7 @@ namespace Crunch.NET
             return response;
         }
 
-        public static CrunchResponse DialogConfirmSlot(IOutputSpeech outputSpeech, string slotName, 
+        public static CrunchResponse DialogConfirmSlot(IOutputSpeech outputSpeech, string slotName,
             Intent updatedIntent = null)
         {
             return DialogConfirmSlot(outputSpeech, slotName, null, updatedIntent);
@@ -357,7 +357,7 @@ namespace Crunch.NET
         #region Main Response Builder
         private static CrunchResponse BuildResponse(IOutputSpeech outputSpeech, bool shouldEndSession, Session sessionAttributes, Reprompt reprompt, ICard card)
         {
-            CrunchResponse response = new CrunchResponse {Version = "1.0"};
+            CrunchResponse response = new CrunchResponse { Version = "1.0" };
             if (sessionAttributes != null) response.SessionAttributes = sessionAttributes.Attributes;
 
             ResponseBody body = new ResponseBody

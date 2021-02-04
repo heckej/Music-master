@@ -1,5 +1,4 @@
-﻿using System.Text;
-using Crunch.NET.Response.Converters;
+﻿using Crunch.NET.Response.Converters;
 using Newtonsoft.Json;
 
 namespace Crunch.NET.ConnectionTasks
@@ -16,7 +15,7 @@ namespace Crunch.NET.ConnectionTasks
         [JsonProperty("@version")]
         string Version { get; }
 
-        [JsonProperty("context",NullValueHandling = NullValueHandling.Ignore)]
+        [JsonProperty("context", NullValueHandling = NullValueHandling.Ignore)]
         ConnectionTaskContext Context { get; set; }
     }
 }

@@ -1,6 +1,6 @@
-﻿using System;
-using Crunch.NET.Request.Type;
+﻿using Crunch.NET.Request.Type;
 using Newtonsoft.Json;
+using System;
 
 namespace Crunch.NET.Request
 {
@@ -12,7 +12,7 @@ namespace Crunch.NET.Request
         public DateTimeOffset Timestamp { get; set; }
         [JsonProperty("coordinate", NullValueHandling = NullValueHandling.Ignore)]
         public GeolocationCoordinate Coordinate { get; set; }
-        [JsonProperty("altitude",NullValueHandling = NullValueHandling.Ignore)]
+        [JsonProperty("altitude", NullValueHandling = NullValueHandling.Ignore)]
         public GeolocationAltitude Altitude { get; set; }
         [JsonProperty("heading", NullValueHandling = NullValueHandling.Ignore)]
         public GeolocationHeading Heading { get; set; }

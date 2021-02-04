@@ -1,12 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc.ViewFeatures;
-using Microsoft.Bot.Builder;
+﻿using Microsoft.Bot.Builder;
 using Microsoft.Bot.Schema;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Tools;
 using UserCommandLogic;
 
 namespace MusicMasterBot.Middleware.Language
@@ -45,7 +43,7 @@ namespace MusicMasterBot.Middleware.Language
             {
                 // User says something.
                 var text = turnContext.Activity.AsMessageActivity().Text;
-                if (turnContext.Activity.AsMessageActivity().Locale == "nl" )
+                if (turnContext.Activity.AsMessageActivity().Locale == "nl")
                 {
                     turnContext.Activity.AsMessageActivity().Text = TranslateFromDutch(text);
                 }
@@ -57,13 +55,13 @@ namespace MusicMasterBot.Middleware.Language
 
                 foreach (Activity currentActivity in activities.Where(a => a.Type == ActivityTypes.Message))
                 {
-                    
+
                     if (turnContext.Activity.AsMessageActivity().Locale == "nl")
                     {
                         var text = currentActivity.AsMessageActivity().Speak;
                         currentActivity.AsMessageActivity().Speak = TranslateToDutch(text);
                     }
-                    
+
                 }
 
                 return await nextSend();
@@ -228,7 +226,7 @@ namespace MusicMasterBot.Middleware.Language
                     /*Console.WriteLine("Text after sentence replacement: " + text);*/
                 }
             }
-                
+
             if (!anyReplacements)
             {
                 text = text.ToLower();

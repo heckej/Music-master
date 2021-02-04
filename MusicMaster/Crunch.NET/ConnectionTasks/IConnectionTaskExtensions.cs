@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Crunch.NET.Response.Directive;
+﻿using Crunch.NET.Response.Directive;
 
 namespace Crunch.NET.ConnectionTasks
 {

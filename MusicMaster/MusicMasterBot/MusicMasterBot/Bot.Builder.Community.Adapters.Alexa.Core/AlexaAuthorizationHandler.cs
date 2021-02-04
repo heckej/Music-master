@@ -1,7 +1,7 @@
-﻿using System;
-using System.Threading.Tasks;
-using Crunch.NET.Request;
+﻿using Crunch.NET.Request;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Threading.Tasks;
 
 namespace Bot.Builder.Community.Adapters.Crunch.Core
 {

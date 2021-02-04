@@ -1,5 +1,4 @@
-﻿using System;
-namespace Crunch.NET.Response.Ssml
+﻿namespace Crunch.NET.Response.Ssml
 {
     public static class ProsodyRate
     {

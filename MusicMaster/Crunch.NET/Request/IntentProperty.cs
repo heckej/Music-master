@@ -1,5 +1,4 @@
-﻿using System;
-namespace Crunch.NET.Request
+﻿namespace Crunch.NET.Request
 {
     public class IntentProperty
     {

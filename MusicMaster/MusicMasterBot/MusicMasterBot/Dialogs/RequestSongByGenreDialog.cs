@@ -3,15 +3,14 @@
 //
 // Generated with Bot Builder V4 SDK Template for Visual Studio CoreBot v4.9.2
 
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
+using Metrics;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Schema;
-using Metrics;
-using System.Security.Policy;
 using MusicMasterBot.CognitiveModels;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace MusicMasterBot.Dialogs
 {
@@ -32,14 +31,12 @@ namespace MusicMasterBot.Dialogs
 
 
         private Dictionary<string, string> SongToFilePath = new Dictionary<string, string>();
-
-        int _levDistBoundary = 10;
-        double _levDistPercentage = 0.5;
+        readonly double _levDistPercentage = 0.5;
 
         public RequestSongByGenreDialog()
             : base(nameof(RequestSongByGenreDialog))
         {
-            for (int i=0; i<_genres.Length;i++)
+            for (int i = 0; i < _genres.Length; i++)
             {
                 GenresToSongs.Add(_genres[i], new HashSet<string>());
                 GenresToSongs[_genres[i]].Add(_songs[i]);
@@ -63,14 +60,14 @@ namespace MusicMasterBot.Dialogs
             var songRequest = (SongRequest)stepContext.Options;
 
             var (bestMatchGenre, levDist) = GetBestMatch(songRequest.Genre, KnownGenres);
-                if (bestMatchGenre != null && levDist < _levDistPercentage * bestMatchGenre.Length)
-                    songRequest.Title = bestMatchGenre;
-                else
-                {
-                    var promptMessage = MessageFactory.Text(GenreStepMsgText, GenreStepMsgText, InputHints.ExpectingInput);
-                    return await stepContext.PromptAsync(nameof(TextPrompt), new PromptOptions { Prompt = promptMessage }, cancellationToken);
-                }
-            
+            if (bestMatchGenre != null && levDist < _levDistPercentage * bestMatchGenre.Length)
+                songRequest.Title = bestMatchGenre;
+            else
+            {
+                var promptMessage = MessageFactory.Text(GenreStepMsgText, GenreStepMsgText, InputHints.ExpectingInput);
+                return await stepContext.PromptAsync(nameof(TextPrompt), new PromptOptions { Prompt = promptMessage }, cancellationToken);
+            }
+
             return await stepContext.NextAsync(songRequest.Title, cancellationToken);
         }
 
@@ -117,7 +114,7 @@ namespace MusicMasterBot.Dialogs
             string bestMatch = null;
             int bestLevDist = int.MaxValue;
             int currentLevDist;
-            foreach(string setValue in setToMatch)
+            foreach (string setValue in setToMatch)
             {
                 if (value == setValue.ToLower())
                     return (setValue, 0);

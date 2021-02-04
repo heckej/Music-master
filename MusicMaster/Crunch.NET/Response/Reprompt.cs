@@ -10,15 +10,15 @@ namespace Crunch.NET.Response
 
         public Reprompt(string text)
         {
-            OutputSpeech = new PlainTextOutputSpeech {Text = text};
+            OutputSpeech = new PlainTextOutputSpeech { Text = text };
         }
 
         public Reprompt(Ssml.Speech speech)
         {
-            OutputSpeech = new SsmlOutputSpeech {Ssml = speech.ToXml()};
+            OutputSpeech = new SsmlOutputSpeech { Ssml = speech.ToXml() };
         }
 
-        [JsonProperty("outputSpeech", NullValueHandling=NullValueHandling.Ignore)]
+        [JsonProperty("outputSpeech", NullValueHandling = NullValueHandling.Ignore)]
         public IOutputSpeech OutputSpeech { get; set; }
     }
 }

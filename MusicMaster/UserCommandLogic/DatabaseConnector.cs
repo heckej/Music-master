@@ -1,9 +1,8 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Threading.Tasks;
 using UserCommandLogic;
-using MySql.Data.MySqlClient;
 
 namespace MusicData
 {
@@ -44,7 +43,7 @@ namespace MusicData
             SettingsHaveBeenSet = true;
         }
 
-        public async Task<ISet<Song>> GetSongTable() 
+        public async Task<ISet<Song>> GetSongTable()
         {
             var songs = new HashSet<Song>();
             using (var conn = new MySqlConnection(builder.ConnectionString))

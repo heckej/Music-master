@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Crunch.NET.Response.Directive;
+﻿using Crunch.NET.Response.Directive;
 using Crunch.NET.Response.Directive.Templates.Types;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
 
 namespace Crunch.NET.Response.Converters
 {

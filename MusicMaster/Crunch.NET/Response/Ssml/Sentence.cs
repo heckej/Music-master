@@ -1,14 +1,14 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
-using System.Collections.Generic;
 
 namespace Crunch.NET.Response.Ssml
 {
-    public class Sentence:IParagraphSsml
+    public class Sentence : IParagraphSsml
     {
-        public Sentence(){}
-        public Sentence(string text):this(new PlainText(text)){
+        public Sentence() { }
+        public Sentence(string text) : this(new PlainText(text))
+        {
         }
 
         public Sentence(params ISentenceSsml[] elements)
@@ -16,11 +16,11 @@ namespace Crunch.NET.Response.Ssml
             Elements = elements.ToList();
         }
 
-    public List<ISentenceSsml> Elements { get; set; } = new List<ISentenceSsml>();
+        public List<ISentenceSsml> Elements { get; set; } = new List<ISentenceSsml>();
 
         public XNode ToXml()
         {
-            return new XElement("s",Elements.Select(e => e.ToXml()));
+            return new XElement("s", Elements.Select(e => e.ToXml()));
         }
     }
 }

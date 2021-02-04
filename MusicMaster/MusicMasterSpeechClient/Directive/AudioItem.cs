@@ -8,7 +8,7 @@ namespace Crunch.NET.Response.Directive
         [JsonProperty("stream")]
         public AudioItemStream Stream { get; set; }
 
-		[JsonProperty("metadata", NullValueHandling = NullValueHandling.Ignore)]
-		public AudioItemMetadata Metadata { get; set; }
+        [JsonProperty("metadata", NullValueHandling = NullValueHandling.Ignore)]
+        public AudioItemMetadata Metadata { get; set; }
     }
 }

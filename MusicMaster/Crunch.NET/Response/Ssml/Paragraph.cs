@@ -1,13 +1,12 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
-using System.Collections.Generic;
 
 namespace Crunch.NET.Response.Ssml
 {
     public class Paragraph : ISsml
     {
-        public List<IParagraphSsml> Elements {get;set;} = new List<IParagraphSsml>();
+        public List<IParagraphSsml> Elements { get; set; } = new List<IParagraphSsml>();
 
         public Paragraph() { }
 

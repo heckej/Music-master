@@ -3,19 +3,14 @@
 //
 // Generated with Bot Builder V4 SDK Template for Visual Studio CoreBot v4.9.2
 
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Schema;
-using Metrics;
-using System.Security.Policy;
 using MusicMasterBot.CognitiveModels;
-using System.Linq;
-using UserCommandLogic;
-using Crunch.NET.Response.Ssml;
 using System;
+using System.Threading;
+using System.Threading.Tasks;
+using UserCommandLogic;
 
 namespace MusicMasterBot.Dialogs
 {
@@ -99,7 +94,7 @@ namespace MusicMasterBot.Dialogs
                     return await stepContext.PromptAsync(nameof(TextPrompt), new PromptOptions { Prompt = promptMessage }, cancellationToken);
                 }
             }
-            
+
             return await stepContext.NextAsync(songRequest.Title, cancellationToken);
         }
 
@@ -129,7 +124,7 @@ namespace MusicMasterBot.Dialogs
             }
 
             string messageText = "";
-            string spokenMessageText =  "";
+            string spokenMessageText = "";
 
             var (bestMatchTitle, _) = _songChooser.GetClosestKnownSongTitle(songRequest.Title, _songChooser.ThresholdSimilarityRatio);
             Console.WriteLine(songRequest.Title + " => " + bestMatchTitle);
@@ -143,7 +138,7 @@ namespace MusicMasterBot.Dialogs
                 messageText += messageText1 + " ";
                 spokenMessageText += spokenMessageText1 + " ";
             }
-                
+
             if (bestMatchTitle is null && (songRequest.Intent is UserCommand.Intent.PlayByTitle || songRequest.Intent is UserCommand.Intent.PlayByTitleArtist))
             {
                 var (messageText1, spokenMessageText1) = SentenceGenerator.UnknownSongTitle(songRequest.Title);

@@ -2,7 +2,7 @@
 
 namespace Crunch.NET.Response.Directive.Templates.Types
 {
-    public class BodyTemplate7:IBodyTemplate
+    public class BodyTemplate7 : IBodyTemplate
     {
         public string Type => "BodyTemplate7";
         public string Token { get; set; }

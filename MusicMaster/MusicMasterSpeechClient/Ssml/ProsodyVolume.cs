@@ -1,5 +1,4 @@
-﻿using System;
-namespace Crunch.NET.Response.Ssml
+﻿namespace Crunch.NET.Response.Ssml
 {
     public static class ProsodyVolume
     {
@@ -11,9 +10,9 @@ namespace Crunch.NET.Response.Ssml
         public const string ExtraLoud = "x-loud";
 
 
-		public static string Decibel(int amount)
-		{
-			return $"{(amount >= 0 ? "+" : string.Empty)}{amount}dB";
-		}
+        public static string Decibel(int amount)
+        {
+            return $"{(amount >= 0 ? "+" : string.Empty)}{amount}dB";
+        }
     }
 }

@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Crunch.NET.Helpers;
+﻿using Crunch.NET.Helpers;
 using Newtonsoft.Json;
+using System;
 
 namespace Crunch.NET.ConnectionTasks.Inputs
 {
-    public class ScheduleFoodEstablishmentReservation:IConnectionTask
+    public class ScheduleFoodEstablishmentReservation : IConnectionTask
     {
         public const string AssociatedUri = "connection://AMAZON.ScheduleFoodEstablishmentReservation/1";
         [JsonIgnore]
@@ -21,10 +19,10 @@ namespace Crunch.NET.ConnectionTasks.Inputs
         [JsonProperty("context", NullValueHandling = NullValueHandling.Ignore)]
         public ConnectionTaskContext Context { get; set; }
 
-        [JsonProperty("partySize",NullValueHandling = NullValueHandling.Ignore)]
+        [JsonProperty("partySize", NullValueHandling = NullValueHandling.Ignore)]
         public int PartySize { get; set; }
 
-        [JsonProperty("startTime",NullValueHandling = NullValueHandling.Ignore),JsonConverter(typeof(MixedDateTimeConverter))]
+        [JsonProperty("startTime", NullValueHandling = NullValueHandling.Ignore), JsonConverter(typeof(MixedDateTimeConverter))]
         public DateTime? StartTime { get; set; }
 
         [JsonProperty("restaurant")]

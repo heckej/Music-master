@@ -1,8 +1,5 @@
 ﻿using Crunch.NET.Request.Type;
 using Newtonsoft.Json;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Crunch.NET.Request
 {
@@ -10,7 +7,7 @@ namespace Crunch.NET.Request
     {
         [JsonProperty("System")]
         public AlexaSystem System { get; set; }
-        
+
         [JsonProperty("AudioPlayer")]
         public PlaybackState AudioPlayer { get; set; }
 

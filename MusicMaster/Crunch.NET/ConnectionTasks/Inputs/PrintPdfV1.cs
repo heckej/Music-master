@@ -1,9 +1,8 @@
-﻿using System;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace Crunch.NET.ConnectionTasks.Inputs
 {
-    public class PrintPdfV1:IConnectionTask
+    public class PrintPdfV1 : IConnectionTask
     {
         public const string AssociatedUri = "connection://AMAZON.PrintPDF/1";
 

@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Crunch.NET.Helpers;
+﻿using Crunch.NET.Helpers;
 using Newtonsoft.Json;
+using System;
 
 namespace Crunch.NET.ConnectionTasks.Inputs
 {
-    public class ScheduleTaxiReservation:IConnectionTask
+    public class ScheduleTaxiReservation : IConnectionTask
     {
         public const string AssociatedUri = "connection://AMAZON.ScheduleTaxiReservation/1";
         [JsonIgnore]
@@ -24,13 +22,13 @@ namespace Crunch.NET.ConnectionTasks.Inputs
         [JsonProperty("partySize")]
         public int PartySize { get; set; }
 
-        [JsonProperty("pickupLocation",NullValueHandling = NullValueHandling.Ignore)]
+        [JsonProperty("pickupLocation", NullValueHandling = NullValueHandling.Ignore)]
         public PostalAddress PickupLocation { get; set; }
 
-        [JsonProperty("dropoffLocation",NullValueHandling = NullValueHandling.Ignore)]
+        [JsonProperty("dropoffLocation", NullValueHandling = NullValueHandling.Ignore)]
         public PostalAddress DropoffLocation { get; set; }
 
-        [JsonProperty("pickupTime",NullValueHandling = NullValueHandling.Ignore),JsonConverter(typeof(MixedDateTimeConverter))]
+        [JsonProperty("pickupTime", NullValueHandling = NullValueHandling.Ignore), JsonConverter(typeof(MixedDateTimeConverter))]
         public DateTime? PickupTime { get; set; }
     }
 }

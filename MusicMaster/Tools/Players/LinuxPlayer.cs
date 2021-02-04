@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
 using UserCommandLogic;
 
 namespace Tools.Players
@@ -54,12 +51,12 @@ namespace Tools.Players
 
         public void VolumeDown(double percentage = 10)
         {
-            ExecuteCmus("-v -" + (int) percentage + "%");
+            ExecuteCmus("-v -" + (int)percentage + "%");
         }
 
         public void VolumeUp(double percentage = 10)
         {
-            ExecuteCmus("-v +" + (int) percentage + "%");
+            ExecuteCmus("-v +" + (int)percentage + "%");
         }
 
         private string ExecuteCmus(string arg)
@@ -68,7 +65,7 @@ namespace Tools.Players
             Console.Write("Output cmus: " + res["output"]);
             Console.Write("Debug cmus: " + res["debug"]);
             /*if (res["debug"] != "" && res["debug"] != null)*/
-               /* throw new Exception("Some debugging info: " + res["debug"] + "\nOutput: " + res["output"]);*/
+            /* throw new Exception("Some debugging info: " + res["debug"] + "\nOutput: " + res["output"]);*/
             if (res["debug"].Contains("cmus is not running"))
             {
                 throw new System.Exception("cmus not running.");
@@ -85,12 +82,12 @@ namespace Tools.Players
 
         public void SetVolume(double percentage)
         {
-            ExecuteCmus("-v \"" + (int) percentage + "%\"");
+            ExecuteCmus("-v \"" + (int)percentage + "%\"");
         }
 
         public void SetVolume(double percentageLeft, double percentageRight)
         {
-            ExecuteCmus("-v " + "\"" + (int) percentageLeft + "% " + (int) percentageRight + "%\"");
+            ExecuteCmus("-v " + "\"" + (int)percentageLeft + "% " + (int)percentageRight + "%\"");
         }
     }
 }

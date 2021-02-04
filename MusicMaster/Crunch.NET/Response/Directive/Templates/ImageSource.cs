@@ -7,7 +7,7 @@ namespace Crunch.NET.Response.Directive.Templates
         [JsonProperty("url", Required = Required.Always)]
         public string Url { get; set; }
 
-        [JsonProperty("size",NullValueHandling = NullValueHandling.Ignore)]
+        [JsonProperty("size", NullValueHandling = NullValueHandling.Ignore)]
         public string Size { get; set; }
 
         [JsonProperty("widthPixels")]

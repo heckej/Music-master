@@ -1,5 +1,5 @@
-using System.Collections.Generic;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace Crunch.NET.Request
 {
@@ -8,9 +8,11 @@ namespace Crunch.NET.Request
         private string _name;
 
         [JsonProperty("name")]
-        public string Name {
+        public string Name
+        {
             get { return _name; }
-            set {
+            set
+            {
                 _name = value;
                 Signature = value;
             }

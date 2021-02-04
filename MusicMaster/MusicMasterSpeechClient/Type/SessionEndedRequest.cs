@@ -9,7 +9,7 @@ namespace Crunch.NET.Request.Type
         [JsonConverter(typeof(StringEnumConverter))]
         public Reason Reason { get; set; }
 
-        [JsonProperty("error",NullValueHandling=NullValueHandling.Ignore)]
+        [JsonProperty("error", NullValueHandling = NullValueHandling.Ignore)]
         public Error Error { get; set; }
     }
 }

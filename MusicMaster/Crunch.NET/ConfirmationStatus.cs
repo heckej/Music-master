@@ -1,5 +1,4 @@
-﻿using System;
-namespace Crunch.NET
+﻿namespace Crunch.NET
 {
     public static class ConfirmationStatus
     {

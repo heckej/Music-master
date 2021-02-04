@@ -1,9 +1,8 @@
-﻿using System;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace Crunch.NET.ConnectionTasks.Inputs
 {
-    public class PrintWebPageV1:IConnectionTask
+    public class PrintWebPageV1 : IConnectionTask
     {
         public const string AssociatedUri = "connection://AMAZON.PrintWebPage/1";
 

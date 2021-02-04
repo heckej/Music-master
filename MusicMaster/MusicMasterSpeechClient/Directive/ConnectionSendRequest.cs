@@ -8,7 +8,7 @@ namespace Crunch.NET.Response.Directive
         public T Payload { get; set; }
     }
 
-    public class ConnectionSendRequest:IDirective
+    public class ConnectionSendRequest : IDirective
     {
         [JsonProperty("type")] public string Type => "Connections.SendRequest";
 

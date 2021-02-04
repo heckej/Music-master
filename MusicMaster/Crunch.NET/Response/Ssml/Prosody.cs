@@ -1,10 +1,10 @@
-﻿using System.Linq;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace Crunch.NET.Response.Ssml
 {
-    public class Prosody:ICommonSsml
+    public class Prosody : ICommonSsml
     {
         public string Rate { get; set; }
         public string Pitch { get; set; }
@@ -23,22 +23,22 @@ namespace Crunch.NET.Response.Ssml
         {
             List<XObject> attributes = new List<XObject>();
 
-            if(!string.IsNullOrWhiteSpace(Rate))
+            if (!string.IsNullOrWhiteSpace(Rate))
             {
                 attributes.Add(new XAttribute("rate", Rate));
             }
 
-            if(!string.IsNullOrWhiteSpace(Pitch))
+            if (!string.IsNullOrWhiteSpace(Pitch))
             {
                 attributes.Add(new XAttribute("pitch", Pitch));
             }
 
-            if(!string.IsNullOrWhiteSpace(Volume))
+            if (!string.IsNullOrWhiteSpace(Volume))
             {
                 attributes.Add(new XAttribute("volume", Volume));
             }
 
-            return new XElement("prosody",attributes.Concat(Elements.Select(e => e.ToXml())));
+            return new XElement("prosody", attributes.Concat(Elements.Select(e => e.ToXml())));
         }
     }
 }

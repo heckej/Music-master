@@ -1,5 +1,4 @@
-﻿using Crunch.NET.Request.Type;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace Crunch.NET.Request
 {

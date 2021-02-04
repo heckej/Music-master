@@ -1,8 +1,4 @@
 ﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Crunch.NET.Request
 {
@@ -17,7 +13,7 @@ namespace Crunch.NET.Request
         [JsonProperty("application")]
         public Application Application { get; set; }
 
-        [JsonProperty("person",NullValueHandling = NullValueHandling.Ignore)]
+        [JsonProperty("person", NullValueHandling = NullValueHandling.Ignore)]
         public Person Person { get; set; }
 
         [JsonProperty("user")]

@@ -1,8 +1,6 @@
 ﻿using Microsoft.Bot.Builder;
 using Microsoft.Bot.Schema;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
 
 namespace Bot.Builder.Community.Adapters.Crunch
 {

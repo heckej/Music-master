@@ -1,11 +1,11 @@
-﻿using System;
+﻿using Crunch.NET.Request;
+using Crunch.NET.Response.Directive;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
-using Crunch.NET.Request;
-using Crunch.NET.Response.Directive;
-using Newtonsoft.Json.Linq;
 
 namespace Crunch.NET.Response
 {
@@ -23,22 +23,22 @@ namespace Crunch.NET.Response
 
         public ProgressiveResponse(CrunchRequest request) : this(request, new HttpClient())
         {
-            
+
         }
 
-        public ProgressiveResponse(CrunchRequest request,HttpClient client) : this(
+        public ProgressiveResponse(CrunchRequest request, HttpClient client) : this(
             request?.Request,
             request?.Context,
-            request?.Context,client)
+            request?.Context, client)
         {
         }
 
-        public ProgressiveResponse(string requestId, string authToken, string baseAddress):this(requestId,authToken,baseAddress,new HttpClient())
+        public ProgressiveResponse(string requestId, string authToken, string baseAddress) : this(requestId, authToken, baseAddress, new HttpClient())
         {
 
         }
 
-        public ProgressiveResponse(string requestId, string authToken,string baseAddress, HttpClient client)
+        public ProgressiveResponse(string requestId, string authToken, string baseAddress, HttpClient client)
         {
             Client = client;
             if (!string.IsNullOrWhiteSpace(baseAddress))
@@ -57,7 +57,7 @@ namespace Crunch.NET.Response
             }
         }
 
-        public ProgressiveResponse(ProgressiveResponseHeader header,HttpClient client)
+        public ProgressiveResponse(ProgressiveResponseHeader header, HttpClient client)
         {
             Client = client;
             Header = header;

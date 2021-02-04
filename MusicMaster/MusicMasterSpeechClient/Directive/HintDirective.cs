@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace Crunch.NET.Response.Directive
 {
-    public class HintDirective:IDirective
+    public class HintDirective : IDirective
     {
         public HintDirective()
         {
@@ -16,7 +16,7 @@ namespace Crunch.NET.Response.Directive
 
         [JsonProperty("type")]
         public string Type => "Hint";
-        
+
         [JsonProperty("hint")]
         public Hint Hint { get; set; }
     }

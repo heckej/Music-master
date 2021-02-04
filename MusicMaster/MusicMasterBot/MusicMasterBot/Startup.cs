@@ -8,18 +8,16 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Integration.AspNet.Core;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MusicData;
 using MusicMasterBot.Bots;
 using MusicMasterBot.Dialogs;
-using MusicMasterBot.TextToSpeech;
-using System.Linq;
-using UserCommandLogic;
-using Microsoft.Extensions.Configuration;
-using Tools;
-using System;
 using MusicMasterBot.Middleware.Language;
+using MusicMasterBot.TextToSpeech;
+using Tools;
+using UserCommandLogic;
 
 namespace MusicMasterBot
 {
