@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Bot.Builder.Community.Adapters.Crunch.Core.Attachments
+﻿namespace Bot.Builder.Community.Adapters.Crunch.Core.Attachments
 {
     public static class AlexaAttachmentContentTypes
     {

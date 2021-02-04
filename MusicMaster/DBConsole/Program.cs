@@ -9,7 +9,7 @@ namespace DBConsole
         {
             var con = new DatabaseConnector("localhost", "media", "media", "media");
             var songs = con.GetSongTable().Result;
-            foreach(var song in songs)
+            foreach (var song in songs)
             {
                 Console.WriteLine(song.Title + " by " + song.Artist + ", located at " + song.FilePath);
             }

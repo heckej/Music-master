@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace Metrics
 {
@@ -41,7 +39,7 @@ namespace Metrics
             foreach (string word in words)
                 totalLength += word.Length;
             foreach (string word in words)
-                lengths.Add((double)word.Length/totalLength);
+                lengths.Add((double)word.Length / totalLength);
             return lengths;
         }
 

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Crunch.NET.Response.Converters;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
 namespace Crunch.NET.Response.Directive

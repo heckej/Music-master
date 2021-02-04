@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using UserCommandLogic;
 
 namespace MusicMasterBot
@@ -188,7 +187,7 @@ namespace MusicMasterBot
             return sentences.ElementAt(r);
         }
 
-        public static (string written, string spoken) AskArtistName(string titleGuess=null)
+        public static (string written, string spoken) AskArtistName(string titleGuess = null)
         {
             IList<(string, string)> sentences = new List<(string, string)>
             {
@@ -206,7 +205,7 @@ namespace MusicMasterBot
             return (sentenceWritten1 + " " + sentenceWritten2, sentenceSpoken1 + " " + sentenceSpoken2);
         }
 
-        public static (string written, string spoken) AskSongTitle(string artistGuess=null)
+        public static (string written, string spoken) AskSongTitle(string artistGuess = null)
         {
             IList<(string, string)> sentences = new List<(string, string)>
             {
@@ -224,7 +223,7 @@ namespace MusicMasterBot
             return (sentenceWritten1 + " " + sentenceWritten2, sentenceSpoken1 + " " + sentenceSpoken2);
         }
 
-        public static (string written, string spoken) SayGuess(string guess=null)
+        public static (string written, string spoken) SayGuess(string guess = null)
         {
             var (guessSentenceWritten, guessSentenceWrittenSpoken) = ("", "");
             if (!(guess is null))

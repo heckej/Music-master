@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Xml.Linq;
 
 namespace Crunch.NET.Response.Ssml
@@ -19,7 +18,7 @@ namespace Crunch.NET.Response.Ssml
 
             if (!string.IsNullOrWhiteSpace(Strength))
             {
-                attributes.Add(new XAttribute("strength",Strength));
+                attributes.Add(new XAttribute("strength", Strength));
             }
             return new XElement("break", attributes);
         }

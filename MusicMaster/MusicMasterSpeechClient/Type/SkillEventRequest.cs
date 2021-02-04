@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Crunch.NET.Helpers;
+﻿using Crunch.NET.Helpers;
 using Newtonsoft.Json;
+using System;
 
 namespace Crunch.NET.Request.Type
 {
-    public class SkillEventRequest:Request
+    public class SkillEventRequest : Request
     {
         [JsonProperty("eventCreationTime", NullValueHandling = NullValueHandling.Ignore)]
         [JsonConverter(typeof(MixedDateTimeConverter))]

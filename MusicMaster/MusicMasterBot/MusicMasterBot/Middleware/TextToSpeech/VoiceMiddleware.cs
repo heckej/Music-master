@@ -45,10 +45,10 @@ namespace MusicMasterBot.TextToSpeech
                 throw new ArgumentNullException(nameof(turnContext));
             }
 
-                if (turnContext.Activity.Type == ActivityTypes.Message)
-                {
-                    // User says something.
-                }
+            if (turnContext.Activity.Type == ActivityTypes.Message)
+            {
+                // User says something.
+            }
 
             turnContext.OnSendActivities(async (newContext, activities, nextSend) =>
             {
@@ -147,7 +147,7 @@ namespace MusicMasterBot.TextToSpeech
                                 if (speak != null && speak.ContainsKey("debug") && speak.ContainsKey("output"))
                                     Console.WriteLine("Speech result: debug: " + speak["debug"] + ", output: " + speak["output"]);
                             }
-                            
+
                         }
                     }
 

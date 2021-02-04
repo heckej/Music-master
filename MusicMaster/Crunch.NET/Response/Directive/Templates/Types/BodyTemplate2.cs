@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace Crunch.NET.Response.Directive.Templates.Types
 {
-    public class BodyTemplate2:IBodyTemplate
+    public class BodyTemplate2 : IBodyTemplate
     {
         public string Type => "BodyTemplate2";
         public string Token { get; set; }

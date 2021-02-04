@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
-
-namespace Bot.Builder.Community.Adapters.Crunch.Core
+﻿namespace Bot.Builder.Community.Adapters.Crunch.Core
 {
     public class CrunchRequestMapperOptions
     {

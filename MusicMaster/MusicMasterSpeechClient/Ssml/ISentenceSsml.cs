@@ -1,7 +1,6 @@
-﻿using System;
-namespace Crunch.NET.Response.Ssml
+﻿namespace Crunch.NET.Response.Ssml
 {
-    public interface ISentenceSsml:ISsml
+    public interface ISentenceSsml : ISsml
     {
     }
 }

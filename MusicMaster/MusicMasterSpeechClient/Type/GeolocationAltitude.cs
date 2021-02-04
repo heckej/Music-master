@@ -7,7 +7,7 @@ namespace Crunch.NET.Request.Type
         [JsonProperty("altitudeInMeters", NullValueHandling = NullValueHandling.Ignore)]
         public double? Altitude { get; set; }
 
-        [JsonProperty("accuracyInMeters",NullValueHandling = NullValueHandling.Ignore)]
+        [JsonProperty("accuracyInMeters", NullValueHandling = NullValueHandling.Ignore)]
         public double? Accuracy { get; set; }
     }
 }

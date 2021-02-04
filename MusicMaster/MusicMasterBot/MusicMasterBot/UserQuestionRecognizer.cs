@@ -1,11 +1,11 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.AI.Luis;
 using Microsoft.Extensions.Configuration;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace MusicMasterBot
 {

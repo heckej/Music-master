@@ -4,7 +4,7 @@ namespace Crunch.NET.Response
 {
     public class CardImage
     {
-        [JsonProperty("smallImageUrl",NullValueHandling = NullValueHandling.Ignore)]
+        [JsonProperty("smallImageUrl", NullValueHandling = NullValueHandling.Ignore)]
         public string SmallImageUrl { get; set; }
 
         [JsonProperty("largeImageUrl", NullValueHandling = NullValueHandling.Ignore)]

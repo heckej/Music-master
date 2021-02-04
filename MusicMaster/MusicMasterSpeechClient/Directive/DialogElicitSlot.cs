@@ -1,5 +1,4 @@
-﻿using System;
-using Crunch.NET.Request;
+﻿using Crunch.NET.Request;
 using Newtonsoft.Json;
 
 namespace Crunch.NET.Response.Directive

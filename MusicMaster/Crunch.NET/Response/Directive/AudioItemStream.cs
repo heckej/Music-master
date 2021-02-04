@@ -11,7 +11,7 @@ namespace Crunch.NET.Response.Directive
         [JsonRequired]
         [JsonProperty("token")]
         public string Token { get; set; }
-        
+
         [JsonProperty("expectedPreviousToken")]
         public string ExpectedPreviousToken { get; set; }
 

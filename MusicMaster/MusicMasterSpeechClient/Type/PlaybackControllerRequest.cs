@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace Crunch.NET.Request.Type
+﻿namespace Crunch.NET.Request.Type
 {
     public class PlaybackControllerRequest : Request
     {

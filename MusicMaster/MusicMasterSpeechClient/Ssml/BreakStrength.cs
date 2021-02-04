@@ -1,6 +1,4 @@
-﻿using System.Security.Cryptography.X509Certificates;
-
-namespace Crunch.NET.Response.Ssml
+﻿namespace Crunch.NET.Response.Ssml
 {
     public class BreakStrength
     {

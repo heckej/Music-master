@@ -1,12 +1,9 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Crunch.NET.Request.Type
 {
-    public class AudioPlayerRequest: Request
+    public class AudioPlayerRequest : Request
     {
         [JsonProperty("token")]
         public string Token { get; set; }
@@ -22,7 +19,7 @@ namespace Crunch.NET.Request.Type
 
         [JsonProperty("enqueuedToken")]
         public string EnqueuedToken { get; set; }
-        
+
         public bool HasEnqueuedItem
         {
             get

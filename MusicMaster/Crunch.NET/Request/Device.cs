@@ -1,8 +1,5 @@
 ﻿using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Crunch.NET.Request
 {
@@ -17,7 +14,7 @@ namespace Crunch.NET.Request
         public bool IsInterfaceSupported(string interfaceName)
         {
             var hasInterface = SupportedInterfaces?.ContainsKey(interfaceName);
-            return (hasInterface.HasValue ? hasInterface.Value : false); 
+            return (hasInterface.HasValue ? hasInterface.Value : false);
         }
     }
 }

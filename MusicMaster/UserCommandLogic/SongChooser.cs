@@ -1,15 +1,13 @@
-using MusicData;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Metrics;
-using System.Collections.Immutable;
-using System.ComponentModel;
+using MusicData;
 using MusicMasterBot;
 using MusicMasterBot.CognitiveModels;
-using Microsoft.EntityFrameworkCore.Storage;
 using MySql.Data.MySqlClient;
+using System;
+using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Diagnostics;
+using System.Linq;
 
 namespace UserCommandLogic
 {
@@ -21,16 +19,24 @@ namespace UserCommandLogic
         ///     
 
         private IList<Song> _songs;
-        public DatabaseConnector DatabaseConnector { get; set; }
         private static readonly Random _random = new Random();
         private ISet<string> _knownArtists;
         private ISet<string> _knownSongTitles;
         private IDictionary<string, ISet<Song>> _artistsToSongs = new Dictionary<string, ISet<Song>>();
-
         private double _thresholdSimilarityRatio = 0.80;
-
         double ISongChooser.ThresholdSimilarityRatio { get => _thresholdSimilarityRatio; set => _thresholdSimilarityRatio = value; }
 
+
+        /// <summary>
+        /// A database connector to be used by this song chooser to retrieve data from the database.
+        /// </summary>
+        public DatabaseConnector DatabaseConnector { get; set; }
+
+        /// <summary>
+        /// Initialisesa new song chooser partially.
+        /// </summary>
+        /// <remarks>The resulting song chooser object hasn't been initialised completely.
+        /// To complete initialisation, set a database connector using <code>SetDatabaseConnection()</code>.</remarks>
         public SongChooser()
         {
             _songs = new List<Song>();
@@ -38,6 +44,12 @@ namespace UserCommandLogic
             _knownSongTitles = new HashSet<string>();
         }
 
+
+        /// <summary>
+        /// Initialisesa new song chooser with the given <paramref name="databaseConnector"/> as its database connector.
+        /// </summary>
+        /// <remarks>The resulting song chooser object may not be initialised completely, namely if the given <paramref name="databaseConnector"/>
+        /// hasn't been set. To complete initialisation, set up the <paramref name="databaseConnector"/>.</remarks>
         public SongChooser(DatabaseConnector databaseConnector)
         {
             if (databaseConnector.SettingsHaveBeenSet)
@@ -45,6 +57,15 @@ namespace UserCommandLogic
             DatabaseConnector = databaseConnector;
         }
 
+
+        /// <summary>
+        /// Sets the given <paramref name="databaseConnector"/> as the <code>DatabaseConnector</code> of this song chooser.
+        /// </summary>
+        /// <param name="databaseConnector">The database connector to be set as the <code>DatabaseConnector</code> of this song chooser</param>
+        /// <remarks>In case no connection could be established with the database, no data will be available from the </remarks>
+        /// <exception cref="ArgumentException">The settings of the given <paramref name="databaseConnector"/> have not been set.</exception>
+        /// <exception cref="MySqlException">An error occurred while contacting the database referenced by the given 
+        /// <paramref name="databaseConnector"/>.</exception>
         public void SetDatabaseConnection(DatabaseConnector databaseConnector)
         {
             if (!databaseConnector.SettingsHaveBeenSet)
@@ -62,28 +83,50 @@ namespace UserCommandLogic
                 _songs = new List<Song>();
                 _knownArtists = new HashSet<string>();
                 _knownSongTitles = new HashSet<string>();
+                throw;
             }
             catch (AggregateException e)
             {
                 Debug.WriteLine("No connection established with database, so no songs have been loaded. Please rerun the code to try again:\n" + e.ToString());
-                _songs = new List<Song>();
-                _knownArtists = new HashSet<string>();
-                _knownSongTitles = new HashSet<string>();
+                throw e.InnerException;
             }
             DatabaseConnector = databaseConnector;
         }
 
+
+        /// <summary>
+        /// Returns a song from the database, if any available.
+        /// </summary>
         public Song ChooseRandomSong()
         {
-            int r = _random.Next(_songs.Count);
-            return _songs.ElementAt(r);
-        }
-
-        public Song ChooseRandomSongByGenre(string genre)
-        {
+            if (_songs.Count > 0)
+            {
+                int r = _random.Next(_songs.Count);
+                return _songs.ElementAt(r);
+            }
             return null;
         }
 
+
+        /// <summary>
+        /// Returns a song from the database that has the given <paramref name="genre"/> as one of its genres, if any available.
+        /// </summary>
+        /// <param name="genre">The genre to be used to choose a song</param>
+        /// <exception cref="NotImplementedException">This method has not been implemented.</exception>
+        public Song ChooseRandomSongByGenre(string genre)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        /// <summary>
+        /// Chooses a song from the database with a given <paramref name="artist"/> as its artist, if any available.
+        /// </summary>
+        /// <param name="artist"></param>
+        /// <returns>If there is no closest known artist, 
+        ///             then return null.
+        ///          Else, return a random song by this artist.</returns>
+        /// <exception cref="ArgumentException">There are no songs of this artist in the database.</exception>
         public Song ChooseRandomSongByArtist(string artist)
         {
             var (bestMatch, _) = GetClosestKnownArtist(artist);
@@ -97,6 +140,20 @@ namespace UserCommandLogic
             return songsByArtist.ElementAt(r);
         }
 
+
+        /// <summary>
+        /// Chooses a song from the database based on a given <paramref name="songRequest"/>, if any available
+        /// </summary>
+        /// <param name="songRequest">A song request to be used to choose a song from the database.</param>
+        /// <returns>If the Intent of the given <paramref name="songRequest"/> is <code>PlayByTitle</code>
+        ///             then a song is chosen by the title closest to the title of this <paramref name="songRequest"/>,
+        ///          Else if the Intent is <code>PlayByArtist</code>
+        ///             then a random song is chosen by the artist of this <paramref name="songRequest"/>
+        ///          Else if the Intent is <code>PlayByTitleArtist</code>
+        ///             then a song is selected based on the artist or title closest to those of this <paramref name="songRequest"/>
+        ///          Else 
+        ///             return null
+        /// </returns>
         public Song ChooseByRequest(SongRequest songRequest)
         {
             Song song = null;
@@ -115,6 +172,18 @@ namespace UserCommandLogic
             return song;
         }
 
+
+        /// <summary>
+        /// Selects a song based on the given <paramref name="title"/> and <paramref name="artist"/>
+        /// </summary>
+        /// <param name="title">The title of the song to be returned</param>
+        /// <param name="artist">The artist of the song to be returned</param>
+        /// <returns>If the given <paramref name="title"/>-<paramref name="artist"/> pair belongs
+        ///             to a song in the database
+        ///                 return the related song
+        ///          Else
+        ///                 return null
+        /// </returns>
         public Song GetSongData(string title, string artist)
         {
             if (IsKnownArtistWithSongs(artist))
@@ -124,6 +193,19 @@ namespace UserCommandLogic
             return null;
         }
 
+
+        /// <summary>
+        /// Selects a song from the database with its title closest to the given <paramref name="title"/> and its artist
+        /// closest to the given <paramref name="artist"/> (order of priority: title, artist)
+        /// </summary>
+        /// <param name="title">The title to be used to select a song</param>
+        /// <param name="artist">The artist to be used to select a song</param>
+        /// <returns>If the given <paramref name="artist"/> (or comparable name) has the given <paramref name="title"/> 
+        /// (or a comparable title) among its songs
+        ///             then that song is returned.
+        ///          Else
+        ///             return null
+        /// </returns>
         public Song GetSongByClosestTitle(string title, string artist)
         {
             var closestSongs = GetAllSongsByClosestTitle(title);
@@ -153,7 +235,7 @@ namespace UserCommandLogic
             return GetAllSongsByClosestTitle(title, _knownSongTitles);
         }
 
-        public ISet<Song> GetAllSongsByClosestTitle(string title, ISet<string> setOfTitles, double ratio=0.80)
+        public ISet<Song> GetAllSongsByClosestTitle(string title, ISet<string> setOfTitles, double ratio = 0.80)
         {
             var results = new HashSet<Song>();
             var titleMatches = LevenshteinDistance.GetAllBestMatches(title, setOfTitles, ratio, true);
@@ -203,7 +285,7 @@ namespace UserCommandLogic
                 return (artist, 1.0);
             artist = StringComparator.PreprocessString(artist);
             var artists = StringComparator.PreprocessCollection((HashSet<string>)_knownArtists);
-            var match  = LevenshteinDistance.GetBestMatch(artist, artists, true);
+            var match = LevenshteinDistance.GetBestMatch(artist, artists, true);
             foreach (var artistName in _knownArtists)
                 if (StringComparator.PreprocessString(artistName) == match.bestMatch)
                     return (artistName, match.levenshteinDistance);
@@ -221,7 +303,7 @@ namespace UserCommandLogic
         public (string bestMatch, double similarityRatio) GetClosestKnownSongTitle(string title)
         {
             title = StringComparator.PreprocessString(title);
-            var titles = StringComparator.PreprocessCollection((HashSet<string>) _knownSongTitles);
+            var titles = StringComparator.PreprocessCollection((HashSet<string>)_knownSongTitles);
             var match = LevenshteinDistance.GetBestMatch(title, titles, true);
             foreach (var songTitle in _knownSongTitles)
                 if (StringComparator.PreprocessString(songTitle) == match.bestMatch)
@@ -281,11 +363,36 @@ namespace UserCommandLogic
             throw new NotImplementedException();
         }
 
-        public Song ChooseByRequest(SongRequest songRequest)
+        public bool IsKnownArtist(string artist)
         {
-            Song song = null;
-            switch (songRequest.Intent)
-            {
+            return _knownArtists.Contains(artist);
+        }
+
+        public bool IsKnownSongTitle(string song)
+        {
+            return _knownSongTitles.Contains(song);
+        }
+
+        public ISet<string> GetKnownArtists()
+        {
+            return _knownArtists;
+        }
+
+        public ISet<string> GetKnownSongTitles()
+        {
+            return _knownSongTitles;
+        }
+
+        public IList<Song> GetSongs()
+        {
+            return _songs;
+        }
+
+        public IDictionary<string, ISet<Song>> GetArtistsToSongs()
+        {
+            return _artistsToSongs;
+        }
+
         public string GetKnownArtistFromSentence(string sentence)
         {
             var sorted = from s in _knownArtists

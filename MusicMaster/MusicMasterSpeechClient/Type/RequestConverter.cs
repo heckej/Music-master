@@ -1,9 +1,8 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
-using System.Linq;
 using System.Collections.Generic;
-using System.Runtime.InteropServices.ComTypes;
+using System.Linq;
 
 namespace Crunch.NET.Request.Type
 {

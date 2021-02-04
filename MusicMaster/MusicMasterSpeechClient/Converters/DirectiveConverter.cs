@@ -1,8 +1,8 @@
-﻿using Newtonsoft.Json;
+﻿using Crunch.NET.Response.Directive;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using Crunch.NET.Response.Directive;
-using Newtonsoft.Json.Linq;
 
 namespace Crunch.NET.Response.Converters
 {
@@ -54,7 +54,7 @@ namespace Crunch.NET.Response.Converters
             {
                 directive = TypeFactories[typeValue]();
             }
-            else if(dataTypeFactory)
+            else if (dataTypeFactory)
             {
                 directive = DataDrivenTypeFactory[typeValue](jsonObject);
             }

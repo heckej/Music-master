@@ -1,16 +1,10 @@
 ﻿using Crunch.NET.Request;
 using Crunch.NET.Response;
-using Crunch.NET.Response.Ssml;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Net;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Text;
-using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace MusicMasterSpeechClient
@@ -38,7 +32,7 @@ namespace MusicMasterSpeechClient
                 //userInput = Console.ReadLine();
                 var listenResult = Tools.Voice.Listen();
                 //if (!listenResult["debug"].Contains("ALSA lib"))
-                    Console.WriteLine(listenResult["debug"]);
+                Console.WriteLine(listenResult["debug"]);
                 var results = listenResult["output"].Split("\n");
                 Console.WriteLine("output contains " + results.Length + " elements");
                 foreach (var res in results)
@@ -62,7 +56,7 @@ namespace MusicMasterSpeechClient
             }
         }
 
-        private static async Task<string> ProcessUserRequest(string userRequest, string language="en")
+        private static async Task<string> ProcessUserRequest(string userRequest, string language = "en")
         {
             if (language != "en")
                 language = "nl";
@@ -85,10 +79,13 @@ namespace MusicMasterSpeechClient
             var response = await client.PostAsync(endPoint, httpContent);
             var responseContent = await response.Content.ReadAsStringAsync();
 
-            var musicMasterResponse =  JsonConvert.DeserializeObject<CrunchResponse>(responseContent, JsonSerializerSettings);
-            try {
+            var musicMasterResponse = JsonConvert.DeserializeObject<CrunchResponse>(responseContent, JsonSerializerSettings);
+            try
+            {
                 return musicMasterResponse.Response.Reprompt.OutputSpeech.Text;
-            } catch (Exception e) {
+            }
+            catch (Exception e)
+            {
                 Console.WriteLine(e);
                 return "";
             }

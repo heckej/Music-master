@@ -1,11 +1,9 @@
-﻿using System;
+﻿using Newtonsoft.Json;
 using System.Collections.Generic;
-using System.Text;
-using Newtonsoft.Json;
 
 namespace Crunch.NET.Response.Directive.Templates.Types
 {
-    public class ListTemplate1:IListTemplate
+    public class ListTemplate1 : IListTemplate
     {
         public string Type => "ListTemplate1";
         public string Token { get; set; }

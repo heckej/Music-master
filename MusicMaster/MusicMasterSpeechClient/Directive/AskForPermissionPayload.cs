@@ -14,10 +14,10 @@ namespace Crunch.NET.Response.Directive
             PermissionScope = permissionScope;
         }
 
-        [JsonProperty("@type")] 
+        [JsonProperty("@type")]
         public string Type { get; set; } = "AskForPermissionsConsentRequest";
 
-        [JsonProperty("@version")] 
+        [JsonProperty("@version")]
         public string Version { get; set; } = "1";
 
         [JsonProperty("permissionScope")]

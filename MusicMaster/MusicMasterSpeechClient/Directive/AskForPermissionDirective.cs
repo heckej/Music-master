@@ -4,7 +4,7 @@
     {
         public AskForPermissionDirective()
         {
-            
+
         }
 
         public AskForPermissionDirective(string permissionScope)

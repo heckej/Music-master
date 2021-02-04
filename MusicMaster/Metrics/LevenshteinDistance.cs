@@ -1,7 +1,5 @@
-using System;
-using System.Collections;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Metrics
 {
@@ -72,7 +70,7 @@ namespace Metrics
         /// The list contains as much elements as there are words in the sentence with the most words.
         /// If one sentence is longer than the other, the words that don't have a respective word to 
         /// be compared to are compared to the empty string.</returns>
-        public static IList<double> ComputePerWordInSentence(string sentence1, string sentence2, bool ratio=false)
+        public static IList<double> ComputePerWordInSentence(string sentence1, string sentence2, bool ratio = false)
         {
             IList<double> results = new List<double>();
             IList<string> wordsLongestSentence;
@@ -82,7 +80,7 @@ namespace Metrics
             {
                 wordsLongestSentence = sentence1.Split(' ');
                 wordsShortestSentence = sentence2.Split(' ');
-            }            
+            }
             else
             {
                 wordsLongestSentence = sentence2.Split(' ');
@@ -106,10 +104,10 @@ namespace Metrics
                 }
             }
 
-            return results; 
+            return results;
         }
 
-        public static IList<double> ComputeBestPerWordInFirstSentence(string sentence1, string sentence2, bool ratio=false)
+        public static IList<double> ComputeBestPerWordInFirstSentence(string sentence1, string sentence2, bool ratio = false)
         {
             IList<double> results = new List<double>();
             var wordsSentence1 = sentence1.Split(' ');
@@ -148,9 +146,26 @@ namespace Metrics
         /// <returns>(s.Length + t.Length - Compute(s,t))/(s.Length + t.Length)</returns>
         public static double ComputeSimilarityRatio(string s, string t)
         {
-            return (double) (s.Length + t.Length - Compute(s,t)) / (s.Length + t.Length);
+            return (double)(s.Length + t.Length - Compute(s, t)) / (s.Length + t.Length);
         }
-        public static (string bestMatch, double levenshteinDistance) GetBestMatch(string value, ISet<string> setToMatch, bool ratio=false)
+
+        /// <summary>
+        /// Computes the Levenshtein similarity ratio of the shortest string with the best matching part of the longest string.
+        /// </summary>
+        /// <param name="s"></param>
+        /// <param name="t"></param>
+        /// <returns></returns>
+        public static double PartialRatio(string s, string t)
+        {
+            // Currently only exact substring matching
+            if (s.Length > t.Length && s.ToLower().Contains(t.ToLower()))
+                return 1.0;
+            else if (t.Length >= s.Length && t.ToLower().Contains(s.ToLower()))
+                return 1.0;
+            return 0.0;
+        }
+
+        public static (string bestMatch, double levenshteinDistance) GetBestMatch(string value, ISet<string> setToMatch, bool ratio = false)
         {
             if (value == null)
                 return (null, 0);
@@ -185,7 +200,7 @@ namespace Metrics
             return (bestMatch, bestLevDist);
         }
 
-        public static ISet<(string, double)> GetAllBestMatches(string value, ISet<string> setToMatch, double threshold, bool ratio=false)
+        public static ISet<(string, double)> GetAllBestMatches(string value, ISet<string> setToMatch, double threshold, bool ratio = false)
         {
             var results = new HashSet<(string, double)>();
             if (value == null)

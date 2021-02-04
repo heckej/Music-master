@@ -8,7 +8,7 @@ namespace Crunch.NET.Request.Type
         public T Payload { get; set; }
     }
 
-    public class ConnectionResponseRequest:Request
+    public class ConnectionResponseRequest : Request
     {
         [JsonProperty("name")]
         public string Name { get; set; }

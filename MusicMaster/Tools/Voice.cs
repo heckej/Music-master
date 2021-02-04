@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -19,7 +18,7 @@ namespace Tools
                 throw new Exception("No implementation exists for the current OS");
         }
 
-        private static IDictionary<string,string> SpeakOnLinux(string textToSpeech, bool wait = false)
+        private static IDictionary<string, string> SpeakOnLinux(string textToSpeech, bool wait = false)
         {
             string param = "\"" + textToSpeech + "\"";
             return new RunCmd().RunPython3("tts.py", param);

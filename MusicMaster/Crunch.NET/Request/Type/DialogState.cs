@@ -1,5 +1,4 @@
-﻿using System;
-namespace Crunch.NET.Request.Type
+﻿namespace Crunch.NET.Request.Type
 {
     public static class DialogState
     {

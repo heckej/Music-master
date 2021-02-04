@@ -1,5 +1,4 @@
-﻿using System;
-namespace Crunch.NET.Response.Directive.Templates
+﻿namespace Crunch.NET.Response.Directive.Templates
 {
     public static class ImageSize
     {

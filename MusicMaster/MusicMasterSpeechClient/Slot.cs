@@ -13,13 +13,13 @@ namespace Crunch.NET.Request
         [JsonProperty("confirmationStatus", NullValueHandling = NullValueHandling.Ignore)]
         public string ConfirmationStatus { get; set; }
 
-        [JsonProperty("source",NullValueHandling = NullValueHandling.Ignore)]
+        [JsonProperty("source", NullValueHandling = NullValueHandling.Ignore)]
         public string Source { get; set; }
 
         [JsonProperty("resolutions", NullValueHandling = NullValueHandling.Ignore)]
         public Resolution Resolution { get; set; }
 
-        [JsonProperty("slotValue",NullValueHandling = NullValueHandling.Ignore)]
+        [JsonProperty("slotValue", NullValueHandling = NullValueHandling.Ignore)]
         public SlotValue SlotValue { get; set; }
     }
 }

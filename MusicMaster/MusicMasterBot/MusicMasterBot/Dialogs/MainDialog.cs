@@ -3,16 +3,15 @@
 //
 // Generated with Bot Builder V4 SDK Template for Visual Studio CoreBot v4.9.2
 
-using System;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Schema;
 using Microsoft.Extensions.Logging;
 using MusicMasterBot.CognitiveModels;
+using System;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Tools;
 using UserCommandLogic;
 
@@ -27,7 +26,7 @@ namespace MusicMasterBot.Dialogs
         private readonly IPlayer _musicPlayer;
 
         // Dependency injection uses this constructor to instantiate MainDialog
-        public MainDialog(UserCommandRecognizer luisCommandRecognizer, UserQuestionRecognizer luisQuestionRecognizer, RequestSongDialog requestSongDialog, ILogger<MainDialog> logger, 
+        public MainDialog(UserCommandRecognizer luisCommandRecognizer, UserQuestionRecognizer luisQuestionRecognizer, RequestSongDialog requestSongDialog, ILogger<MainDialog> logger,
             ISongChooser songChooser, IPlayer musicPlayer)
             : base(nameof(MainDialog))
         {

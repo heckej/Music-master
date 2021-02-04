@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace Crunch.NET.Response.Directive.Templates
 {
@@ -9,6 +9,6 @@ namespace Crunch.NET.Response.Directive.Templates
         public string ContentDescription { get; set; }
 
         [JsonProperty("sources")]
-        public List<ImageSource> Sources {get;set;} = new List<ImageSource>();
+        public List<ImageSource> Sources { get; set; } = new List<ImageSource>();
     }
 }

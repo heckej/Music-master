@@ -1,7 +1,7 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Bot.Builder;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Bot.Builder.Community.Adapters.Crunch.Integration.AspNet.Core
 {

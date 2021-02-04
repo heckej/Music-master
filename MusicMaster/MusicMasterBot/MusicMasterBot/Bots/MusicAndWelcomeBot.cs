@@ -3,16 +3,16 @@
 //
 // Generated with Bot Builder V4 SDK Template for Visual Studio CoreBot v4.9.2
 
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Schema;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace MusicMasterBot.Bots
 {

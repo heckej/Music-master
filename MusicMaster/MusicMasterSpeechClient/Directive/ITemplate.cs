@@ -1,5 +1,4 @@
-﻿using System;
-using Crunch.NET.Response.Converters;
+﻿using Crunch.NET.Response.Converters;
 using Newtonsoft.Json;
 
 namespace Crunch.NET.Response.Directive

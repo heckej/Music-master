@@ -1,11 +1,9 @@
-﻿using System;
+﻿using Newtonsoft.Json;
 using System.Collections.Generic;
-using System.Text;
-using Newtonsoft.Json;
 
 namespace Crunch.NET.Response.Directive
 {
-    public class JsonDirective:IDirective
+    public class JsonDirective : IDirective
     {
         public JsonDirective() { }
 

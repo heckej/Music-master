@@ -1,7 +1,7 @@
-﻿using System.Threading.Tasks;
-using Bot.Builder.Community.Adapters.Crunch;
+﻿using Bot.Builder.Community.Adapters.Crunch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Bot.Builder;
+using System.Threading.Tasks;
 
 namespace Bot.Builder.Community.Samples.Alexa.Controllers
 {
@@ -16,7 +16,7 @@ namespace Bot.Builder.Community.Samples.Alexa.Controllers
         private readonly IBot Bot;
 
         public CrunchController(CrunchAdapter adapter, IBot bot)
-        { 
+        {
             Adapter = adapter;
             Bot = bot;
         }

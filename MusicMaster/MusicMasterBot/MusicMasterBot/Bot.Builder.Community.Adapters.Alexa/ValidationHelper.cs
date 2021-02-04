@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-using Crunch.NET.Request;
-using Bot.Builder.Community.Adapters.Crunch.Core;
+﻿using Crunch.NET.Request;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 

@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using Crunch.NET.ConnectionTasks;
+﻿using Crunch.NET.ConnectionTasks;
 using Crunch.NET.ConnectionTasks.Inputs;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
 
 namespace Crunch.NET.Response.Converters
 {

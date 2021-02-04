@@ -1,17 +1,16 @@
-﻿using System;
+﻿using Bot.Builder.Community.Adapters.Crunch.Core.Attachments;
+using Crunch.NET.Request;
+using Crunch.NET.Response;
+using Microsoft.Bot.Schema;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.Rest;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security;
 using System.Xml;
 using System.Xml.Linq;
-using Crunch.NET.Request;
-using Crunch.NET.Request.Type;
-using Crunch.NET.Response;
-using Bot.Builder.Community.Adapters.Crunch.Core.Attachments;
-using Microsoft.Bot.Schema;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
-using Microsoft.Rest;
 using AlexaResponse = Crunch.NET.Response;
 
 namespace Bot.Builder.Community.Adapters.Crunch.Core
@@ -83,7 +82,7 @@ namespace Bot.Builder.Community.Adapters.Crunch.Core
             if (activity == null || activity.Type != ActivityTypes.Message)
             {
                 response.Response.ShouldEndSession = true;
-                response.Response.OutputSpeech = new PlainTextOutputSpeech 
+                response.Response.OutputSpeech = new PlainTextOutputSpeech
                 {
                     Text = string.Empty
                 };

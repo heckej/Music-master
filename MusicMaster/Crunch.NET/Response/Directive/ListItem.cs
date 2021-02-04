@@ -7,10 +7,10 @@ namespace Crunch.NET.Response.Directive
     {
         [JsonProperty("token")]
         public string Token { get; set; }
-        
+
         [JsonProperty("image")]
         public TemplateImage Image { get; set; }
-        
+
         [JsonProperty("textContent")]
         public TemplateContent Content { get; set; }
     }

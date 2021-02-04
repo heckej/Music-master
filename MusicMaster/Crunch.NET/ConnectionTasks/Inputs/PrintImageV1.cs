@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
 namespace Crunch.NET.ConnectionTasks.Inputs
@@ -27,7 +24,7 @@ namespace Crunch.NET.ConnectionTasks.Inputs
         [JsonProperty("description")]
         public string Description { get; set; }
 
-        [JsonProperty("imageType"),JsonConverter(typeof(StringEnumConverter))]
+        [JsonProperty("imageType"), JsonConverter(typeof(StringEnumConverter))]
         public PrintImageV1Type ImageV1Type { get; set; }
 
         [JsonProperty("url")]
